@@ -150,7 +150,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textViewSessionsBeforeLongBreak"
+                android:id="@+id/textViewSessionsBeforeLB"
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -160,7 +160,7 @@
                 android:layout_marginTop="3dp"/>
 
             <SeekBar
-                android:id="@+id/seekbarSessionsBeforeLongBreak"
+                android:id="@+id/seekbarSessionsBeforeLB"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
