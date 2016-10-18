@@ -2,6 +2,7 @@ package com.bond.iampomodoro.View;
 
 import android.databinding.DataBindingUtil;
 
+import android.databinding.ObservableField;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ public class FragmentSettings extends Fragment {
 
     FragmentSettingsBinding binding;
     User user = new User();
+    ScreenHandler screenHandler = new ScreenHandler();
 
     public static FragmentSettings newInstance() {
         return new FragmentSettings();
@@ -70,8 +72,8 @@ public class FragmentSettings extends Fragment {
         //binding.setScreenHandler(new FragmentSettings().screenHandler);
         // init screen handler
 
-        //ScreenHandler screenHandler = new ScreenHandler();
-        //binding.setScreenHandler(screenHandler);
+
+        binding.setScreenHandler(screenHandler);
 
 
 
@@ -99,13 +101,13 @@ public class FragmentSettings extends Fragment {
     }
     public static class ScreenHandler {
 
-        public final String firstName;
-        public ScreenHandler (String firstName) {
-            this.firstName = firstName;
-        }
+//        public final String firstName;
+//        public ScreenHandler (String firstName) {
+//            this.firstName = firstName;
+//        }
 
         //public ObservableBoolean loading = new ObservableBoolean();
-        //public ObservableField<String> buttonText = new ObservableField<>("load big data");
+        public ObservableField<String> buttonText = new ObservableField<>("load big data");
 
     }
 
@@ -249,6 +251,7 @@ public class FragmentSettings extends Fragment {
                     user.setName(String.valueOf(v));
                     binding.setUser(user);
                 })
+                .doOnNext(v -> screenHandler.buttonText.set(String.valueOf(v)))
                 .map(v -> new Indexed<>("WorkSession", v));
 
         sb1.subscribe(w -> System.out.println("[Rx] " + w.index + " : " + w.item));
