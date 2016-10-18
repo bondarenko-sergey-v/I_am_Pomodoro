@@ -1,5 +1,7 @@
 package com.bond.iampomodoro.View;
 
+import android.databinding.DataBindingUtil;
+
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -8,13 +10,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bond.iampomodoro.Model.SettingsHelper;
 import com.bond.iampomodoro.R;
+import com.bond.iampomodoro.databinding.FragmentSettingsBinding;
+import com.jakewharton.rxbinding.widget.RxCompoundButton;
+import com.jakewharton.rxbinding.widget.RxSeekBar;
+
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class FragmentSettings extends Fragment {
 
@@ -33,17 +43,10 @@ public class FragmentSettings extends Fragment {
     TextView textViewLongBreak;
     TextView textViewSessionsBeforeLB;
 
-    CheckBox checkBoxDaySound;
-    CheckBox checkBoxDayVibration;
-    CheckBox checkBoxDayKeepScreen;
-
-    CheckBox checkBoxNightSound;
-    CheckBox checkBoxNightVibration;
-    CheckBox checkBoxNightKeepScreen;
-    CheckBox checkBoxNightPictures;
-
-    CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
     SeekBar.OnSeekBarChangeListener onSeekBarChangeListener;
+
+    FragmentSettingsBinding binding;
+    User user = new User();
 
     public static FragmentSettings newInstance() {
         return new FragmentSettings();
@@ -55,8 +58,55 @@ public class FragmentSettings extends Fragment {
 
         settings = SettingsHelper.getSettings(getActivity());
 
-        view = inflater.inflate(R.layout.fragment_settings, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false);
+
+
+        user.setName("olo");
+        binding.setUser(user);
+
+        //final View layout = inflater.inflate(R.layout.fragment_settings,container,false);
+        //FragmentSettingsBinding.bind(layout).setScreenHandler(new ScreenHandler(this));
+
+        //binding.setScreenHandler(new FragmentSettings().screenHandler);
+        // init screen handler
+
+        //ScreenHandler screenHandler = new ScreenHandler();
+        //binding.setScreenHandler(screenHandler);
+
+
+
+        //view = inflater.inflate(R.layout.fragment_settings, container, false);
+        view = binding.getRoot();
         return view;
+    }
+
+    public static class User {
+
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+
+        //public ObservableBoolean loading = new ObservableBoolean();
+        //public ObservableField<String> buttonText = new ObservableField<>("load big data");
+
+    }
+    public static class ScreenHandler {
+
+        public final String firstName;
+        public ScreenHandler (String firstName) {
+            this.firstName = firstName;
+        }
+
+        //public ObservableBoolean loading = new ObservableBoolean();
+        //public ObservableField<String> buttonText = new ObservableField<>("load big data");
+
     }
 
     @Override
@@ -64,6 +114,7 @@ public class FragmentSettings extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         initUI();
+        //binding.checkBoxDaySound.
 
         setupListeners();
 
@@ -82,6 +133,15 @@ public class FragmentSettings extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        //if (checkBoxDayVibration1 != null) {
+        //    checkBoxDayVibration1.unsubscribe();
+        //}
+    }
+
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
@@ -90,6 +150,15 @@ public class FragmentSettings extends Fragment {
 
         if(!isVisibleToUser && firstVisible) {
             SettingsHelper.setSettings(getActivity(), settings);
+        }
+    }
+
+    class Indexed <T> {
+        final String index;
+        final T item;
+        Indexed(String index, T item) {
+            this.index = index;
+            this.item = item;
         }
     }
 
@@ -131,91 +200,78 @@ public class FragmentSettings extends Fragment {
         textViewSessionsBeforeLB.setText(String.valueOf(settings[3]));
 
 
-        checkBoxDaySound = (CheckBox) view.findViewById(R.id.checkBoxDaySound);
-        checkBoxDayVibration = (CheckBox) view.findViewById(R.id.checkBoxDayVibration);
-        checkBoxDayKeepScreen = (CheckBox) view.findViewById(R.id.checkBoxDayKeepScreen);
-        checkBoxNightSound = (CheckBox) view.findViewById(R.id.checkBoxNightSound);
-        checkBoxNightVibration = (CheckBox) view.findViewById(R.id.checkBoxNightVibration);
-        checkBoxNightKeepScreen = (CheckBox) view.findViewById(R.id.checkBoxNightKeepScreen);
-        checkBoxNightPictures = (CheckBox) view.findViewById(R.id.checkBoxNightPictures);
 
-        if(settings[4] == 1) checkBoxDaySound.setChecked(true);
-        if(settings[5] == 1) checkBoxDayVibration.setChecked(true);
-        if(settings[6] == 1) checkBoxDayKeepScreen.setChecked(true);
-        if(settings[7] == 1) checkBoxNightSound.setChecked(true);
-        if(settings[8] == 1) checkBoxNightVibration.setChecked(true);
-        if(settings[9] == 1) checkBoxNightKeepScreen.setChecked(true);
-        if(settings[10] == 1) checkBoxNightPictures.setChecked(true);
+        Observable<Indexed<Boolean>> cb1 = RxCompoundButton
+                .checkedChanges(binding.checkBoxDaySound)
+                .skip(1)
+                .map(v -> new Indexed<>("DaySound", v));
+
+        Observable<Indexed<Boolean>> cb2 = RxCompoundButton
+                .checkedChanges(binding.checkBoxDayVibration)
+                .skip(1)
+                .map(v -> new Indexed<>("DayVibration", v));
+
+        Observable<Indexed<Boolean>> cb3 = RxCompoundButton
+                .checkedChanges(binding.checkBoxDayKeepScreen)
+                .skip(1)
+                .map(v -> new Indexed<>("DayKeepScreen", v));
+
+        Observable<Indexed<Boolean>> cb4 = RxCompoundButton
+                .checkedChanges(binding.checkBoxNightSound)
+                .skip(1)
+                .map(v -> new Indexed<>("NightSound", v));
+
+        Observable<Indexed<Boolean>> cb5 = RxCompoundButton
+                .checkedChanges(binding.checkBoxNightVibration)
+                .skip(1)
+                .map(v -> new Indexed<>("NightVibration", v));
+
+        Observable<Indexed<Boolean>> cb6 = RxCompoundButton
+                .checkedChanges(binding.checkBoxNightKeepScreen)
+                .skip(1)
+                .map(v -> new Indexed<>("NightKeepScreen", v));
+
+        Observable<Indexed<Boolean>> cb7 = RxCompoundButton
+                .checkedChanges(binding.checkBoxNightPictures)
+                .skip(1)
+                .map(v -> new Indexed<>("NightPictures", v));
+
+        Observable<Indexed<Boolean>> values = Observable.merge(cb1,cb2,cb3,cb4,cb5,cb6,cb7);
+
+        values.subscribe(w -> System.out.println("[Rx] " + w.index + " : " + w.item));
+
+
+        Observable<Indexed<Integer>> sb1 = RxSeekBar.changes(binding.seekbarWorkSession)
+                .skip(1)
+                //.debounce(150, TimeUnit.MILLISECONDS)
+                .map(v -> v + 25)
+                .doOnNext(v -> {
+                    user.setName(String.valueOf(v));
+                    binding.setUser(user);
+                })
+                .map(v -> new Indexed<>("WorkSession", v));
+
+        sb1.subscribe(w -> System.out.println("[Rx] " + w.index + " : " + w.item));
+
+//        Observable<Boolean> values = RxCompoundButton
+//                .checkedChanges(binding.checkBoxDayVibration)
+//                .skip(1);
+
+//       RxCompoundButton.checkedChanges(binding.checkBoxDayVibration)
+//               .skip(1) // Skip the initial value.
+//               .map(c -> c + " - DayVibration")
+//               .subscribe(c -> Log.d("[Rx]", String.valueOf(c)));
+
+//        if(settings[4] == 1) checkBoxDaySound.setChecked(true);
+//        if(settings[5] == 1) checkBoxDayVibration.setChecked(true);
+//        if(settings[6] == 1) checkBoxDayKeepScreen.setChecked(true);
+//        if(settings[7] == 1) checkBoxNightSound.setChecked(true);
+//        if(settings[8] == 1) checkBoxNightVibration.setChecked(true);
+//        if(settings[9] == 1) checkBoxNightKeepScreen.setChecked(true);
+//        if(settings[10] == 1) checkBoxNightPictures.setChecked(true);
     }
 
     private void setupListeners() {
-
-        onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-
-                switch (compoundButton.getId()) {
-
-                    case R.id.checkBoxDaySound:
-                        if (checked) {
-                            settings[4] = 1;
-                        }
-                        else {
-                            settings[4] = 0;
-                        }
-                        break;
-                    case R.id.checkBoxDayVibration:
-                        if (checked) {
-                            settings[5] = 1;
-                        }
-                        else {
-                            settings[5] = 0;
-                        }
-                        break;
-                    case R.id.checkBoxDayKeepScreen:
-                        if (checked) {
-                            settings[6] = 1;
-                        }
-                        else {
-                            settings[6] = 0;
-                        }
-                        break;
-
-                    case R.id.checkBoxNightSound:
-                        if (checked) {
-                            settings[7] = 1;
-                        }
-                        else {
-                            settings[7] = 0;
-                        }
-                        break;
-                    case R.id.checkBoxNightVibration:
-                        if (checked) {
-                            settings[8] = 1;
-                        }
-                        else {
-                            settings[8] = 0;
-                        }
-                        break;
-                    case R.id.checkBoxNightKeepScreen:
-                        if (checked) {
-                            settings[9] = 1;
-                        }
-                        else {
-                            settings[9] = 0;
-                        }
-                        break;
-                    case R.id.checkBoxNightPictures:
-                        if (checked) {
-                            settings[10] = 1;
-                        }
-                        else {
-                            settings[10] = 0;
-                        }
-                        break;
-                }
-            }
-        };
 
         onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
 
@@ -224,10 +280,10 @@ public class FragmentSettings extends Fragment {
 
                 switch (seekBar.getId()) {
 
-                    case R.id.seekbarWorkSession:
-                        textViewWorkSession.setText(String.valueOf(progress + 25));
-                        settings[0] = progress + 25;
-                        break;
+//                    case R.id.seekbarWorkSession:
+//                        textViewWorkSession.setText(String.valueOf(progress + 25));
+//                        settings[0] = progress + 25;
+//                        break;
 
                     case R.id.seekbarBreak:
                         textViewBreak.setText(String.valueOf(progress + 5));
@@ -256,17 +312,12 @@ public class FragmentSettings extends Fragment {
 
     private void listenersInitialization() {
 
-        seekbarWorkSession.setOnSeekBarChangeListener(onSeekBarChangeListener);
+//        seekbarWorkSession.setOnSeekBarChangeListener(onSeekBarChangeListener);
+
+
         seekbarBreak.setOnSeekBarChangeListener(onSeekBarChangeListener);
         seekbarLongBreak.setOnSeekBarChangeListener(onSeekBarChangeListener);
         seekbarSessionsBeforeLB.setOnSeekBarChangeListener(onSeekBarChangeListener);
 
-        checkBoxDaySound.setOnCheckedChangeListener(onCheckedChangeListener);
-        checkBoxDayVibration.setOnCheckedChangeListener(onCheckedChangeListener);
-        checkBoxDayKeepScreen.setOnCheckedChangeListener(onCheckedChangeListener);
-        checkBoxNightSound.setOnCheckedChangeListener(onCheckedChangeListener);
-        checkBoxNightVibration.setOnCheckedChangeListener(onCheckedChangeListener);
-        checkBoxNightKeepScreen.setOnCheckedChangeListener(onCheckedChangeListener);
-        checkBoxNightPictures.setOnCheckedChangeListener(onCheckedChangeListener);
     }
 }
