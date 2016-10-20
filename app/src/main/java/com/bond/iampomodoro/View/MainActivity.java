@@ -34,14 +34,12 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setIcon(R.mipmap.ic_code_tags_light));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.mipmap.ic_settings_light));
 
-        // Set listeners
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
 
-                // Change colors and icons depends on active tab
                 switch (tab.getPosition()) {
                     case 0:
                         setLightTabs();
@@ -60,19 +58,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setDarkTabs() {
-        tabLayout.setBackgroundColor(Color.BLACK);
-
-        tabLayout.getTabAt(0).setIcon(R.mipmap.ic_weather_sunny);
-        tabLayout.getTabAt(1).setIcon(R.mipmap.ic_code_tags);
-        tabLayout.getTabAt(2).setIcon(R.mipmap.ic_settings);
-    }
-
     private void setLightTabs() {
         tabLayout.setBackgroundColor(Color.WHITE);
-
         tabLayout.getTabAt(0).setIcon(R.mipmap.ic_weather_sunny_light);
         tabLayout.getTabAt(1).setIcon(R.mipmap.ic_code_tags_light);
         tabLayout.getTabAt(2).setIcon(R.mipmap.ic_settings_light);
+    }
+
+    private void setDarkTabs() {
+        tabLayout.setBackgroundColor(Color.BLACK);
+        tabLayout.getTabAt(0).setIcon(R.mipmap.ic_weather_sunny);
+        tabLayout.getTabAt(1).setIcon(R.mipmap.ic_code_tags);
+        tabLayout.getTabAt(2).setIcon(R.mipmap.ic_settings);
     }
 }

@@ -3,69 +3,42 @@ package com.bond.iampomodoro.Model;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 public class SettingsHelper {
 
     private static final String APP_PREF = "mysettings";
+    private static final String APP_PREF_OBJECT = "prefObject";
 
-    private static final String APP_PREF_WORK_SESSION = "WorkSession";
-    private static final String APP_PREF_BREAK = "Break";
-    private static final String APP_PREF_LONG_BREAK = "LongBreak";
-    private static final String APP_PREF_SESSION_BEFORE_L_B = "SessionBeforeLB";
-
-    private static final String APP_PREF_DAY_SOUND = "DaySound";
-    private static final String APP_PREF_DAY_VIBRATION = "DayVibration";
-    private static final String APP_PREF_DAY_KEEP_SCREEN = "DayKeepScreen";
-
-    private static final String APP_PREF_NIGHT_SOUND = "NightSound";
-    private static final String APP_PREF_NIGHT_VIBRATION = "NightVibration";
-    private static final String APP_PREF_NIGHT_KEEP_SCREEN = "NightKeepScreen";
-    private static final String APP_PREF_NIGHT_PICTURES = "NightPictures";
-
-    public static int[] getSettings(Context context) {
-        int [] settings = new int[11];
+    public static SettingsObject getSettings(Context context) {
         SharedPreferences mSettings;
+        String initialSettings = "{\"bool\":[true,true,true,false,true,true,true]," +
+                "\"intr\":[25,5,15,4]}";
 
         mSettings = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
+        String json = mSettings.getString(APP_PREF_OBJECT, initialSettings);
 
-        settings[0] = mSettings.getInt(APP_PREF_WORK_SESSION, 25);
-        settings[1] = mSettings.getInt(APP_PREF_BREAK, 5);
-        settings[2] = mSettings.getInt(APP_PREF_LONG_BREAK, 15);
-        settings[3] = mSettings.getInt(APP_PREF_SESSION_BEFORE_L_B, 4);
-
-        settings[4] = mSettings.getInt(APP_PREF_DAY_SOUND, 1);
-        settings[5] = mSettings.getInt(APP_PREF_DAY_VIBRATION, 1);
-        settings[6] = mSettings.getInt(APP_PREF_DAY_KEEP_SCREEN, 1);
-
-        settings[7] = mSettings.getInt(APP_PREF_NIGHT_SOUND, 0);
-        settings[8] = mSettings.getInt(APP_PREF_NIGHT_VIBRATION, 1);
-        settings[9] = mSettings.getInt(APP_PREF_NIGHT_KEEP_SCREEN, 1);
-        settings[10] = mSettings.getInt(APP_PREF_NIGHT_PICTURES, 1);
-
-        return settings;
+        return new Gson().fromJson(json,
+                new TypeToken<SettingsObject>(){}.getType());
     }
 
-    public static void setSettings(Context context, int[] settings) {
-        int [] settingsArr = settings;
-        SharedPreferences mSettings;
+    public static void setSettings(Context context, SettingsObject settings) {
         SharedPreferences.Editor editor;
+        editor = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE).edit();
 
-        mSettings = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
-        editor = mSettings.edit();
+        String json = new Gson().toJson(settings);
 
-        editor.putInt(APP_PREF_WORK_SESSION, settingsArr[0])
-            .putInt(APP_PREF_BREAK, settingsArr[1])
-            .putInt(APP_PREF_LONG_BREAK, settingsArr[2])
-            .putInt(APP_PREF_SESSION_BEFORE_L_B, settingsArr[3])
+        editor.putString(APP_PREF_OBJECT, json).apply();
+    }
 
-            .putInt(APP_PREF_DAY_SOUND, settingsArr[4])
-            .putInt(APP_PREF_DAY_VIBRATION, settingsArr[5])
-            .putInt(APP_PREF_DAY_KEEP_SCREEN, settingsArr[6])
+    public static class SettingsObject {
+        public Boolean[] bool;
+        public Integer[] intr;
 
-            .putInt(APP_PREF_NIGHT_SOUND, settingsArr[7])
-            .putInt(APP_PREF_NIGHT_VIBRATION, settingsArr[8])
-            .putInt(APP_PREF_NIGHT_KEEP_SCREEN, settingsArr[9])
-            .putInt(APP_PREF_NIGHT_PICTURES, settingsArr[10])
-
-            .apply();
+        public SettingsObject(Boolean[] bool, Integer[] intr) {
+            this.bool = bool;
+            this.intr = intr;
+        }
     }
 }
