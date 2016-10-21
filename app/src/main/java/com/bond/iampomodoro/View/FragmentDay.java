@@ -13,10 +13,10 @@ import com.bond.iampomodoro.R;
 
 public class FragmentDay extends Fragment implements View.OnClickListener {
 
-    static TextView minutesTextView;
-    static TextView secondsTextView;
-    Button startBtn;
-    Button resetBtn;
+    private TextView minutesTextView;
+    private TextView secondsTextView;
+    private Button startBtn;
+    private Button resetBtn;
 
     public static FragmentDay newInstance() {
         return new FragmentDay();
@@ -42,7 +42,7 @@ public class FragmentDay extends Fragment implements View.OnClickListener {
         startBtn.setOnClickListener(FragmentDay.this);
         resetBtn.setOnClickListener(FragmentDay.this);
 
-        //TODO Presenter.startNewFragment
+        //TODO MainPresenter.startNewFragment
 
     }
 
@@ -50,16 +50,16 @@ public class FragmentDay extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.startBtn:
-                //TODO Presenter.pause
+                //TODO MainPresenter.pause
                 break;
 
             case R.id.resetBtn:
-                //TODO Presenter.reset
+                //TODO MainPresenter.reset
                 break;
         }
     }
 
-    public static void showTime(int minutes, int seconds) {
+    public void showTime(int minutes, int seconds) {
 
         minutesTextView.setText(String.valueOf(minutes));
         secondsTextView.setText(String.valueOf(seconds));

@@ -42,18 +42,18 @@ public class FragmentHardcore extends Fragment implements View.OnClickListener {
         startBtn.setOnClickListener(FragmentHardcore.this);
         resetBtn.setOnClickListener(FragmentHardcore.this);
 
-        //TODO Presenter.startNewFragment
+        //TODO MainPresenter.startNewFragment
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.startBtn:
-                //TODO Presenter.pause
+                //TODO MainPresenter.pause
                 break;
 
             case R.id.resetBtn:
-                //TODO Presenter.reset
+                //TODO MainPresenter.reset
                 break;
         }
     }

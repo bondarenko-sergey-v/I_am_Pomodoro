@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <data>
+    <!--data>
 
         <import type="android.view.View" />
 
@@ -9,7 +9,7 @@
             name="screenHandler"
             type="com.bond.iampomodoro.View.FragmentSettings.ScreenHandler" />
 
-    </data>
+    </data-->
 
 <ScrollView
 
@@ -61,7 +61,6 @@
 
             <TextView
                 android:id="@+id/textViewWorkSession"
-                android:text="@{ screenHandler.textViewWorkSession }"
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -73,7 +72,6 @@
             <SeekBar
                 android:id="@+id/seekbarWorkSession"
                 android:max="35"
-                android:progress="@{ screenHandler.progressWorkSession }"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -101,7 +99,6 @@
 
             <TextView
                 android:id="@+id/textViewBreak"
-                android:text="@{ screenHandler.textViewBreak }"
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -113,7 +110,6 @@
             <SeekBar
                 android:id="@+id/seekbarBreak"
                 android:max="15"
-                android:progress="@{ screenHandler.progressBreak }"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -141,7 +137,6 @@
 
             <TextView
                 android:id="@+id/textViewLongBreak"
-                android:text="@{ screenHandler.textViewLongBreak }"
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -153,7 +148,6 @@
             <SeekBar
                 android:id="@+id/seekbarLongBreak"
                 android:max="30"
-                android:progress="@{ screenHandler.progressLongBreak }"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -181,7 +175,6 @@
 
             <TextView
                 android:id="@+id/textViewSessionsBeforeLB"
-                android:text="@{ screenHandler.textViewSessionsBeforeLB }"
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -193,7 +186,6 @@
             <SeekBar
                 android:id="@+id/seekbarSessionsBeforeLB"
                 android:max="2"
-                android:progress="@{ screenHandler.progressSessionsBeforeLB }"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -243,7 +235,6 @@
 
             <CheckBox
                 android:layout_width="64dp"
-                android:checked="@{ screenHandler.DaySound }"
                 android:layout_height="wrap_content"
                 android:theme="@style/checkBoxStyle"
                 android:layout_gravity="center"
@@ -269,7 +260,6 @@
 
             <CheckBox
                 android:layout_width="64dp"
-                android:checked="@{ screenHandler.DayVibration }"
                 android:layout_height="wrap_content"
                 android:theme="@style/checkBoxStyle"
                 android:layout_gravity="center"
@@ -295,7 +285,6 @@
 
             <CheckBox
                 android:layout_width="64dp"
-                android:checked="@{ screenHandler.DayKeepScreen }"
                 android:layout_height="wrap_content"
                 android:theme="@style/checkBoxStyle"
                 android:layout_gravity="center"
@@ -341,7 +330,6 @@
 
             <CheckBox
                 android:layout_width="64dp"
-                android:checked="@{ screenHandler.NightSound }"
                 android:layout_height="wrap_content"
                 android:theme="@style/checkBoxStyle"
                 android:layout_gravity="center"
@@ -367,7 +355,6 @@
 
             <CheckBox
                 android:layout_width="64dp"
-                android:checked="@{ screenHandler.NightVibration }"
                 android:layout_height="wrap_content"
                 android:theme="@style/checkBoxStyle"
                 android:layout_gravity="center"
@@ -393,7 +380,6 @@
 
             <CheckBox
                 android:layout_width="64dp"
-                android:checked="@{ screenHandler.NightKeepScreen }"
                 android:layout_height="wrap_content"
                 android:theme="@style/checkBoxStyle"
                 android:layout_gravity="center"
@@ -419,7 +405,6 @@
 
             <CheckBox
                 android:layout_width="64dp"
-                android:checked="@{ screenHandler.NightPictures }"
                 android:layout_height="wrap_content"
                 android:theme="@style/checkBoxStyle"
                 android:layout_gravity="center"

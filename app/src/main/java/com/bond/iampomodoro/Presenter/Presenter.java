@@ -1,16 +1,13 @@
 package com.bond.iampomodoro.Presenter;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
+import android.content.Context;
 
-public class Presenter extends Service {
-    public Presenter() {
-    }
+import com.bond.iampomodoro.Model.SettingsObject;
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+public interface Presenter {
+
+    void saveSetings(Context context, SettingsObject settings);
+
+    SettingsObject notifySettingsFragmentStart(Context context);
+
 }
