@@ -7,13 +7,34 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.bond.iampomodoro.App;
+import com.bond.iampomodoro.AppComponent;
 import com.bond.iampomodoro.R;
 import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements HasComponent<ActivityComponent> {
 
     private TabLayout tabLayout;
+
+    private ActivityComponent component;
+
+    //@Inject Geocoder geocoder;
+
+    public ActivityComponent createComponent() {
+        App app = (App) getApplication();
+        ActivityComponent component = DaggerActivityComponent.builder()
+                .appComponent(app.getComponent())
+                .activityModule(new ActivityModule(this))
+                .build();
+
+        return component;
+    }
+
+    @Override
+    public ActivityComponent getComponent() {
+        return component;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +43,36 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         LeakCanary.install(getApplication());
+
+        this.component = createComponent();
+
+  //      App app = (App) getApplication();
+  //      app.getComponent().inject(this);
+
+
+ //!!!!!        AppComponent appComponent = DaggerAppComponent.builder()
+ //!!!!!                .appModule(new AppModule())
+ //!!!!!                .build();
+
+
+                 //   this.component = DaggerActivityComponent.builder()
+    //           .appModule(new AppModule(this))
+    //           .build();
+
+        // Explicitly reference the application object since we don't want to match our own injector.
+//        ObjectGraph appGraph = Injector.obtain(getApplication());
+//        appGraph.inject(this);
+//        activityGraph = appGraph.plus(new MainActivityModule(this));
+
+
+  //      ActivityComponent component = DaggerActivityComponent.builder()
+  //              .appComponent(app.getComponent())
+  //              .activityModule(new ActivityModule(this))
+  //              .build();
+
+//        activityComponent().inject(this);
+
+
 
         setContentView(R.layout.activity_main);
 
@@ -64,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) { }
         });
     }
-
     private void setLightTabs() {
         tabLayout.setBackgroundColor(Color.WHITE);
         tabLayout.getTabAt(0).setIcon(R.mipmap.ic_weather_sunny_light);

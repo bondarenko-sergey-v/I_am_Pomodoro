@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
+import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.Model.SettingsObject;
 import com.bond.iampomodoro.Presenter.MainPresenter;
 import com.bond.iampomodoro.R;
@@ -21,12 +22,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
 import static rx.Observable.combineLatest;
 
-public class FragmentSettings extends Fragment implements SettingsMvpView {
+public class FragmentSettings extends Fragment implements RepoInfoMainView {
+
+    //@Inject MainPresenter presenter;
 
     private FragmentSettingsBinding binding;
 
@@ -37,6 +42,20 @@ public class FragmentSettings extends Fragment implements SettingsMvpView {
 
     public static FragmentSettings newInstance() {
         return new FragmentSettings();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+  //      IA.getComponent().inject(this);
+  //      presenter.onCreate(this, getRepositoryVO());
+
+        App.getComponent().inject(this);
+        //presenter.onCreate(this);
+
+
+
     }
 
     @Override
@@ -54,6 +73,7 @@ public class FragmentSettings extends Fragment implements SettingsMvpView {
 
         mainPresenter = new MainPresenter();
         settings = mainPresenter.notifySettingsFragmentStart(getActivity());
+        //settings = presenter.notifySettingsFragmentStart(getActivity());
 
         InitCheckBoxes();
         InitSeekbars();

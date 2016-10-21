@@ -3,11 +3,11 @@
 
     <!--data>
 
-        <import type="android.view.View" />
+        <import type="android.view.MainView" />
 
         <variable
             name="screenHandler"
-            type="com.bond.iampomodoro.View.FragmentSettings.ScreenHandler" />
+            type="com.bond.iampomodoro.View.MainViewMainView.FragmentSettings.ScreenHandler" />
 
     </data-->
 
