@@ -1,4 +1,4 @@
-package com.bond.iampomodoro.View;
+package com.bond.iampomodoro.view.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,18 +42,18 @@ public class FragmentHardcore extends Fragment implements View.OnClickListener {
         startBtn.setOnClickListener(FragmentHardcore.this);
         resetBtn.setOnClickListener(FragmentHardcore.this);
 
-        //TODO MainPresenter.startNewFragment
+        //TODO Presenter.startNewFragment
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.startBtn:
-                //TODO MainPresenter.pause
+                //TODO Presenter.pause
                 break;
 
             case R.id.resetBtn:
-                //TODO MainPresenter.reset
+                //TODO Presenter.reset
                 break;
         }
     }

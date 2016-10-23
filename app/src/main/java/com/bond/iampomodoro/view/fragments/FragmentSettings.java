@@ -1,4 +1,4 @@
-package com.bond.iampomodoro.View;
+package com.bond.iampomodoro.view.fragments;
 
 import android.databinding.DataBindingUtil;
 
@@ -11,9 +11,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 
 import com.bond.iampomodoro.App;
-import com.bond.iampomodoro.Model.SettingsObject;
-import com.bond.iampomodoro.Presenter.MainPresenter;
+import com.bond.iampomodoro.AppComponent;
+import com.bond.iampomodoro.model.SettingsObject;
+import com.bond.iampomodoro.presenter.Presenter;
 import com.bond.iampomodoro.R;
+import com.bond.iampomodoro.view.RepoInfoMainView;
 import com.bond.iampomodoro.databinding.FragmentSettingsBinding;
 import com.jakewharton.rxbinding.widget.RxCompoundButton;
 import com.jakewharton.rxbinding.widget.RxSeekBar;
@@ -31,11 +33,12 @@ import static rx.Observable.combineLatest;
 
 public class FragmentSettings extends Fragment implements RepoInfoMainView {
 
-    //@Inject MainPresenter presenter;
+    @Inject
+    Presenter presenter;
 
     private FragmentSettingsBinding binding;
 
-    private MainPresenter mainPresenter;
+    //private Presenter mainPresenter;
     private SettingsObject settings;
 
     protected CompositeSubscription subscriptions = new CompositeSubscription();
@@ -48,10 +51,13 @@ public class FragmentSettings extends Fragment implements RepoInfoMainView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        AppComponent component = App.getComponent();
+        App.getComponent().inject(this);
+
   //      IA.getComponent().inject(this);
   //      presenter.onCreate(this, getRepositoryVO());
 
-        App.getComponent().inject(this);
+        //App.getComponent().inject(this);
         //presenter.onCreate(this);
 
 
@@ -71,9 +77,9 @@ public class FragmentSettings extends Fragment implements RepoInfoMainView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mainPresenter = new MainPresenter();
-        settings = mainPresenter.notifySettingsFragmentStart(getActivity());
-        //settings = presenter.notifySettingsFragmentStart(getActivity());
+        //mainPresenter = new Presenter();
+        //settings = mainPresenter.notifySettingsFragmentStart(getActivity());
+        settings = presenter.notifySettingsFragmentStart(getActivity());
 
         InitCheckBoxes();
         InitSeekbars();
@@ -82,7 +88,7 @@ public class FragmentSettings extends Fragment implements RepoInfoMainView {
     @Override
     public void onPause() {
 
-        mainPresenter.saveSetings(getActivity(), settings);
+        presenter.saveSetings(getActivity(), settings);
 
         super.onPause();
     }
@@ -101,7 +107,7 @@ public class FragmentSettings extends Fragment implements RepoInfoMainView {
         super.setUserVisibleHint(isVisibleToUser);
 
         if(!isVisibleToUser && settings != null) {
-           mainPresenter.saveSetings(getActivity(), settings);
+           presenter.saveSetings(getActivity(), settings);
         }
     }
 

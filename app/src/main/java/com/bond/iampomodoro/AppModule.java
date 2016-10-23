@@ -2,8 +2,7 @@ package com.bond.iampomodoro;
 
 import android.app.Application;
 
-import com.bond.iampomodoro.Presenter.MainPresenter;
-import com.bond.iampomodoro.View.MainActivity;
+import com.bond.iampomodoro.presenter.Presenter;
 
 import javax.inject.Singleton;
 
@@ -13,23 +12,18 @@ import dagger.Provides;
 @Module
 public class AppModule {
 
-    protected final Application application;
+//    protected final Application application;
 
-    public AppModule(App application) {
-        this.application = application;
-    }
+//    public AppModule(App application) {
+//        this.application = application;
+//    }
 
-    @Provides
-    @Singleton
-    public Application provideApplication() {
-        return application;
-    }
+//   @Provides
+//   @Singleton
+//   public Application provideApplication() {
+//       return application;
+//   }
 
-    @Provides
-    @Singleton
-    public MainPresenter mainPresenter() {
-        return new MainPresenter();
-    }
 }
 
 

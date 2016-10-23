@@ -1,28 +1,27 @@
 package com.bond.iampomodoro;
 
-import android.app.Application;
-
-import com.bond.iampomodoro.Presenter.MainPresenter;
-import com.bond.iampomodoro.View.FragmentSettings;
-import com.bond.iampomodoro.View.MainActivity;
+import com.bond.iampomodoro.presenter.Presenter;
+import com.bond.iampomodoro.view.ActivityModule;
+import com.bond.iampomodoro.view.fragments.FragmentSettings;
+import com.bond.iampomodoro.view.MainActivity;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
 
 @Singleton
-@Component(modules = { AppModule.class })
+@Component(modules = { AppModule.class, ActivityModule.class })
 public interface AppComponent {
 
-    MainPresenter mainPresenter();
+//    Presenter mainPresenter();
+//
+//    Application provideApplication();
 
-    Application provideApplication();
-
-    void inject (MainActivity activity);
+//    void inject (MainActivity activity);
 
     void inject (FragmentSettings fragmentSettings);
 
-    void inject (MainPresenter mainPresenter);
+    void inject (Presenter mainPresenter);
 
     //void inject (SettingsHelper settingsHelper);
 }

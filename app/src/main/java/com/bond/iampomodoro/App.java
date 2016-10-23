@@ -2,6 +2,8 @@ package com.bond.iampomodoro;
 
 import android.app.Application;
 
+import com.bond.iampomodoro.view.ActivityModule;
+
 public class App extends Application {
 
   private static AppComponent component;
@@ -17,7 +19,8 @@ public class App extends Application {
 
   public AppComponent createComponent() {
     return DaggerAppComponent.builder()
-            .appModule(new AppModule(this))
+            //.appModule(new AppModule(this))
+            //.activityModule(new ActivityModule(this))
             .build();
   }
 
