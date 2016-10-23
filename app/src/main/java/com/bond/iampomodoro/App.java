@@ -2,7 +2,9 @@ package com.bond.iampomodoro;
 
 import android.app.Application;
 
-import com.bond.iampomodoro.view.ActivityModule;
+import com.bond.iampomodoro.di.AppComponent;
+import com.bond.iampomodoro.di.AppModule;
+import com.bond.iampomodoro.di.DaggerAppComponent;
 
 public class App extends Application {
 
@@ -19,8 +21,8 @@ public class App extends Application {
 
   public AppComponent createComponent() {
     return DaggerAppComponent.builder()
-            //.appModule(new AppModule(this))
-            //.activityModule(new ActivityModule(this))
+            .appModule(new AppModule(this))
+            //.activityModule(new ViewModule(this))
             .build();
   }
 

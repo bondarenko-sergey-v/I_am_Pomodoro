@@ -42,7 +42,7 @@ public class FragmentDay extends Fragment implements View.OnClickListener {
         startBtn.setOnClickListener(FragmentDay.this);
         resetBtn.setOnClickListener(FragmentDay.this);
 
-        //TODO Presenter.startNewFragment
+        //TODO SettingsPresenter.startNewFragment
 
     }
 
@@ -50,11 +50,11 @@ public class FragmentDay extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.startBtn:
-                //TODO Presenter.pause
+                //TODO SettingsPresenter.pause
                 break;
 
             case R.id.resetBtn:
-                //TODO Presenter.reset
+                //TODO SettingsPresenter.reset
                 break;
         }
     }
