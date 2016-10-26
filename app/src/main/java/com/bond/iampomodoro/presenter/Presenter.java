@@ -1,45 +1,147 @@
 package com.bond.iampomodoro.presenter;
 
-import android.content.Context;
-
 import com.bond.iampomodoro.App;
+import com.bond.iampomodoro.R;
+import com.bond.iampomodoro.databinding.FragmentDayBinding;
 import com.bond.iampomodoro.model.SettingsHelper;
 import com.bond.iampomodoro.model.SettingsObject;
-import com.bond.iampomodoro.view.RepoInfoMainView;
+import com.jakewharton.rxbinding.view.RxView;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-//TODO Make Singleton
-//public class Presenter extends Service {
-public class Presenter implements PresenterInterface {
-//public class Presenter {
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
-    /** UNCOMMENT **/
+public class Presenter {
+
+    @Inject
+    SettingsHelper settingsHelper;
+
+    //@Inject
+    CompositeSubscription compositeSubscription = new CompositeSubscription();
+
+    private SettingsObject settings;
+    private FragmentDayBinding binding;
+
+    private Boolean isWorkTime = true;
+    private int breaksCount = 0;
+
+    private int workSessionMin;
+    private int breakMin;
+    private int longBreakMin;
+    private int sessionsBeforeLB;
+
     public Presenter() {
         App.getComponent().inject(this);
     }
 
-    @Inject
-    SettingsHelper settingsHelper;
-    //SettingsHelper settingsHelper = new SettingsHelper();
+    public void notifyDayFragmentStarts(FragmentDayBinding binding) {
+        this.binding = binding;
 
-    private RepoInfoMainView view;
+        settings = settingsHelper.getSetings();
+        workSessionMin = settings.intr[0];
+        breakMin = settings.intr[1];
+        longBreakMin = settings.intr[2];
+        sessionsBeforeLB = settings.intr[3];
 
-    //public void onCreate(RepoInfoMainView view, Repository repository) {
-//    public void onCreate(RepoInfoMainView view) {
-//        ///App.getComponent().inject(this);
-//        this.view = view;
-//
-//        settingsHelper = new SettingsHelper();
-//    }
-
-    public void saveSetings(Context context, SettingsObject settings) {
-
-        settingsHelper.setSetings(context, settings);
+        initUI();
     }
 
-    public SettingsObject notifySettingsFragmentStart(Context context) {
+    private void initUI() {
+        binding.minutes.setText(String.valueOf(workSessionMin));
 
-        return settingsHelper.getSetings(context);
+        RxView.clicks(binding.startBtn)
+                .skip(1)
+                .subscribe(v -> {
+                    switch (binding.startBtn.getText().toString()) {
+                        case "Start":
+                            timerStart();
+                            binding.startBtn.setText(R.string.pause);
+                            binding.resetBtn.setEnabled(true);
+                            binding.resetBtn.setText(R.string.reset);
+                            break;
+                        case "Pause":
+                            clearCompositeSubscription();
+                            binding.startBtn.setText(R.string.resume);
+                            break;
+                        case "Resume":
+                            timerResume();
+                            binding.startBtn.setText(R.string.pause);
+                            break;
+                    }
+                });
+
+        RxView.clicks(binding.resetBtn)
+                .skip(1)
+                .subscribe(v -> {
+                    clearCompositeSubscription();
+                    binding.startBtn.setText(R.string.start);
+                    binding.resetBtn.setText("");
+                    binding.resetBtn.setEnabled(false);
+                    binding.minutes.setText(String.valueOf(workSessionMin));
+                    binding.seconds.setText("00");
+                    isWorkTime = true;
+                    breaksCount = 0;
+                });
+    }
+
+    private void timerStart() {
+        //clearCompositeSubscription();
+
+        if (isWorkTime) {
+            countDownTimer(0, 10);
+            //countDownTimer(workSessionMin, 0);
+            isWorkTime = false;
+        } else if (breaksCount < sessionsBeforeLB) {
+            countDownTimer(0, 3);
+            //countDownTimer(breakMin, 0);
+            breaksCount++;
+            isWorkTime = true;
+        } else {
+            countDownTimer(0, 7);
+            //countDownTimer(longBreakMin, 0);
+            breaksCount = 0;
+            isWorkTime = true;
+        }
+    }
+
+    private  void timerResume() {
+        //clearCompositeSubscription();
+
+        countDownTimer(Integer.parseInt(binding.minutes.getText().toString()),
+                Integer.parseInt(binding.seconds.getText().toString()));
+    }
+
+    private void countDownTimer(int minutes, int seconds) {
+        int intervalInSeconds = minutes * 60 + seconds;
+
+        clearCompositeSubscription();
+
+        Subscription s =
+                Observable.interval(1, TimeUnit.SECONDS, Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(v -> v +1)
+                        .take(intervalInSeconds)
+                        .doAfterTerminate(() -> timerStart())
+                        .subscribe(v -> {
+                            binding.minutes.setText(String.valueOf(
+                                    (int) (intervalInSeconds - v) / 60));
+                            binding.seconds.setText(String.format("%02d", //TODO Check warning
+                                    (intervalInSeconds - v) % 60));
+                        });
+
+        compositeSubscription.add(s);
+    }
+
+    private void clearCompositeSubscription() {
+        if (compositeSubscription != null && !compositeSubscription.isUnsubscribed()) {
+            compositeSubscription.unsubscribe();
+            compositeSubscription = new CompositeSubscription();
+        }
     }
 }

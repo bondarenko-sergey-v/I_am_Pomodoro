@@ -1,7 +1,10 @@
 package com.bond.iampomodoro.di;
 
 import com.bond.iampomodoro.model.SettingsHelper;
+import com.bond.iampomodoro.presenter.Presenter;
 import com.bond.iampomodoro.presenter.SettingsPresenter;
+import com.bond.iampomodoro.view.fragments.FragmentDay;
+import com.bond.iampomodoro.view.fragments.FragmentHardcore;
 import com.bond.iampomodoro.view.fragments.FragmentSettings;
 
 import javax.inject.Singleton;
@@ -9,21 +12,18 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = { AppModule.class, ViewModule.class, PresenterModule.class })
+@Component(modules = { AppModule.class, PresenterModule.class, ModelModule.class })
 public interface AppComponent {
-
-//    SettingsPresenter mainPresenter();
-//
-//    Application provideApplication();
-
-//    void inject (MainActivity activity);
 
     void inject (FragmentSettings fragmentSettings);
 
-    void inject (SettingsPresenter mainPresenter);
+    void inject (FragmentDay fragmentDay);
+
+    //void inject (FragmentHardcore fragmentHardcore);
+
+    void inject (SettingsPresenter settingsPresenter);
+
+    void inject (Presenter presenter);
 
     void inject (SettingsHelper settingsHelper);
-
-    //@ApplicationContext
-    //Context context();
 }

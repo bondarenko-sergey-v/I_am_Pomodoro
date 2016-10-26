@@ -14,15 +14,12 @@ public class App extends Application {
   public void onCreate() {
     super.onCreate();
 
-    //component = buildComponent();
-    //this.component = createComponent();
     component = createComponent();
   }
 
   public AppComponent createComponent() {
     return DaggerAppComponent.builder()
             .appModule(new AppModule(this))
-            //.activityModule(new ViewModule(this))
             .build();
   }
 

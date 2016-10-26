@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
 
 public class FragmentHardcore extends Fragment implements View.OnClickListener {
@@ -21,6 +22,13 @@ public class FragmentHardcore extends Fragment implements View.OnClickListener {
     public static FragmentHardcore newInstance() {
         return new FragmentHardcore();
     }
+
+ //   @Override
+ //   public void onCreate(@Nullable Bundle savedInstanceState) {
+ //       super.onCreate(savedInstanceState);
+//
+ //       App.getComponent().inject(this);
+ //   }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -60,7 +60,7 @@ public class SettingsPresenter {
 
         Subscription s = Observable.from(cbList)
                 .doOnNext(v -> v.setChecked(settings.bool[cbList.indexOf(v)])) //TODO Refactor index calculation
-                .map(RxCompoundButton::checkedChanges)
+                .map(RxCompoundButton::checkedChanges)                         // with .count or something else
                 .toList()
                 .flatMap(v -> combineLatest(v, args -> {
                     List<Boolean> combine = new ArrayList<>();
