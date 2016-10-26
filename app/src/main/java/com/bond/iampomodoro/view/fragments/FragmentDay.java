@@ -18,7 +18,7 @@ import javax.inject.Inject;
 public class FragmentDay extends Fragment{
 
     @Inject
-    DayPresenter presenter;
+    DayPresenter dayPresenter;
 
     private FragmentDayBinding binding;
 
@@ -46,6 +46,6 @@ public class FragmentDay extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        presenter.notifyDayFragmentStarts(binding);
+        dayPresenter.notifyDayFragmentStarts(binding);
     }
 }

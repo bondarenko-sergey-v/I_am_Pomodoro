@@ -1,11 +1,8 @@
 package com.bond.iampomodoro.presenter;
 
 import com.bond.iampomodoro.App;
-import com.bond.iampomodoro.R;
-import com.bond.iampomodoro.databinding.FragmentDayBinding;
 import com.bond.iampomodoro.model.SettingsHelper;
 import com.bond.iampomodoro.model.SettingsObject;
-import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,18 +20,18 @@ public abstract class BasePresenter {
     SettingsHelper settingsHelper;
 
     //@Inject
-    CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
-    private SettingsObject settings;
-    private FragmentDayBinding binding;
+    public boolean isWorkTime = true;
+    public int breaksCount = 0;
 
-    private Boolean isWorkTime = true;
-    private int breaksCount = 0;
+    public int workSessionMin;
+    public int breakMin;
+    public int longBreakMin;
+    public int sessionsBeforeLB;
 
-    private int workSessionMin;
-    private int breakMin;
-    private int longBreakMin;
-    private int sessionsBeforeLB;
+    private int savedMinutes;
+    private int savedSeconds;
 
     public BasePresenter() {
         App.getComponent().inject(this);
@@ -42,16 +39,13 @@ public abstract class BasePresenter {
 
     abstract void showTime(int minutes, int seconds);
 
-    public void notifyDayFragmentStarts(FragmentDayBinding binding) {
-        this.binding = binding;
+    public void getSettings() {
 
-        settings = settingsHelper.getSetings();
+        SettingsObject settings = settingsHelper.getSetings();
         workSessionMin = settings.intr[0];
         breakMin = settings.intr[1];
         longBreakMin = settings.intr[2];
         sessionsBeforeLB = settings.intr[3];
-
-        initUI();
     }
 
     public void timerStart() {
@@ -73,10 +67,8 @@ public abstract class BasePresenter {
         }
     }
 
-    private  void timerResume() {
-
-        countDownTimer(Integer.parseInt(binding.minutes.getText().toString()),
-                Integer.parseInt(binding.seconds.getText().toString()));
+    public void timerResume() {
+        countDownTimer(savedMinutes,savedSeconds);
     }
 
     private void countDownTimer(int minutes, int seconds) {
@@ -91,12 +83,9 @@ public abstract class BasePresenter {
                         .take(intervalInSeconds)
                         .doAfterTerminate(() -> timerStart())
                         .subscribe(v -> {
-                            showTime((int) (intervalInSeconds - v) / 60,
-                                     (int) (intervalInSeconds - v) % 60);
-                            //                       binding.minutes.setText(String.valueOf(
-                            //                               (int) (intervalInSeconds - v) / 60));
-                            //                       binding.seconds.setText(String.format("%02d", //TODO Check warning
-                            //                               (intervalInSeconds - v) % 60));
+                            savedMinutes = (int) (intervalInSeconds - v) / 60;
+                            savedSeconds = (int) (intervalInSeconds - v) % 60;
+                            showTime(savedMinutes,savedSeconds);
                         });
 
         compositeSubscription.add(s);

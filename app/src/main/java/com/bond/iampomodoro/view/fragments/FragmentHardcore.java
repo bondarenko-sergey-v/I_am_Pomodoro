@@ -11,14 +11,14 @@ import android.view.ViewGroup;
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentHardcoreBinding;
-import com.bond.iampomodoro.presenter.DayPresenter;
+import com.bond.iampomodoro.presenter.HardcorePresenter;
 
 import javax.inject.Inject;
 
 public class FragmentHardcore extends Fragment {
 
     @Inject
-    DayPresenter presenter;
+    HardcorePresenter hardcorePresenter;
 
     private FragmentHardcoreBinding binding;
 
@@ -46,7 +46,6 @@ public class FragmentHardcore extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //TODO Change notification
-        //presenter.notifyDayFragmentStarts(binding);
+        hardcorePresenter.notifyHardcoreFragmentStarts(binding);
     }
 }

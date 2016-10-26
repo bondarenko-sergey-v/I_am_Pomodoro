@@ -2,18 +2,20 @@ package com.bond.iampomodoro.presenter;
 
 import android.view.View;
 
+import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
-import com.bond.iampomodoro.databinding.FragmentDayBinding;
 import com.bond.iampomodoro.databinding.FragmentHardcoreBinding;
 import com.jakewharton.rxbinding.view.RxView;
 
-public class DayPresenter extends BasePresenter {
+public class HardcorePresenter extends BasePresenter {
 
-    private FragmentDayBinding binding;
-    //private FragmentHardcoreBinding b;
+    private FragmentHardcoreBinding binding;
 
+    public HardcorePresenter() {
+        App.getComponent().inject(this);
+    }
 
-    public void notifyDayFragmentStarts(FragmentDayBinding binding) {
+    public void notifyHardcoreFragmentStarts(FragmentHardcoreBinding binding) {
         this.binding = binding;
 
         getSettings();

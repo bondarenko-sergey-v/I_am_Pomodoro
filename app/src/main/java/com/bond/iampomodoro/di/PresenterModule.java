@@ -2,6 +2,7 @@ package com.bond.iampomodoro.di;
 
 import com.bond.iampomodoro.presenter.BasePresenter;
 import com.bond.iampomodoro.presenter.DayPresenter;
+import com.bond.iampomodoro.presenter.HardcorePresenter;
 import com.bond.iampomodoro.presenter.SettingsPresenter;
 
 import javax.inject.Singleton;
@@ -25,11 +26,11 @@ public class PresenterModule {
     return new DayPresenter();
   }
 
-//  @Provides
-//  @Singleton
-//  BasePresenter provideBasePresenter() {
-//    return new BasePresenter();
-//  }
+  @Provides
+  @Singleton
+  HardcorePresenter provideHardcorePresenter() {
+    return new HardcorePresenter();
+  }
 
   @Provides
   //@Singleton

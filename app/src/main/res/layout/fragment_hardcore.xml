@@ -30,7 +30,10 @@
             android:background="@android:drawable/screen_background_dark"
             android:textSize="18sp"
             android:fontFamily="monospace"
-            android:textColor="#909090"/>
+            android:textColor="#909090"
+            android:visibility="invisible"
+            android:enabled="false"
+            android:text="@string/reset"/>
 
         <Button
             android:text="Start"

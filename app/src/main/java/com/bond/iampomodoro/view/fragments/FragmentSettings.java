@@ -21,7 +21,7 @@ import rx.subscriptions.CompositeSubscription;
 public class FragmentSettings extends Fragment {
 
     @Inject
-    SettingsPresenter presenter;
+    SettingsPresenter settingsPresenter;
 
     @Inject
     CompositeSubscription subscriptionList;
@@ -52,13 +52,13 @@ public class FragmentSettings extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        presenter.notifySettingsFragmentStarts(binding);
+        settingsPresenter.notifySettingsFragmentStarts(binding);
     }
 
     @Override
     public void onPause() {
 
-        presenter.saveSettings();
+        settingsPresenter.saveSettings();
 
         if (!subscriptionList.isUnsubscribed()) {
             subscriptionList.unsubscribe();
@@ -80,8 +80,8 @@ public class FragmentSettings extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if(!isVisibleToUser && presenter != null) {
-           presenter.saveSettings();
+        if(!isVisibleToUser && settingsPresenter != null) {
+           settingsPresenter.saveSettings();
 
             if (!subscriptionList.isUnsubscribed()) {
                 subscriptionList.unsubscribe();
