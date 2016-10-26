@@ -7,25 +7,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentDayBinding;
-import com.bond.iampomodoro.presenter.Presenter;
+import com.bond.iampomodoro.presenter.DayPresenter;
 
 import javax.inject.Inject;
 
 public class FragmentDay extends Fragment{
 
-    private TextView minutesTextView;
-    private TextView secondsTextView;
-    private Button startBtn;
-    private Button resetBtn;
-
     @Inject
-    Presenter presenter;
+    DayPresenter presenter;
 
     private FragmentDayBinding binding;
 
@@ -54,7 +47,5 @@ public class FragmentDay extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         presenter.notifyDayFragmentStarts(binding);
-        //settingsPresenter.notifySettingsFragmentStarts(binding);
-        //TODO SettingsPresenter.startNewFragment
     }
 }

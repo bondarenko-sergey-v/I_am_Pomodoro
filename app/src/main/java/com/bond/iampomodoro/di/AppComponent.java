@@ -1,7 +1,8 @@
 package com.bond.iampomodoro.di;
 
 import com.bond.iampomodoro.model.SettingsHelper;
-import com.bond.iampomodoro.presenter.Presenter;
+import com.bond.iampomodoro.presenter.BasePresenter;
+import com.bond.iampomodoro.presenter.DayPresenter;
 import com.bond.iampomodoro.presenter.SettingsPresenter;
 import com.bond.iampomodoro.view.fragments.FragmentDay;
 import com.bond.iampomodoro.view.fragments.FragmentHardcore;
@@ -19,11 +20,13 @@ public interface AppComponent {
 
     void inject (FragmentDay fragmentDay);
 
-    //void inject (FragmentHardcore fragmentHardcore);
+    void inject (FragmentHardcore fragmentHardcore);
 
     void inject (SettingsPresenter settingsPresenter);
 
-    void inject (Presenter presenter);
+    void inject (DayPresenter dayPresenter);
+
+    void inject (BasePresenter basePresenter);
 
     void inject (SettingsHelper settingsHelper);
 }
