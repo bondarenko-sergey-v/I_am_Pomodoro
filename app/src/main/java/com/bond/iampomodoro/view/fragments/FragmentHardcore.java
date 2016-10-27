@@ -30,8 +30,12 @@ public class FragmentHardcore extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if(!isVisibleToUser &&hardcorePresenter != null) {
-            hardcorePresenter.saveTimerSettings(); }
+        if(!isVisibleToUser && hardcorePresenter != null) {
+            hardcorePresenter.saveTimerSettings();
+        }
+
+        if(isVisibleToUser && hardcorePresenter != null) {
+            hardcorePresenter.notifyHardcoreFragmentStarts(binding); } //TODO Make reinflation faster
 
     }
 
@@ -55,6 +59,6 @@ public class FragmentHardcore extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        hardcorePresenter.notifyHardcoreFragmentStarts(binding);
+        //hardcorePresenter.notifyHardcoreFragmentStarts(binding);
     }
 }

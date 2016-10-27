@@ -12,8 +12,8 @@ import javax.inject.Inject;
 
 public class SettingsHelper {
 
-    private static final String APP_PREF_GENERAL = "GENERAL";
-    private static final String APP_PREF_TIMER = "TIMER";
+    private static final String APP_PREF_GENERAL = "general";
+    private static final String APP_PREF_TIMER = "timer";
 
     private SharedPreferences mSettings;
     private SharedPreferences.Editor editor;
@@ -49,8 +49,7 @@ public class SettingsHelper {
         mSettings = PreferenceManager.getDefaultSharedPreferences(appContext);
 
         String json = mSettings.getString(APP_PREF_TIMER,
-                "{\"breaksCount\":0,\"isCompSubscriptionHasSubscriptions\":false," +
-                "\"isWorkTime\":true,\"savedMinutes\":0,\"savedSeconds\":0}");
+        "{\"intervalInSeconds\":1,\"isTimerOnPause\":false,\"timerCycleCounter\":0}");
 
         return new Gson().fromJson(json,
                 new TypeToken<TimerSettingsObject>(){}.getType());
@@ -62,6 +61,6 @@ public class SettingsHelper {
 
         editor.putString(APP_PREF_TIMER, new Gson().toJson(timerSetings))
                 .apply();
-        System.out.println(new Gson().toJson(timerSetings));
+        //System.out.println("Save timer settings - " + new Gson().toJson(timerSetings));
     }
 }

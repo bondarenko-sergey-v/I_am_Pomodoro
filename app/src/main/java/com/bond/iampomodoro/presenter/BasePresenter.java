@@ -23,22 +23,22 @@ public abstract class BasePresenter {
     //@Inject
     private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
-    public boolean isWorkTime = true;
-    public int breaksCount = 0;
+    TimerSettingsObject ob;
 
     public int workSessionMin;
     public int breakMin;
     public int longBreakMin;
     public int sessionsBeforeLB;
 
-    private int savedMinutes;
-    private int savedSeconds;
-
     public BasePresenter() {
         App.getComponent().inject(this);
     }
 
-    abstract void showTime(int minutes, int seconds);
+    abstract void resetTimer();
+    abstract void startTimer();
+    abstract void pauseTimer();
+
+    abstract void showTime(int intervalInSeconds);
 
     public void getSettings() {
 
@@ -47,75 +47,65 @@ public abstract class BasePresenter {
         breakMin = settings.intr[1];
         longBreakMin = settings.intr[2];
         sessionsBeforeLB = settings.intr[3];
+
+        // Get timer setting
+        ob = settingsHelper.getTimerSetings();
+
+        setTimerState();
+    }
+
+    public void setTimerState() {
+
+        if(ob.timerCycleCounter == 0) {
+            resetTimer();
+            return;
+        }
+
+        if(!ob.isTimerOnPause && ob.timerCycleCounter != 0) {
+            ob.isTimerOnPause = true;
+            startTimer();
+            return;
+        }
+
+        if(ob.isTimerOnPause) {
+            pauseTimer();
+            return;
+        }
     }
 
     public void saveTimerSettings() {
-        int correctedBreakCounts = breaksCount;
-        //TODO Clear composite subscriprion
-
-        if(isWorkTime) correctedBreakCounts--;
-        if(isWorkTime && breaksCount == 0) correctedBreakCounts = sessionsBeforeLB;
-        if (savedMinutes == workSessionMin) isWorkTime = false; //TODO Refactor
-
-        //TODO Add to TimerSettingsObject timer state
-        TimerSettingsObject ob = new TimerSettingsObject(savedMinutes, savedSeconds, !isWorkTime,
-                correctedBreakCounts, compositeSubscription.hasSubscriptions());
-
-        settingsHelper.setTimerSetings(ob);
-    }
-
-    public void getTimerSettings() {
-        TimerSettingsObject ob = settingsHelper.getTimerSetings();
-
-        savedMinutes = ob.savedMinutes;
-        savedSeconds = ob.savedSeconds;
-        isWorkTime = ob.isWorkTime;
-        breaksCount = ob.breaksCount;
-
-        showTime(savedMinutes,savedSeconds);
-        //TODO MAke change UI Buttons
-
-        if(ob.isCompSubscriptionHasSubscriptions) {
-
-        }
-        int correctedBreakCounts = breaksCount;
-
-        if(isWorkTime) correctedBreakCounts--;
-        if(isWorkTime && breaksCount == 0) correctedBreakCounts = sessionsBeforeLB;
-        if (savedMinutes == workSessionMin) isWorkTime = false; //TODO Refactor
-
-        TimerSettingsObject ob = new TimerSettingsObject(savedMinutes, savedSeconds, !isWorkTime,
-                correctedBreakCounts, compositeSubscription.hasSubscriptions());
+        clearCompositeSubscription();
 
         settingsHelper.setTimerSetings(ob);
     }
 
     public void timerStart() {
 
-        if (isWorkTime) {
-            countDownTimer(0, 10);
-            //countDownTimer(workSessionMin, 0);
-            isWorkTime = false;
-        } else if (breaksCount < sessionsBeforeLB) {
-            countDownTimer(0, 3);
-            //countDownTimer(breakMin, 0);
-            breaksCount++;
-            isWorkTime = true;
+        if(ob.isTimerOnPause) {
+            countDownTimer(ob.intervalInSeconds);
+            ob.isTimerOnPause = false;
+            return;
+        }
+
+        ob.timerCycleCounter++;
+
+        if (ob.timerCycleCounter % 2 != 0) {
+            countDownTimer(10);
+            //countDownTimer(workSessionMin * 60);
+            System.out.println("Work");
+        } else if (ob.timerCycleCounter % 2 == 0
+                && ob.timerCycleCounter % ((sessionsBeforeLB + 1) * 2) != 0) {
+            countDownTimer(3);
+            //countDownTimer(breakMin * 60);
+            System.out.println("Break");
         } else {
-            countDownTimer(0, 7);
-            //countDownTimer(longBreakMin, 0);
-            breaksCount = 0;
-            isWorkTime = true;
+            countDownTimer(7);
+            //countDownTimer(longBreakMin * 60);
+            System.out.println("Long break");
         }
     }
 
-    public void timerResume() {
-        countDownTimer(savedMinutes,savedSeconds);
-    }
-
-    private void countDownTimer(int minutes, int seconds) {
-        int intervalInSeconds = minutes * 60 + seconds;
-
+    private void countDownTimer(int intervalInSeconds) {
         clearCompositeSubscription();
 
         Subscription s =
@@ -125,9 +115,8 @@ public abstract class BasePresenter {
                         .take(intervalInSeconds)
                         .doAfterTerminate(() -> timerStart())
                         .subscribe(v -> {
-                            savedMinutes = (int) (intervalInSeconds - v) / 60;
-                            savedSeconds = (int) (intervalInSeconds - v) % 60;
-                            showTime(savedMinutes,savedSeconds);
+                            ob.intervalInSeconds = (int) (intervalInSeconds - v);
+                            showTime(ob.intervalInSeconds);
                         });
 
         compositeSubscription.add(s);

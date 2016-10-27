@@ -1,18 +1,14 @@
 package com.bond.iampomodoro.model;
 
 public class TimerSettingsObject {
-    public int savedMinutes;
-    public int savedSeconds;
-    public boolean isWorkTime;
-    public int breaksCount;
-    public boolean isCompSubscriptionHasSubscriptions;
+    public int timerCycleCounter;
+    public int intervalInSeconds;
+    public boolean isTimerOnPause;
 
-    public TimerSettingsObject(int savedMinutes, int savedSeconds, boolean isWorkTime,
-                               int breaksCount, boolean isCompSubscriptionHasSubscriptions) {
-        this.savedMinutes = savedMinutes;
-        this.savedSeconds = savedSeconds;
-        this.isWorkTime = isWorkTime;
-        this.breaksCount = breaksCount;
-        this.isCompSubscriptionHasSubscriptions = isCompSubscriptionHasSubscriptions;
+    public TimerSettingsObject(int timerCycleCounter, int intervalInSeconds,
+                               boolean isTimerOnPause) {
+        this.timerCycleCounter = timerCycleCounter;
+        this.intervalInSeconds = intervalInSeconds;
+        this.isTimerOnPause = isTimerOnPause;
     }
 }

@@ -31,11 +31,11 @@ public class FragmentDay extends Fragment{
         super.setUserVisibleHint(isVisibleToUser);
 
         if(!isVisibleToUser && dayPresenter != null) {
-        dayPresenter.saveTimerSettings(); }
+            dayPresenter.saveTimerSettings();
+        }
 
         if(isVisibleToUser && dayPresenter != null) {
-        dayPresenter.getTimerSettings(); }
-
+            dayPresenter.notifyDayFragmentStarts(binding); } //TODO Make reinflation faster
 
     }
 
