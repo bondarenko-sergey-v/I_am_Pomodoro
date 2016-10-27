@@ -27,6 +27,15 @@ public class FragmentHardcore extends Fragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if(!isVisibleToUser &&hardcorePresenter != null) {
+            hardcorePresenter.saveTimerSettings(); }
+
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

@@ -3,6 +3,7 @@ package com.bond.iampomodoro.presenter;
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.model.SettingsHelper;
 import com.bond.iampomodoro.model.SettingsObject;
+import com.bond.iampomodoro.model.TimerSettingsObject;
 
 import java.util.concurrent.TimeUnit;
 
@@ -46,6 +47,47 @@ public abstract class BasePresenter {
         breakMin = settings.intr[1];
         longBreakMin = settings.intr[2];
         sessionsBeforeLB = settings.intr[3];
+    }
+
+    public void saveTimerSettings() {
+        int correctedBreakCounts = breaksCount;
+        //TODO Clear composite subscriprion
+
+        if(isWorkTime) correctedBreakCounts--;
+        if(isWorkTime && breaksCount == 0) correctedBreakCounts = sessionsBeforeLB;
+        if (savedMinutes == workSessionMin) isWorkTime = false; //TODO Refactor
+
+        //TODO Add to TimerSettingsObject timer state
+        TimerSettingsObject ob = new TimerSettingsObject(savedMinutes, savedSeconds, !isWorkTime,
+                correctedBreakCounts, compositeSubscription.hasSubscriptions());
+
+        settingsHelper.setTimerSetings(ob);
+    }
+
+    public void getTimerSettings() {
+        TimerSettingsObject ob = settingsHelper.getTimerSetings();
+
+        savedMinutes = ob.savedMinutes;
+        savedSeconds = ob.savedSeconds;
+        isWorkTime = ob.isWorkTime;
+        breaksCount = ob.breaksCount;
+
+        showTime(savedMinutes,savedSeconds);
+        //TODO MAke change UI Buttons
+
+        if(ob.isCompSubscriptionHasSubscriptions) {
+
+        }
+        int correctedBreakCounts = breaksCount;
+
+        if(isWorkTime) correctedBreakCounts--;
+        if(isWorkTime && breaksCount == 0) correctedBreakCounts = sessionsBeforeLB;
+        if (savedMinutes == workSessionMin) isWorkTime = false; //TODO Refactor
+
+        TimerSettingsObject ob = new TimerSettingsObject(savedMinutes, savedSeconds, !isWorkTime,
+                correctedBreakCounts, compositeSubscription.hasSubscriptions());
+
+        settingsHelper.setTimerSetings(ob);
     }
 
     public void timerStart() {

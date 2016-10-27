@@ -4,14 +4,12 @@ import android.view.View;
 
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentDayBinding;
-import com.bond.iampomodoro.databinding.FragmentHardcoreBinding;
 import com.jakewharton.rxbinding.view.RxView;
 
 public class DayPresenter extends BasePresenter {
 
     private FragmentDayBinding binding;
-    //private FragmentHardcoreBinding b;
-
+    private String buttonsState = "Start";
 
     public void notifyDayFragmentStarts(FragmentDayBinding binding) {
         this.binding = binding;
@@ -26,37 +24,67 @@ public class DayPresenter extends BasePresenter {
 
         RxView.clicks(binding.startBtn)
                 .skip(1)
-                .subscribe(v -> {
-                    switch (binding.startBtn.getText().toString()) {
-                        case "Start":
-                            timerStart();
-                            binding.startBtn.setText(R.string.pause);
-                            binding.resetBtn.setEnabled(true);
-                            binding.resetBtn.setVisibility(View.VISIBLE);
-                            break;
-                        case "Pause":
-                            clearCompositeSubscription();
-                            binding.startBtn.setText(R.string.resume);
-                            break;
-                        case "Resume":
-                            timerResume();
-                            binding.startBtn.setText(R.string.pause);
-                            break;
-                    }
+                .subscribe(v -> { setTimerState(buttonsState);
+          //          switch (binding.startBtn.getText().toString()) {
+          //              case "Start":
+          //                  timerStart();
+          //                  binding.startBtn.setText(R.string.pause);
+          //                  binding.resetBtn.setEnabled(true);
+          //                  binding.resetBtn.setVisibility(View.VISIBLE);
+          //                  break;
+          //              case "Pause":
+          //                  clearCompositeSubscription();
+          //                  saveTimerSettings();
+          //                  binding.startBtn.setText(R.string.resume);
+          //                  break;
+          //              case "Resume":
+          //                  timerResume();
+          //                  binding.startBtn.setText(R.string.pause);
+          //                  break;
+          //          }
                 });
 
         RxView.clicks(binding.resetBtn)
                 .skip(1)
-                .subscribe(v -> {
-                    clearCompositeSubscription();
-                    showTime(workSessionMin,0);
-                    binding.startBtn.setText(R.string.start);
-                    binding.resetBtn.setEnabled(false);
-                    binding.resetBtn.setVisibility(View.INVISIBLE);
-                    isWorkTime = true;
-                    breaksCount = 0;
+                .subscribe(v -> { setTimerState("Reset");
+         //           clearCompositeSubscription();
+         //           showTime(workSessionMin,0);
+         //           binding.startBtn.setText(R.string.start);
+         //           binding.resetBtn.setEnabled(false);
+         //           binding.resetBtn.setVisibility(View.INVISIBLE);
+         //           isWorkTime = true;
+         //           breaksCount = 0;
                 });
     }
+
+    public void setTimerState(String butonsState) {
+        switch (butonsState) {
+            case "Start":
+                timerStart();
+                binding.startBtn.setText(R.string.pause);
+                binding.resetBtn.setEnabled(true);
+                binding.resetBtn.setVisibility(View.VISIBLE);
+                break;
+            case "Pause":
+                clearCompositeSubscription();
+                saveTimerSettings();
+                binding.startBtn.setText(R.string.resume);
+                break;
+            case "Resume":
+                timerResume();
+                binding.startBtn.setText(R.string.pause);
+                break;
+            case "Reset":
+                clearCompositeSubscription();
+                showTime(workSessionMin,0);
+                binding.startBtn.setText(R.string.start);
+                binding.resetBtn.setEnabled(false);
+                binding.resetBtn.setVisibility(View.INVISIBLE);
+                isWorkTime = true;
+                breaksCount = 0;
+                break;
+    }
+
 
     @Override
     public void showTime(int minutes, int seconds) {

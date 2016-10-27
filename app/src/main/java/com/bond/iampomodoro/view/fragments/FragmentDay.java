@@ -27,6 +27,19 @@ public class FragmentDay extends Fragment{
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if(!isVisibleToUser && dayPresenter != null) {
+        dayPresenter.saveTimerSettings(); }
+
+        if(isVisibleToUser && dayPresenter != null) {
+        dayPresenter.getTimerSettings(); }
+
+
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
