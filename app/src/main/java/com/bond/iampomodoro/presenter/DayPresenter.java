@@ -65,11 +65,11 @@ public class DayPresenter extends BasePresenter {
                 binding.resetBtn.setEnabled(true);
                 binding.resetBtn.setVisibility(View.VISIBLE);
                 break;
-            case "Pause":
-                clearCompositeSubscription();
-                saveTimerSettings();
-                binding.startBtn.setText(R.string.resume);
-                break;
+         //   case "Pause":
+         //       clearCompositeSubscription();
+         //       saveTimerSettings();
+         //       binding.startBtn.setText(R.string.resume);
+         //       break;
             case "Resume":
                 timerResume();
                 binding.startBtn.setText(R.string.pause);
