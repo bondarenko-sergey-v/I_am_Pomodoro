@@ -1,6 +1,10 @@
 package com.bond.iampomodoro.presenter;
 
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.os.Vibrator;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentDayBinding;
@@ -9,6 +13,10 @@ import com.jakewharton.rxbinding.view.RxView;
 public class DayPresenter extends BasePresenter {
 
     private FragmentDayBinding binding;
+
+ //   public DayPresenter() {
+ //       App.getComponent().inject(this);
+ //   }
 
     public void notifyDayFragmentStarts(FragmentDayBinding binding) {
         this.binding = binding;
@@ -68,9 +76,30 @@ public class DayPresenter extends BasePresenter {
 
     @Override
     public void showTime(int timelInSeconds) {
+        if(timelInSeconds == 0) {
+            binding.minutes.setText(String.valueOf(0));
+            binding.seconds.setText(String.format("%02d", 0));
+            return;
+        }
+
         binding.minutes.setText(String.valueOf(
                 (int) timelInSeconds / 60));
         binding.seconds.setText(String.format("%02d",//TODO Check warning
                 (int) timelInSeconds % 60));
+    }
+
+    @Override
+    public void notifyUser(Context context) {
+
+
+    //    long[] pattern = { 0, 300, 400, 300 };
+    //    Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+    //    vibrator.vibrate(pattern, -1);
+
+        MediaPlayer mp = MediaPlayer.create(context, R.raw.beep3);
+        mp.setOnPreparedListener(MediaPlayer::start);
+        mp.setOnCompletionListener(MediaPlayer::release);
+
+
     }
 }

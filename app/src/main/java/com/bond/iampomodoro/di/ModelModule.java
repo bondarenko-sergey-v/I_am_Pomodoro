@@ -1,5 +1,6 @@
 package com.bond.iampomodoro.di;
 
+import com.bond.iampomodoro.di.annotations.PerApplication;
 import com.bond.iampomodoro.model.SettingsHelper;
 
 import javax.inject.Singleton;
@@ -11,7 +12,6 @@ import dagger.Provides;
 public class ModelModule {
 
   @Provides
-    //@PerActivity
   @Singleton
   SettingsHelper provideSettingsHelper() {
     return new SettingsHelper();

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
@@ -60,5 +61,7 @@ public class FragmentDay extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         dayPresenter.notifyDayFragmentStarts(binding);
+
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }

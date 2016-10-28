@@ -1,5 +1,7 @@
 package com.bond.iampomodoro.di;
 
+import com.bond.iampomodoro.di.annotations.PerApplication;
+import com.bond.iampomodoro.model.Vibration;
 import com.bond.iampomodoro.presenter.BasePresenter;
 import com.bond.iampomodoro.presenter.DayPresenter;
 import com.bond.iampomodoro.presenter.HardcorePresenter;
@@ -22,6 +24,12 @@ public class PresenterModule {
 
   @Provides
   @Singleton
+  Vibration provideVibration() {
+    return new Vibration();
+  }
+
+  @Provides
+  @Singleton
   DayPresenter provideDayPresenter() {
     return new DayPresenter();
   }
@@ -33,7 +41,7 @@ public class PresenterModule {
   }
 
   @Provides
-  //@Singleton
+  @Singleton
   CompositeSubscription provideCompositeSubscription() {
     return new CompositeSubscription();
   }

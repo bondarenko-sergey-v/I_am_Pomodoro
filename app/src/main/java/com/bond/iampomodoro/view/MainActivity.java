@@ -1,24 +1,41 @@
 package com.bond.iampomodoro.view;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
+import com.bond.iampomodoro.di.ActivityComponent;
+import com.bond.iampomodoro.di.ActivityModule;
+import com.bond.iampomodoro.di.AppComponent;
+import com.bond.iampomodoro.di.DaggerActivityComponent;
 
 public class MainActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
 
+    private static ActivityComponent activityComponent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //TODO Fix memory leaks
-//        if (LeakCanary.isInAnalyzerProcess(this)) {
+
+        App app = (App) getApplication();
+        activityComponent = DaggerActivityComponent.builder()
+                .appComponent(app.getComponent())
+                .activityModule(new ActivityModule(this))
+                .build();
+                //.inject(this);
+        activityComponent.inject(this);
+
+//        if (LeakCanary.isInAnalyzerProcess(this)) { //TODO Check memory leaks
 //            return;
 //        }
 //        LeakCanary.install(getApplication());
@@ -78,5 +95,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(R.mipmap.ic_weather_sunny);
         tabLayout.getTabAt(1).setIcon(R.mipmap.ic_code_tags);
         tabLayout.getTabAt(2).setIcon(R.mipmap.ic_settings);
+    }
+    public static ActivityComponent getActivityComponent() {
+        return activityComponent;
     }
 }

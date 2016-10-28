@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.bond.iampomodoro.App;
+import com.bond.iampomodoro.di.annotations.ApplicationContext;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -19,6 +20,7 @@ public class SettingsHelper {
     private SharedPreferences.Editor editor;
 
     @Inject
+    @ApplicationContext
     Context appContext;
 
     public SettingsHelper() {
@@ -51,6 +53,10 @@ public class SettingsHelper {
         String json = mSettings.getString(APP_PREF_TIMER,
         "{\"intervalInSeconds\":1,\"isTimerOnPause\":false,\"timerCycleCounter\":0}");
 
+        //TODO Fix bug with "null" settings and delete underlying code
+        if(json.equals("null")) { json = "{\"intervalInSeconds\":1," +
+                "\"isTimerOnPause\":false,\"timerCycleCounter\":0}";}
+
         return new Gson().fromJson(json,
                 new TypeToken<TimerSettingsObject>(){}.getType());
     }
@@ -61,6 +67,6 @@ public class SettingsHelper {
 
         editor.putString(APP_PREF_TIMER, new Gson().toJson(timerSetings))
                 .apply();
-        //System.out.println("Save timer settings - " + new Gson().toJson(timerSetings));
+        //System.out.println("Save timer settings - " + new Gson().toJson(timerSetings));\\ long[] pattern = { 500, 300, 400, 200 };
     }
 }

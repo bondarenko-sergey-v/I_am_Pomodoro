@@ -1,12 +1,23 @@
 package com.bond.iampomodoro.presenter;
 
+import android.content.Context;
+import android.os.Vibrator;
 import android.view.View;
 
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentHardcoreBinding;
+import com.bond.iampomodoro.di.annotations.ActivityContext;
 import com.jakewharton.rxbinding.view.RxView;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 public class HardcorePresenter extends BasePresenter {
+
+    @Inject
+    //@Named("ActivityContext")
+    @ActivityContext
+    Context activityContext;
 
     private FragmentHardcoreBinding binding;
 
@@ -72,5 +83,12 @@ public class HardcorePresenter extends BasePresenter {
                 (int) timelInSeconds / 60));
         binding.seconds.setText(String.format("%02d",//TODO Check warning
                 (int) timelInSeconds % 60));
+    }
+
+    @Override
+    void notifyUser(Context context) {
+        long[] pattern = { 500, 300, 400, 200 };
+        Vibrator vibrator = (Vibrator) activityContext.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(pattern, -1);
     }
 }
