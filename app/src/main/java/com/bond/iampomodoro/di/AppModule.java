@@ -6,18 +6,12 @@ import android.content.Context;
 
 import com.bond.iampomodoro.di.annotations.ActivityContext;
 import com.bond.iampomodoro.di.annotations.ApplicationContext;
-import com.bond.iampomodoro.model.SettingsHelper;
-import com.bond.iampomodoro.model.Vibration;
-import com.bond.iampomodoro.presenter.DayPresenter;
-import com.bond.iampomodoro.presenter.HardcorePresenter;
-import com.bond.iampomodoro.presenter.SettingsPresenter;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import rx.subscriptions.CompositeSubscription;
 
 @Module
 public class AppModule {
@@ -67,8 +61,8 @@ public class AppModule {
 //
 //  @Provides
 //  @Singleton
-//  Vibration provideVibration() {
-//    return new Vibration();
+//  NotifyUser provideVibration() {
+//    return new NotifyUser();
 //  }
 //
 //  @Provides

@@ -1,14 +1,11 @@
 package com.bond.iampomodoro;
 
 import android.app.Application;
-import android.content.Context;
-import android.os.Vibrator;
 
 import com.bond.iampomodoro.di.AppComponent;
 import com.bond.iampomodoro.di.AppModule;
 import com.bond.iampomodoro.di.DaggerAppComponent;
-import com.bond.iampomodoro.di.ModelModule;
-import com.bond.iampomodoro.di.PresenterModule;
+import com.frogermcs.dagger2metrics.Dagger2Metrics;
 
 public class App extends Application {
 
@@ -24,8 +21,6 @@ public class App extends Application {
   public AppComponent createComponent() {
     return DaggerAppComponent.builder()
             .appModule(new AppModule(this))
-            //.modelModule(new ModelModule())
-            //.presenterModule(new PresenterModule())
             .build();
   }
 

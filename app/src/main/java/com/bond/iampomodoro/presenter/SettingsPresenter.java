@@ -26,8 +26,8 @@ public class SettingsPresenter {
     @Inject
     SettingsHelper settingsHelper;
 
-    @Inject
-    CompositeSubscription subscriptionList;
+    //@Inject
+    private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     private SettingsObject settings;
 
@@ -48,6 +48,8 @@ public class SettingsPresenter {
         this.binding = binding;
 
         settings = settingsHelper.getSetings();
+
+        clearCompositeSubscription();
 
         initCheckBoxes();
         initSeekbars();
@@ -72,7 +74,7 @@ public class SettingsPresenter {
                 .map(v -> v.toArray(new Boolean[v.size()])) //TODO ?Refactor data casting?
                 .subscribe(v -> settings.bool = v);
 
-        subscriptionList.add(s);
+        compositeSubscription.add(s);
     }
 
     private void initSeekbars() {
@@ -114,6 +116,13 @@ public class SettingsPresenter {
                 .subscribe(v -> settings.intr = v);
 
         //TODO Fix subscriptions lifecycle management
-        subscriptionList.add(s);
+        compositeSubscription.add(s);
+    }
+
+    private void clearCompositeSubscription() {
+        if (compositeSubscription != null && !compositeSubscription.isUnsubscribed()) {
+            compositeSubscription.unsubscribe();
+            compositeSubscription = new CompositeSubscription();
+        }
     }
 }

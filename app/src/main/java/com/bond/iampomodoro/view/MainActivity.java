@@ -15,8 +15,14 @@ import com.bond.iampomodoro.di.ActivityComponent;
 import com.bond.iampomodoro.di.ActivityModule;
 import com.bond.iampomodoro.di.AppComponent;
 import com.bond.iampomodoro.di.DaggerActivityComponent;
+import com.bond.iampomodoro.presenter.DayPresenter;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
+
+//    @Inject
+//    DayPresenter dayPresenter;
 
     private TabLayout tabLayout;
 
@@ -62,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
                 switch (tab.getPosition()) {
                     case 0:
                         setLightTabs();
@@ -74,7 +79,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) { }
+            public void onTabUnselected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        //dayPresenter.saveTimerSettings();
+                        break;
+                    case 1:
+
+                        break;
+                }
+            }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) { }

@@ -1,32 +1,34 @@
 package com.bond.iampomodoro.presenter;
 
-import android.content.Context;
-import android.os.Vibrator;
 import android.view.View;
 
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentHardcoreBinding;
-import com.bond.iampomodoro.di.annotations.ActivityContext;
+import com.bond.iampomodoro.model.NotifyUser;
 import com.jakewharton.rxbinding.view.RxView;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 public class HardcorePresenter extends BasePresenter {
 
-    @Inject
-    //@Named("ActivityContext")
-    @ActivityContext
-    Context activityContext;
+//    @Inject
+//    //@Named("ActivityContext")
+//    @ActivityContext
+//    Context activityContext;
 
     private FragmentHardcoreBinding binding;
 
     public void notifyHardcoreFragmentStarts(FragmentHardcoreBinding binding) {
         this.binding = binding;
 
-        getSettings();
+        getSettingsAndRestoreTimer();
 
         initUI();
+    }
+
+    public void refreshFragment() {
+
+        getSettingsAndRestoreTimer();
+
+        initUI(); //?
     }
 
     private void initUI() {
@@ -42,6 +44,14 @@ public class HardcorePresenter extends BasePresenter {
 
         RxView.clicks(binding.resetBtn)
                 .subscribe(v -> resetTimer());
+
+        keepScreenOn.keep(generalSettings.bool[5]);
+        //binding.getRoot().setKeepScreenOn(generalSettings.bool[5]);
+ //       if(generalSettings.bool[5]) {
+ //           activityContext.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+ //       } else {
+ //           activityContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+ //       }
     }
 
     @Override
@@ -78,17 +88,15 @@ public class HardcorePresenter extends BasePresenter {
     }
 
     @Override
-    public void showTime(int timelInSeconds) {
+    public void showTime(int timeInSeconds) {
         binding.minutes.setText(String.valueOf(
-                (int) timelInSeconds / 60));
+                (int) timeInSeconds / 60));
         binding.seconds.setText(String.format("%02d",//TODO Check warning
-                (int) timelInSeconds % 60));
+                (int) timeInSeconds % 60));
     }
 
     @Override
-    void notifyUser(Context context) {
-        long[] pattern = { 500, 300, 400, 200 };
-        Vibrator vibrator = (Vibrator) activityContext.getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(pattern, -1);
+    void notifyUser(NotifyUser notifyUser) { //TODO Fix double-link
+        notifyUser.vibrateAndPlaySound(generalSettings.bool[3],generalSettings.bool[4]);
     }
 }

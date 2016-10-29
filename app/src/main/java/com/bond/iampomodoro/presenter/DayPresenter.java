@@ -1,30 +1,38 @@
 package com.bond.iampomodoro.presenter;
 
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.os.Vibrator;
 import android.view.View;
-import android.view.WindowManager;
 
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentDayBinding;
+import com.bond.iampomodoro.model.NotifyUser;
 import com.jakewharton.rxbinding.view.RxView;
 
 public class DayPresenter extends BasePresenter {
 
     private FragmentDayBinding binding;
 
- //   public DayPresenter() {
- //       App.getComponent().inject(this);
- //   }
+//    public DayPresenter() {
+//        App.getComponent().inject(this);
+//        //MainActivity.getActivityComponent().inject(this);
+//    }
 
     public void notifyDayFragmentStarts(FragmentDayBinding binding) {
         this.binding = binding;
 
-        getSettings();
+        getSettingsAndRestoreTimer();
 
         initUI();
     }
+
+    public void refreshFragment() {
+
+        getSettingsAndRestoreTimer();
+
+        initUI(); //?
+    }
+
+//    @Inject
+//    KeepScreenOn keepScreenOn;
 
     private void initUI() {
 
@@ -39,6 +47,14 @@ public class DayPresenter extends BasePresenter {
 
         RxView.clicks(binding.resetBtn)
             .subscribe(v -> resetTimer());
+
+        keepScreenOn.keep(generalSettings.bool[2]); //TODO Analyze DI chain
+        //binding.getRoot().setKeepScreenOn(generalSettings.bool[2]);
+//        if(generalSettings.bool[2]) {
+//            activityContext.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        } else {
+//            activityContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        }
     }
 
     @Override
@@ -76,30 +92,19 @@ public class DayPresenter extends BasePresenter {
 
     @Override
     public void showTime(int timelInSeconds) {
-        if(timelInSeconds == 0) {
+        if(timelInSeconds != 0) {
+            binding.minutes.setText(String.valueOf(
+                    (int) timelInSeconds / 60));
+            binding.seconds.setText(String.format("%02d",//TODO Check warning
+                    (int) timelInSeconds % 60));
+        } else {
             binding.minutes.setText(String.valueOf(0));
             binding.seconds.setText(String.format("%02d", 0));
-            return;
         }
-
-        binding.minutes.setText(String.valueOf(
-                (int) timelInSeconds / 60));
-        binding.seconds.setText(String.format("%02d",//TODO Check warning
-                (int) timelInSeconds % 60));
     }
 
     @Override
-    public void notifyUser(Context context) {
-
-
-    //    long[] pattern = { 0, 300, 400, 300 };
-    //    Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    //    vibrator.vibrate(pattern, -1);
-
-        MediaPlayer mp = MediaPlayer.create(context, R.raw.beep3);
-        mp.setOnPreparedListener(MediaPlayer::start);
-        mp.setOnCompletionListener(MediaPlayer::release);
-
-
+    void notifyUser(NotifyUser notifyUser) {
+        notifyUser.vibrateAndPlaySound(generalSettings.bool[0],generalSettings.bool[1]);
     }
 }

@@ -7,6 +7,7 @@ import com.bond.iampomodoro.di.annotations.ActivityContext;
 import com.bond.iampomodoro.di.annotations.ApplicationContext;
 import com.bond.iampomodoro.di.annotations.PerActivity;
 import com.bond.iampomodoro.model.SettingsHelper;
+import com.bond.iampomodoro.presenter.DayPresenter;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -40,17 +41,15 @@ public class ActivityModule {
   Context provideContext() {
     return context;
   }
-//  @Provides
-//  @PerActivity
-//  @ActivityContext
-//  Context provideContextActivity() {
-//    return mActivity;
-//  }
 
+//  @Inject
+//  //@Singleton
+//  DayPresenter dayPresenter;
+//
 //  @Provides
-//  @PerActivity
-//  SettingsHelper provideSettingsHelper() {
-//    return new SettingsHelper();
+//  //@Singleton
+//  DayPresenter provideDayPresenter() {
+//    return dayPresenter;
 //  }
 }
 

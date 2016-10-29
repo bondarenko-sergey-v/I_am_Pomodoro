@@ -23,6 +23,8 @@ public class FragmentDay extends Fragment{
 
     private FragmentDayBinding binding;
 
+    private boolean isTimeToSaveSettings = false;
+
     public static FragmentDay newInstance() {
         return new FragmentDay();
     }
@@ -31,13 +33,18 @@ public class FragmentDay extends Fragment{
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if(!isVisibleToUser && dayPresenter != null) {
+        if(isVisibleToUser) { isTimeToSaveSettings = true; }
+
+        if(!isVisibleToUser && isTimeToSaveSettings) {
+            isTimeToSaveSettings = false;
             dayPresenter.saveTimerSettings();
         }
 
         if(isVisibleToUser && dayPresenter != null) {
-            dayPresenter.notifyDayFragmentStarts(binding); } //TODO Make reinflation faster
+            //dayPresenter.notifyDayFragmentStarts(binding);  //TODO Make reinflation faster
+            dayPresenter.refreshFragment();
 
+            System.out.println("Refresh fragment Day!"); }
     }
 
     @Override
@@ -61,7 +68,7 @@ public class FragmentDay extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         dayPresenter.notifyDayFragmentStarts(binding);
-
-        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        System.out.println("Notify Day Presenter!");
+        //getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }

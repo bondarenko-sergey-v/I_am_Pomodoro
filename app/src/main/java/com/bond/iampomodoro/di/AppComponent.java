@@ -1,11 +1,7 @@
 package com.bond.iampomodoro.di;
 
-import android.content.Context;
-
-import com.bond.iampomodoro.App;
-import com.bond.iampomodoro.di.annotations.PerApplication;
+import com.bond.iampomodoro.model.NotifyUser;
 import com.bond.iampomodoro.model.SettingsHelper;
-import com.bond.iampomodoro.model.Vibration;
 import com.bond.iampomodoro.presenter.BasePresenter;
 import com.bond.iampomodoro.presenter.DayPresenter;
 import com.bond.iampomodoro.presenter.HardcorePresenter;
@@ -18,7 +14,6 @@ import com.bond.iampomodoro.view.fragments.FragmentSettings;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import rx.subscriptions.CompositeSubscription;
 
 @Singleton
 @Component(modules = { AppModule.class, PresenterModule.class, ModelModule.class })
@@ -37,9 +32,10 @@ public interface AppComponent {
 //
    // CompositeSubscription compositeSubscription();
 //
-   // Vibration vibration();
+   // NotifyUser vibration();
 
 //    void inject (App app);
+   //void inject (MainActivity mainActivity);
 //
    void inject (FragmentSettings fragmentSettings);
 
@@ -51,11 +47,11 @@ public interface AppComponent {
 
    void inject (DayPresenter dayPresenter);
 
-   //void inject (HardcorePresenter hardcorePresenter);
+   void inject (HardcorePresenter hardcorePresenter);
 
    void inject (BasePresenter basePresenter);
 
    void inject (SettingsHelper settingsHelper);
 
-   void inject (Vibration vibration);
+   void inject (NotifyUser notifyUser);
 }

@@ -6,17 +6,15 @@ import android.content.Context;
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.di.annotations.ActivityContext;
 import com.bond.iampomodoro.di.annotations.ApplicationContext;
-import com.bond.iampomodoro.di.annotations.PerApplication;
+import com.bond.iampomodoro.model.NotifyUser;
 import com.bond.iampomodoro.model.SettingsHelper;
 import com.bond.iampomodoro.model.SettingsObject;
 import com.bond.iampomodoro.model.TimerSettingsObject;
-import com.bond.iampomodoro.model.Vibration;
-import com.bond.iampomodoro.view.MainActivity;
+import com.bond.iampomodoro.util.KeepScreenOn;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import rx.Observable;
 import rx.Subscription;
@@ -33,17 +31,21 @@ public abstract class BasePresenter {
     @ApplicationContext
     Context context;
 
-//    @Inject
-//    @ActivityContext
-//    Activity context;
+ //   @Inject
+ //   @ActivityContext
+ //   Activity activityContext;
 
     @Inject
-    Vibration vibration;
+    NotifyUser notifyUser;
+
+    @Inject
+    KeepScreenOn keepScreenOn;
 
     //@Inject
     private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     TimerSettingsObject ob;
+    SettingsObject generalSettings;
 
     public int workSessionMin;
     public int breakMin;
@@ -59,26 +61,22 @@ public abstract class BasePresenter {
     abstract void pauseTimer();
     abstract void resetTimer();
     abstract void showTime(int intervalInSeconds);
-    abstract void notifyUser(Context context);
+    abstract void notifyUser(NotifyUser notifyUser);
 
-    public void getSettings() {
+    public void getSettingsAndRestoreTimer() {
 
-        SettingsObject settings = settingsHelper.getSetings();
-        workSessionMin = settings.intr[0];
-        breakMin = settings.intr[1];
-        longBreakMin = settings.intr[2];
-        sessionsBeforeLB = settings.intr[3];
+        generalSettings = settingsHelper.getSetings();
+        workSessionMin = generalSettings.intr[0];
+        breakMin = generalSettings.intr[1];
+        longBreakMin = generalSettings.intr[2];
+        sessionsBeforeLB = generalSettings.intr[3];
 
         // Get timer setting
         ob = settingsHelper.getTimerSetings();
 
         if(ob.intervalInSeconds == 0) { ob.intervalInSeconds = 1; }
 
-        setTimerState();
-    }
-
-    public void setTimerState() {
-
+        // Restore timer state
         if(ob.timerCycleCounter == 0) {
             resetTimer();
             return;
@@ -92,12 +90,13 @@ public abstract class BasePresenter {
 
         if(ob.isTimerOnPause) {
             pauseTimer();
-            return;
+            //return;
         }
     }
 
     public void saveTimerSettings() {
         clearCompositeSubscription();
+        keepScreenOn.keep(false);
 
         settingsHelper.setTimerSetings(ob);
     }
@@ -113,33 +112,26 @@ public abstract class BasePresenter {
         ob.timerCycleCounter++;
 
         if (ob.timerCycleCounter % 2 != 0) {
-            countDownTimer(10);
+            countDownTimer(15);
             //countDownTimer(workSessionMin * 60);
-            System.out.println("Work");
         } else if (ob.timerCycleCounter % ((sessionsBeforeLB + 1) * 2) != 0) {
-            countDownTimer(3);
+            countDownTimer(5);
             //countDownTimer(breakMin * 60);
-            System.out.println("Break");
         } else {
-            countDownTimer(7);
+            countDownTimer(10);
             //countDownTimer(longBreakMin * 60);
-            System.out.println("Long break");
         }
-
-        vibration.vibrate();
-        notifyUser(context);
     }
 
     private void countDownTimer(int intervalInSeconds) {
-
         clearCompositeSubscription();
 
         Subscription s =
             Observable.interval(1, TimeUnit.SECONDS, Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(v -> v +1)
+                .map(v -> v + 1)
                 .take(intervalInSeconds)
-                .doAfterTerminate(() -> timerStart())
+                .doAfterTerminate(() -> {timerStart(); notifyUser(notifyUser);})
                 .subscribe(v -> {
                     ob.intervalInSeconds = (int) (intervalInSeconds - v);
                     showTime(ob.intervalInSeconds);

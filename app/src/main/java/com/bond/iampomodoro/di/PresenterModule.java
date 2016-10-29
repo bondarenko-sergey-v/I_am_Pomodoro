@@ -1,12 +1,12 @@
 package com.bond.iampomodoro.di;
 
-import com.bond.iampomodoro.di.annotations.PerApplication;
-import com.bond.iampomodoro.model.Vibration;
-import com.bond.iampomodoro.presenter.BasePresenter;
+import com.bond.iampomodoro.model.NotifyUser;
 import com.bond.iampomodoro.presenter.DayPresenter;
 import com.bond.iampomodoro.presenter.HardcorePresenter;
 import com.bond.iampomodoro.presenter.SettingsPresenter;
+import com.bond.iampomodoro.util.KeepScreenOn;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -24,8 +24,8 @@ public class PresenterModule {
 
   @Provides
   @Singleton
-  Vibration provideVibration() {
-    return new Vibration();
+  NotifyUser provideNotifyUser() {
+    return new NotifyUser();
   }
 
   @Provides
@@ -44,6 +44,14 @@ public class PresenterModule {
   @Singleton
   CompositeSubscription provideCompositeSubscription() {
     return new CompositeSubscription();
+  }
+
+//  @Inject
+//  KeepScreenOn keepScreenOn;
+
+  @Provides
+  KeepScreenOn provideKeepScreenOn() {
+    return new KeepScreenOn();
   }
 
 }
