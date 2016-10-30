@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentHardcoreBinding;
-import com.bond.iampomodoro.model.NotifyUser;
+import com.bond.iampomodoro.util.NotifyUser;
 import com.jakewharton.rxbinding.view.RxView;
 
 public class HardcorePresenter extends BasePresenter {
@@ -45,7 +45,7 @@ public class HardcorePresenter extends BasePresenter {
         RxView.clicks(binding.resetBtn)
                 .subscribe(v -> resetTimer());
 
-        keepScreenOn.keep(generalSettings.bool[5]);
+        //keepScreenOn.keep(generalSettings.bool[5]);
         //binding.getRoot().setKeepScreenOn(generalSettings.bool[5]);
  //       if(generalSettings.bool[5]) {
  //           activityContext.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

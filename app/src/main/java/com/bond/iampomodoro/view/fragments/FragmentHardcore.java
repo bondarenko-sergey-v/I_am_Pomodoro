@@ -22,8 +22,6 @@ public class FragmentHardcore extends Fragment {
 
     private FragmentHardcoreBinding binding;
 
-    private boolean isTimeToSaveSettings = false;
-
     public static FragmentHardcore newInstance() {
         return new FragmentHardcore();
     }
@@ -32,25 +30,16 @@ public class FragmentHardcore extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if(isVisibleToUser) { isTimeToSaveSettings = true; }
-
-        if(!isVisibleToUser && isTimeToSaveSettings) {
-            isTimeToSaveSettings = false;
-            hardcorePresenter.saveTimerSettings();
-        }
-
         if(isVisibleToUser && hardcorePresenter != null) {
-            //dayPresenter.notifyDayFragmentStarts(binding);  //TODO Make reinflation faster
             hardcorePresenter.refreshFragment();
-
-            System.out.println("Refresh fragment Hardcore!"); }
+            }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        App.getComponent().inject(this);
+        App.getAppComponent().inject(this);
     }
 
     @Override
@@ -67,6 +56,5 @@ public class FragmentHardcore extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         hardcorePresenter.notifyHardcoreFragmentStarts(binding);
-        System.out.println("Notify Hardcore Presenter!");
     }
 }

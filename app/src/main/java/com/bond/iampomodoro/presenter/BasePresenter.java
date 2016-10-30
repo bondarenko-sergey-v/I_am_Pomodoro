@@ -1,16 +1,10 @@
 package com.bond.iampomodoro.presenter;
 
-import android.app.Activity;
-import android.content.Context;
-
 import com.bond.iampomodoro.App;
-import com.bond.iampomodoro.di.annotations.ActivityContext;
-import com.bond.iampomodoro.di.annotations.ApplicationContext;
-import com.bond.iampomodoro.model.NotifyUser;
+import com.bond.iampomodoro.util.NotifyUser;
 import com.bond.iampomodoro.model.SettingsHelper;
 import com.bond.iampomodoro.model.SettingsObject;
 import com.bond.iampomodoro.model.TimerSettingsObject;
-import com.bond.iampomodoro.util.KeepScreenOn;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,20 +21,6 @@ public abstract class BasePresenter {
     @Inject
     SettingsHelper settingsHelper;
 
-    @Inject
-    @ApplicationContext
-    Context context;
-
- //   @Inject
- //   @ActivityContext
- //   Activity activityContext;
-
-    @Inject
-    NotifyUser notifyUser;
-
-    @Inject
-    KeepScreenOn keepScreenOn;
-
     //@Inject
     private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
@@ -53,8 +33,7 @@ public abstract class BasePresenter {
     public int sessionsBeforeLB;
 
     public BasePresenter() {
-        App.getComponent().inject(this);
-        //MainActivity.getActivityComponent().inject(this);
+        App.getAppComponent().inject(this);
     }
 
     abstract void startTimer();
@@ -90,13 +69,11 @@ public abstract class BasePresenter {
 
         if(ob.isTimerOnPause) {
             pauseTimer();
-            //return;
         }
     }
 
     public void saveTimerSettings() {
         clearCompositeSubscription();
-        keepScreenOn.keep(false);
 
         settingsHelper.setTimerSetings(ob);
     }
@@ -131,7 +108,7 @@ public abstract class BasePresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(v -> v + 1)
                 .take(intervalInSeconds)
-                .doAfterTerminate(() -> {timerStart(); notifyUser(notifyUser);})
+                .doAfterTerminate(() -> {timerStart(); }) //TODO Get back - notifyUser(notifyUser);})
                 .subscribe(v -> {
                     ob.intervalInSeconds = (int) (intervalInSeconds - v);
                     showTime(ob.intervalInSeconds);

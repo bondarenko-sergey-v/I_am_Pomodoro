@@ -30,7 +30,7 @@ import rx.schedulers.Schedulers;
 //    @Override
 //    public void onCreate() {
 //        super.onCreate();
-//        BoilerplateApplication.get(this).getComponent().inject(this);
+//        BoilerplateApplication.get(this).getAppComponent().inject(this);
 //    }
 //
 //    @Override

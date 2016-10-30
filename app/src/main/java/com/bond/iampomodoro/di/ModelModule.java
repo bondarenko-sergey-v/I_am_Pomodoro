@@ -11,9 +11,9 @@ import dagger.Provides;
 @Module
 public class ModelModule {
 
-  @Provides
-  @Singleton
-  SettingsHelper provideSettingsHelper() {
-    return new SettingsHelper();
-  }
+//  @Provides
+//  @Singleton
+//  SettingsHelper provideSettingsHelper() {
+//    return new SettingsHelper();
+//  }
 }

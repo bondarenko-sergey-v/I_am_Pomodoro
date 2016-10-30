@@ -1,17 +1,8 @@
 package com.bond.iampomodoro.di;
 
 import android.app.Activity;
-import android.content.Context;
 
-import com.bond.iampomodoro.di.annotations.ActivityContext;
-import com.bond.iampomodoro.di.annotations.ApplicationContext;
 import com.bond.iampomodoro.di.annotations.PerActivity;
-import com.bond.iampomodoro.model.SettingsHelper;
-import com.bond.iampomodoro.presenter.DayPresenter;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -27,30 +18,7 @@ public class ActivityModule {
 
   @Provides
   @PerActivity
-  @ActivityContext
   Activity provideActivity() {
     return this.activity;
   }
-
-  @Inject
-  @ApplicationContext
-  Context context;
-
-  @Provides
-  @ApplicationContext
-  Context provideContext() {
-    return context;
-  }
-
-//  @Inject
-//  //@Singleton
-//  DayPresenter dayPresenter;
-//
-//  @Provides
-//  //@Singleton
-//  DayPresenter provideDayPresenter() {
-//    return dayPresenter;
-//  }
 }
-
-//TODO Fix Dagger2 annotations and scopes!

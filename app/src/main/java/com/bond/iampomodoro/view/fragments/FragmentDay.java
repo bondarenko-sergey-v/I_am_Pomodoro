@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
@@ -21,9 +20,7 @@ public class FragmentDay extends Fragment{
     @Inject
     DayPresenter dayPresenter;
 
-    private FragmentDayBinding binding;
-
-    private boolean isTimeToSaveSettings = false;
+    private static FragmentDayBinding binding;
 
     public static FragmentDay newInstance() {
         return new FragmentDay();
@@ -33,25 +30,16 @@ public class FragmentDay extends Fragment{
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if(isVisibleToUser) { isTimeToSaveSettings = true; }
-
-        if(!isVisibleToUser && isTimeToSaveSettings) {
-            isTimeToSaveSettings = false;
-            dayPresenter.saveTimerSettings();
-        }
-
         if(isVisibleToUser && dayPresenter != null) {
-            //dayPresenter.notifyDayFragmentStarts(binding);  //TODO Make reinflation faster
-            dayPresenter.refreshFragment();
-
-            System.out.println("Refresh fragment Day!"); }
+            dayPresenter.refreshFragment(); //TODO Make reinflation faster
+            }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        App.getComponent().inject(this);
+        App.getAppComponent().inject(this);
     }
 
     @Override
@@ -67,8 +55,10 @@ public class FragmentDay extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        dayPresenter.notifyDayFragmentStarts(binding);
-        System.out.println("Notify Day Presenter!");
-        //getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        dayPresenter.notifyDayFragmentStarts();
+    }
+
+    public static FragmentDayBinding getFragmentDayBinding() {
+        return binding;
     }
 }

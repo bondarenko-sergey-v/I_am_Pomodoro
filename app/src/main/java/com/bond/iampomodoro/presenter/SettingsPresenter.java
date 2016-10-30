@@ -32,12 +32,13 @@ public class SettingsPresenter {
     private SettingsObject settings;
 
     public SettingsPresenter() {
-        App.getComponent().inject(this);
+        App.getAppComponent().inject(this);
     }
 
     private FragmentSettingsBinding binding;
 
     public void saveSettings() {
+        clearCompositeSubscription();
 
         if(settings != null) {
             settingsHelper.setSetings(settings);
@@ -48,8 +49,6 @@ public class SettingsPresenter {
         this.binding = binding;
 
         settings = settingsHelper.getSetings();
-
-        clearCompositeSubscription();
 
         initCheckBoxes();
         initSeekbars();

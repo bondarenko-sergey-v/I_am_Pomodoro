@@ -4,20 +4,20 @@ import android.view.View;
 
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentDayBinding;
-import com.bond.iampomodoro.model.NotifyUser;
+import com.bond.iampomodoro.util.NotifyUser;
 import com.jakewharton.rxbinding.view.RxView;
 
 public class DayPresenter extends BasePresenter {
 
     private FragmentDayBinding binding;
 
-//    public DayPresenter() {
-//        App.getComponent().inject(this);
-//        //MainActivity.getActivityComponent().inject(this);
-//    }
-
-    public void notifyDayFragmentStarts(FragmentDayBinding binding) {
+    public DayPresenter(FragmentDayBinding binding) {
         this.binding = binding;
+//        App.getAppComponent().inject(this);
+          //MainActivity.getActivitySubcomponent().inject(this);
+    }
+
+    public void notifyDayFragmentStarts() {
 
         getSettingsAndRestoreTimer();
 
@@ -48,7 +48,7 @@ public class DayPresenter extends BasePresenter {
         RxView.clicks(binding.resetBtn)
             .subscribe(v -> resetTimer());
 
-        keepScreenOn.keep(generalSettings.bool[2]); //TODO Analyze DI chain
+        //keepScreenOn.keep(generalSettings.bool[2]); //TODO Analyze DI chain
         //binding.getRoot().setKeepScreenOn(generalSettings.bool[2]);
 //        if(generalSettings.bool[2]) {
 //            activityContext.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

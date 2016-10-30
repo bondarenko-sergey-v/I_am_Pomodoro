@@ -36,7 +36,7 @@ public class FragmentSettings extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        App.getComponent().inject(this);
+        App.getAppComponent().inject(this);
     }
 
     @Override
@@ -56,36 +56,9 @@ public class FragmentSettings extends Fragment {
     }
 
     @Override
-    public void onPause() {
-
-        settingsPresenter.saveSettings();
-
-        if (!subscriptionList.isUnsubscribed()) {
-            subscriptionList.unsubscribe();
-        }
-
-        super.onPause();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
 
-     //   if (!subscriptionList.isUnsubscribed()) {
-     //       subscriptionList.unsubscribe();
-     //   }
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if(!isVisibleToUser && settingsPresenter != null) {
-           settingsPresenter.saveSettings();
-
-            if (!subscriptionList.isUnsubscribed()) {
-                subscriptionList.unsubscribe();
-            }
-        }
+        settingsPresenter.saveSettings();
     }
 }

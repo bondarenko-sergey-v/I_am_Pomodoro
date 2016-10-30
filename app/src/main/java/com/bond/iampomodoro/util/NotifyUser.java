@@ -1,25 +1,17 @@
-package com.bond.iampomodoro.model;
+package com.bond.iampomodoro.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 
 import com.bond.iampomodoro.R;
-import com.bond.iampomodoro.di.annotations.ActivityContext;
-import com.bond.iampomodoro.view.MainActivity;
-
-import javax.inject.Inject;
 
 public class NotifyUser {
 
-    @Inject
-    @ActivityContext
-    Activity context;
+    private final Context context;
 
-    public NotifyUser() {
-        MainActivity.getActivityComponent().inject(this);
-        //App.getComponent().inject(this);
+    public NotifyUser(Context context) {
+        this.context = context;
     }
 
     public void vibrateAndPlaySound(boolean playSound, boolean vibrate) {
