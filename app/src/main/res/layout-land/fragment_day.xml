@@ -7,9 +7,9 @@
         android:background="#FFFFFF">
 
         <TextView
-            android:id="@+id/seconds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/seconds"
             android:textSize="50dp"
             android:text="00"
             android:gravity="center"
@@ -20,49 +20,54 @@
             android:fontFamily="monospace"
             android:textColor="@color/colorTabIndicator" />
 
-        <Button
-            android:id="@+id/resetBtn"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@android:color/white"
-            android:textSize="22sp"
+            android:id="@+id/minutes"
+            android:textSize="100dp"
+            android:text="00"
+            android:gravity="center"
             android:fontFamily="monospace"
-            android:text="@string/reset"
-            android:paddingBottom="10dp"
-            style="?android:attr/borderlessButtonStyle"
-            android:textColor="@color/colorTabIndicator"
-            android:textColorHighlight="@color/colorButtonText" />
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="30dp"
+            android:textColor="@color/colorTabIndicator" />
 
         <Button
             android:text="Start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/startBtn"
-            android:layout_above="@+id/resetBtn"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:background="@android:color/white"
             android:textSize="22sp"
             android:fontFamily="monospace"
+            android:layout_alignTop="@+id/seconds"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/seconds"
+            android:layout_toEndOf="@+id/seconds"
+            android:paddingTop="26dp"
             style="?android:attr/borderlessButtonStyle"
             android:textColor="@color/colorTabIndicator"
             android:textColorHighlight="@color/colorButtonText" />
 
-        <TextView
-            android:id="@+id/minutes"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/resetBtn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="100dp"
-            android:text="00"
-            android:gravity="center"
-            android:layout_marginBottom="140dp"
-            android:layout_above="@+id/startBtn"
-            android:layout_centerHorizontal="true"
+            android:background="@android:color/white"
+            android:textSize="22sp"
             android:fontFamily="monospace"
-            android:textColor="@color/colorTabIndicator" />
+            android:text="@string/reset"
+            android:layout_below="@+id/seconds"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/seconds"
+            android:layout_toEndOf="@+id/seconds"
+            android:paddingBottom="26dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="@color/colorTabIndicator"
+            android:textColorHighlight="@color/colorButtonText" />
 
     </RelativeLayout>
 

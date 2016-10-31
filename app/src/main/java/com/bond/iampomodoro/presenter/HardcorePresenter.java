@@ -44,14 +44,6 @@ public class HardcorePresenter extends BasePresenter {
 
         RxView.clicks(binding.resetBtn)
                 .subscribe(v -> resetTimer());
-
-        //keepScreenOn.keep(generalSettings.bool[5]);
-        //binding.getRoot().setKeepScreenOn(generalSettings.bool[5]);
- //       if(generalSettings.bool[5]) {
- //           activityContext.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
- //       } else {
- //           activityContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
- //       }
     }
 
     @Override

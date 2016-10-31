@@ -45,15 +45,15 @@ public class AppModule {
     return new NotifyUser(application);
   }
 
-  @Provides
-  @Singleton
-  FragmentDayBinding getFragmentDayBinding() {
-    return this.fragmentDayBinding = FragmentDay.getFragmentDayBinding(); }
+//  @Provides
+//  @Singleton
+//  FragmentDayBinding getFragmentDayBinding() {
+//    return this.fragmentDayBinding = FragmentDay.getFragmentDayBinding(); }
 
   @Provides
   @Singleton
   DayPresenter provideDayPresenter() {
-    return new DayPresenter(fragmentDayBinding);
+    return new DayPresenter();
   }
 
   @Provides

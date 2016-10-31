@@ -13,8 +13,8 @@
     <string name="vibration">Vibration</string>
     <string name="some_pictures">Some pictures</string>
 
-    <string name="start">Start</string>
-    <string name="pause">Pause</string>
-    <string name="resume">Resume</string>
-    <string name="reset">Reset</string>
+    <string name="start">START</string>
+    <string name="pause">PAUSE</string>
+    <string name="resume">RESUME</string>
+    <string name="reset">RESET</string>
 </resources>

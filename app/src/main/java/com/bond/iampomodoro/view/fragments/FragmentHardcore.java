@@ -57,4 +57,11 @@ public class FragmentHardcore extends Fragment {
 
         hardcorePresenter.notifyHardcoreFragmentStarts(binding);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        hardcorePresenter.saveTimerSettings();
+    }
 }

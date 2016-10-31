@@ -1,408 +1,414 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ScrollView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@android:color/black">
 
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scrollbars="none"
-        android:fillViewport="false"
-        android:id="@+id/scrollView">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@android:color/black">
-
-            <!-- GENERAL SETTINGS -->
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/general"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:paddingLeft="16dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="8dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@color/colorTabIndicator" />
-
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:text="@string/work_session_min"
-                android:paddingLeft="16dp"
-                android:paddingTop="8dp" />
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scrollbars="none"
+            android:fillViewport="false"
+            android:id="@+id/scrollView">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:background="@android:color/black">
+
+                <!-- GENERAL SETTINGS -->
 
                 <TextView
-                    android:id="@+id/textViewWorkSession"
-                    android:layout_width="64dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@android:color/white"
-                    android:paddingLeft="16dp"
-                    android:paddingBottom="8dp"
-                    android:layout_marginTop="3dp"/>
-
-                <SeekBar
-                    android:id="@+id/seekbarWorkSession"
-                    android:max="35"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:progressDrawable="@drawable/progress"
-                    android:thumb="@drawable/thumb"/>
-
-            </LinearLayout>
-
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:text="@string/break_min"
-                android:paddingLeft="16dp"
-                android:paddingTop="8dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textViewBreak"
-                    android:layout_width="64dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@android:color/white"
-                    android:paddingLeft="16dp"
-                    android:paddingBottom="8dp"
-                    android:layout_marginTop="3dp"/>
-
-                <SeekBar
-                    android:id="@+id/seekbarBreak"
-                    android:max="15"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:progressDrawable="@drawable/progress"
-                    android:thumb="@drawable/thumb"/>
-
-            </LinearLayout>
-
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:text="@string/long_break_min"
-                android:paddingLeft="16dp"
-                android:paddingTop="8dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textViewLongBreak"
-                    android:layout_width="64dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@android:color/white"
-                    android:paddingLeft="16dp"
-                    android:paddingBottom="8dp"
-                    android:layout_marginTop="3dp"/>
-
-                <SeekBar
-                    android:id="@+id/seekbarLongBreak"
-                    android:max="30"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:progressDrawable="@drawable/progress"
-                    android:thumb="@drawable/thumb"/>
-
-            </LinearLayout>
-
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:text="@string/sessions_before_long_break"
-                android:paddingLeft="16dp"
-                android:paddingTop="8dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textViewSessionsBeforeLB"
-                    android:layout_width="64dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@android:color/white"
-                    android:paddingLeft="16dp"
-                    android:paddingBottom="8dp"
-                    android:layout_marginTop="3dp"/>
-
-                <SeekBar
-                    android:id="@+id/seekbarSessionsBeforeLB"
-                    android:max="2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:progressDrawable="@drawable/progress"
-                    android:thumb="@drawable/thumb"/>
-
-            </LinearLayout>
-
-
-            <!-- DAY MODE SETTINGS -->
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/day_mode"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:paddingLeft="16dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@color/colorTabIndicator" />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/sound"
+                    android:text="@string/general"
+                    android:textStyle="bold"
                     android:textColor="@android:color/white"
                     android:paddingLeft="16dp"
                     android:paddingTop="16dp"
-                    android:paddingBottom="16dp" />
+                    android:paddingBottom="8dp" />
 
-                <CheckBox
-                    android:layout_width="64dp"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/checkBoxStyle"
-                    android:layout_gravity="center"
-                    android:id="@+id/cbxDaySound" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@color/colorTabIndicator" />
 
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/vibration"
                     android:textColor="@android:color/white"
+                    android:text="@string/work_session_min"
                     android:paddingLeft="16dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp" />
+                    android:paddingTop="8dp" />
 
-                <CheckBox
-                    android:layout_width="64dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/checkBoxStyle"
-                    android:layout_gravity="center"
-                    android:id="@+id/cbxDayVibration" />
+                    android:orientation="horizontal">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/textViewWorkSession"
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@android:color/white"
+                        android:paddingLeft="16dp"
+                        android:paddingBottom="8dp"
+                        android:layout_marginTop="3dp"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                    <SeekBar
+                        android:id="@+id/seekbarWorkSession"
+                        android:max="35"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:progressDrawable="@drawable/progress"
+                        android:thumb="@drawable/thumb"/>
+
+                </LinearLayout>
+
+
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/keep_screen_on"
                     android:textColor="@android:color/white"
+                    android:text="@string/break_min"
                     android:paddingLeft="16dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp" />
+                    android:paddingTop="8dp" />
 
-                <CheckBox
-                    android:layout_width="64dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/checkBoxStyle"
-                    android:layout_gravity="center"
-                    android:id="@+id/cbxDayKeepScreen" />
+                    android:orientation="horizontal">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/textViewBreak"
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@android:color/white"
+                        android:paddingLeft="16dp"
+                        android:paddingBottom="8dp"
+                        android:layout_marginTop="3dp"/>
 
-            <!-- NIGHT MODE SETTINGS -->
+                    <SeekBar
+                        android:id="@+id/seekbarBreak"
+                        android:max="15"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:progressDrawable="@drawable/progress"
+                        android:thumb="@drawable/thumb"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/night_mode"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:paddingLeft="16dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@color/colorTabIndicator" />
+                </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/sound"
                     android:textColor="@android:color/white"
+                    android:text="@string/long_break_min"
                     android:paddingLeft="16dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp" />
+                    android:paddingTop="8dp" />
 
-                <CheckBox
-                    android:layout_width="64dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/checkBoxStyle"
-                    android:layout_gravity="center"
-                    android:id="@+id/cbxNightSound" />
+                    android:orientation="horizontal">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/textViewLongBreak"
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@android:color/white"
+                        android:paddingLeft="16dp"
+                        android:paddingBottom="8dp"
+                        android:layout_marginTop="3dp"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                    <SeekBar
+                        android:id="@+id/seekbarLongBreak"
+                        android:max="30"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:progressDrawable="@drawable/progress"
+                        android:thumb="@drawable/thumb"/>
+
+                </LinearLayout>
+
+
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/vibration"
                     android:textColor="@android:color/white"
+                    android:text="@string/sessions_before_long_break"
                     android:paddingLeft="16dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp" />
+                    android:paddingTop="8dp" />
 
-                <CheckBox
-                    android:layout_width="64dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/checkBoxStyle"
-                    android:layout_gravity="center"
-                    android:id="@+id/cbxNightVibration" />
+                    android:orientation="horizontal">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/textViewSessionsBeforeLB"
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@android:color/white"
+                        android:paddingLeft="16dp"
+                        android:paddingBottom="8dp"
+                        android:layout_marginTop="3dp"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                    <SeekBar
+                        android:id="@+id/seekbarSessionsBeforeLB"
+                        android:max="2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:progressDrawable="@drawable/progress"
+                        android:thumb="@drawable/thumb"/>
+
+                </LinearLayout>
+
+
+                <!-- DAY MODE SETTINGS -->
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/keep_screen_on"
+                    android:text="@string/day_mode"
+                    android:textStyle="bold"
                     android:textColor="@android:color/white"
                     android:paddingLeft="16dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp" />
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp" />
 
-                <CheckBox
-                    android:layout_width="64dp"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@color/colorTabIndicator" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/checkBoxStyle"
-                    android:layout_gravity="center"
-                    android:id="@+id/cbxNightKeepScreen" />
+                    android:orientation="horizontal">
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/sound"
+                        android:textColor="@android:color/white"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                    <CheckBox
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/checkBoxStyle"
+                        android:layout_gravity="center"
+                        android:id="@+id/cbxDaySound" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/vibration"
+                        android:textColor="@android:color/white"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp" />
+
+                    <CheckBox
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/checkBoxStyle"
+                        android:layout_gravity="center"
+                        android:id="@+id/cbxDayVibration" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/keep_screen_on"
+                        android:textColor="@android:color/white"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp" />
+
+                    <CheckBox
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/checkBoxStyle"
+                        android:layout_gravity="center"
+                        android:id="@+id/cbxDayKeepScreen" />
+
+                </LinearLayout>
+
+                <!-- NIGHT MODE SETTINGS -->
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/some_pictures"
+                    android:text="@string/night_mode"
+                    android:textStyle="bold"
                     android:textColor="@android:color/white"
                     android:paddingLeft="16dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp" />
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp" />
 
-                <CheckBox
-                    android:layout_width="64dp"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@color/colorTabIndicator" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/checkBoxStyle"
-                    android:layout_gravity="center"
-                    android:id="@+id/cbxNightPictures" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/sound"
+                        android:textColor="@android:color/white"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp" />
+
+                    <CheckBox
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/checkBoxStyle"
+                        android:layout_gravity="center"
+                        android:id="@+id/cbxNightSound" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/vibration"
+                        android:textColor="@android:color/white"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp" />
+
+                    <CheckBox
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/checkBoxStyle"
+                        android:layout_gravity="center"
+                        android:id="@+id/cbxNightVibration" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/keep_screen_on"
+                        android:textColor="@android:color/white"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp" />
+
+                    <CheckBox
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/checkBoxStyle"
+                        android:layout_gravity="center"
+                        android:id="@+id/cbxNightKeepScreen" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/some_pictures"
+                        android:textColor="@android:color/white"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp" />
+
+                    <CheckBox
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/checkBoxStyle"
+                        android:layout_gravity="center"
+                        android:id="@+id/cbxNightPictures" />
+
+                </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </LinearLayout>
 
 </layout>

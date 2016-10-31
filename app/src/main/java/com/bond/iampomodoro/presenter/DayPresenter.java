@@ -11,13 +11,14 @@ public class DayPresenter extends BasePresenter {
 
     private FragmentDayBinding binding;
 
-    public DayPresenter(FragmentDayBinding binding) {
-        this.binding = binding;
+    public DayPresenter() {
+
 //        App.getAppComponent().inject(this);
           //MainActivity.getActivitySubcomponent().inject(this);
     }
 
-    public void notifyDayFragmentStarts() {
+    public void notifyDayFragmentStarts(FragmentDayBinding binding) {
+        this.binding = binding;
 
         getSettingsAndRestoreTimer();
 
@@ -47,14 +48,6 @@ public class DayPresenter extends BasePresenter {
 
         RxView.clicks(binding.resetBtn)
             .subscribe(v -> resetTimer());
-
-        //keepScreenOn.keep(generalSettings.bool[2]); //TODO Analyze DI chain
-        //binding.getRoot().setKeepScreenOn(generalSettings.bool[2]);
-//        if(generalSettings.bool[2]) {
-//            activityContext.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-//        } else {
-//            activityContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-//        }
     }
 
     @Override

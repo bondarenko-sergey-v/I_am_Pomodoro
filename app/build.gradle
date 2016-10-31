@@ -5,29 +5,49 @@ buildscript {
 
     dependencies {
         classpath 'me.tatarka:gradle-retrolambda:3.3.0'
-        //classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }
 
+// Version information!
+def versionMajor = 0
+def versionMinor = 1
+def versionPatch = 0
+
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-//apply plugin: 'com.neenbedankt.android-apt'
 
 android {
+
+    signingConfigs {
+        config {
+            keyAlias 'android-sign-app'
+            keyPassword 'android'
+            storeFile file('android')
+            storePassword 'android'
+        }
+    }
+
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.bond.iampomodoro"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+
+        versionCode versionMajor * 100 + versionMinor * 10 + versionPatch
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+
+        debug {
+            debuggable true
         }
     }
 
@@ -41,34 +61,22 @@ android {
     }
 }
 
-
-// Required because retrolambda is on maven central
-//repositories {
-//    mavenCentral()
-//}
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:design:24.2.1'
 
-    //compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.google.dagger:dagger:2.6'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.6'
+
     compile 'io.reactivex:rxjava:1.2.0'
+    compile 'io.reactivex:rxandroid:1.2.0'
 
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
 
     compile 'com.google.code.gson:gson:2.7'
 
-    //Leak canary
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-
-    compile 'com.google.dagger:dagger:2.6'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.6'
-    //apt 'com.google.dagger:dagger-compiler:2.6'
-
-    compile 'com.google.dagger:dagger:2.0.1'
-    //apt 'com.google.dagger:dagger-compiler:2.0.1'
 }

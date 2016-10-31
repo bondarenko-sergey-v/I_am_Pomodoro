@@ -55,7 +55,14 @@ public class FragmentDay extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        dayPresenter.notifyDayFragmentStarts();
+        dayPresenter.notifyDayFragmentStarts(binding);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        dayPresenter.saveTimerSettings();
     }
 
     public static FragmentDayBinding getFragmentDayBinding() {

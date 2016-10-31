@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         tabLayout.addTab(tabLayout.newTab().setIcon(R.mipmap.ic_weather_sunny_light));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.mipmap.ic_code_tags_light));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.mipmap.ic_code_tags_light2));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.mipmap.ic_settings_light));
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -109,14 +109,14 @@ public class MainActivity extends AppCompatActivity {
     private void setLightTabs() {
         tabLayout.setBackgroundColor(Color.WHITE);
         tabLayout.getTabAt(0).setIcon(R.mipmap.ic_weather_sunny_light);
-        tabLayout.getTabAt(1).setIcon(R.mipmap.ic_code_tags_light);
+        tabLayout.getTabAt(1).setIcon(R.mipmap.ic_code_tags_light2);
         tabLayout.getTabAt(2).setIcon(R.mipmap.ic_settings_light);
     }
 
     private void setDarkTabs() {
         tabLayout.setBackgroundColor(Color.BLACK);
         tabLayout.getTabAt(0).setIcon(R.mipmap.ic_weather_sunny);
-        tabLayout.getTabAt(1).setIcon(R.mipmap.ic_code_tags);
+        tabLayout.getTabAt(1).setIcon(R.mipmap.ic_code_tags2);
         tabLayout.getTabAt(2).setIcon(R.mipmap.ic_settings);
     }
     private void keepScreenOn(boolean keepScreenOn) {

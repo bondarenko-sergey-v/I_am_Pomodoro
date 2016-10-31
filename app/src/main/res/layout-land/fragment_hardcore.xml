@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/seconds"
+            android:textSize="50dp"
+            android:text="00"
+            android:gravity="center"
+            android:layout_alignTop="@+id/minutes"
+            android:layout_toRightOf="@+id/minutes"
+            android:layout_toEndOf="@+id/minutes"
+            android:paddingTop="16dp"
+            android:fontFamily="monospace"
+            android:textColor="#909090"/>
+
+        <Button
+            android:id="@+id/resetBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/screen_background_dark"
+            android:textSize="22sp"
+            android:fontFamily="monospace"
+            android:textColor="#909090"
+            android:visibility="invisible"
+            android:enabled="false"
+            android:text="@string/reset"
+            android:layout_below="@+id/seconds"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/seconds"
+            android:layout_toEndOf="@+id/seconds"
+            android:paddingBottom="26dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/minutes"
+            android:textSize="100dp"
+            android:text="00"
+            android:gravity="center"
+            android:fontFamily="monospace"
+            android:textColor="#909090"
+
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="30dp" />
+
+        <Button
+            android:text="Start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/startBtn"
+            android:background="@android:drawable/screen_background_dark"
+            android:textSize="22sp"
+            android:fontFamily="monospace"
+            android:textColor="#909090"
+            android:layout_alignTop="@+id/seconds"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/seconds"
+            android:layout_toEndOf="@+id/seconds"
+            android:paddingTop="26dp" />
+
+    </RelativeLayout>
+
+</layout>

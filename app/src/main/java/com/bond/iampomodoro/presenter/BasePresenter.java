@@ -20,6 +20,8 @@ public abstract class BasePresenter {
 
     @Inject
     SettingsHelper settingsHelper;
+    @Inject
+    NotifyUser notifyUser;
 
     //@Inject
     private CompositeSubscription compositeSubscription = new CompositeSubscription();
@@ -89,14 +91,14 @@ public abstract class BasePresenter {
         ob.timerCycleCounter++;
 
         if (ob.timerCycleCounter % 2 != 0) {
-            countDownTimer(15);
-            //countDownTimer(workSessionMin * 60);
+            //countDownTimer(15);
+            countDownTimer(workSessionMin * 60);
         } else if (ob.timerCycleCounter % ((sessionsBeforeLB + 1) * 2) != 0) {
-            countDownTimer(5);
-            //countDownTimer(breakMin * 60);
+            //countDownTimer(5);
+            countDownTimer(breakMin * 60);
         } else {
-            countDownTimer(10);
-            //countDownTimer(longBreakMin * 60);
+            //countDownTimer(10);
+            countDownTimer(longBreakMin * 60);
         }
     }
 
@@ -108,7 +110,7 @@ public abstract class BasePresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(v -> v + 1)
                 .take(intervalInSeconds)
-                .doAfterTerminate(() -> {timerStart(); }) //TODO Get back - notifyUser(notifyUser);})
+                .doAfterTerminate(() -> {timerStart(); notifyUser(notifyUser);})
                 .subscribe(v -> {
                     ob.intervalInSeconds = (int) (intervalInSeconds - v);
                     showTime(ob.intervalInSeconds);
