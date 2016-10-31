@@ -1,14 +1,20 @@
 <resources>
     <string name="app_name">I am Pomodoro!</string>
+
     <string name="general">GENERAL</string>
+    <string name="day_mode">DAY MODE</string>
+    <string name="night_mode">NIGHT MODE</string>
     <string name="work_session_min">Work session (min):</string>
     <string name="break_min">Break (min):</string>
     <string name="long_break_min">Long break (min):</string>
     <string name="sessions_before_long_break">Sessions before long break:</string>
-    <string name="day_mode">DAY MODE</string>
     <string name="sound">Sound</string>
-    <string name="night_mode">NIGHT MODE</string>
     <string name="keep_screen_on">Keep screen on</string>
     <string name="vibration">Vibration</string>
     <string name="some_pictures">Some pictures</string>
+
+    <string name="start">START</string>
+    <string name="pause">PAUSE</string>
+    <string name="resume">RESUME</string>
+    <string name="reset">RESET</string>
 </resources>

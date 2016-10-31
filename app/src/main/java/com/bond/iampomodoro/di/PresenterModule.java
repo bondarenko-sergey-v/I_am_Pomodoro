@@ -1,19 +1,47 @@
 package com.bond.iampomodoro.di;
 
-import com.bond.iampomodoro.model.SettingsHelper;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
-import dagger.Provides;
 
 @Module
 public class PresenterModule {
 
-  @Provides
-    //@PerActivity
-  @Singleton
-  SettingsHelper provideSettingsHelper() {
-    return new SettingsHelper();
-  }
+
+//--  @Provides
+//--  @Singleton
+//--  SettingsPresenter provideSettingsPresenter() {
+//--    return new SettingsPresenter();
+//--  }
+//--
+//--  @Provides
+//--  @Singleton
+//--  NotifyUser provideNotifyUser() {
+//--    return new NotifyUser();
+//--  }
+//--
+//--  @Provides
+//--  @Singleton
+//--  DayPresenter provideDayPresenter() {
+//--    return new DayPresenter();
+//--  }
+//--
+//--  @Provides
+//--  @Singleton
+//--  HardcorePresenter provideHardcorePresenter() {
+//--    return new HardcorePresenter();
+//--  }
+//--
+//--  @Provides
+//--  @Singleton
+//--  CompositeSubscription provideCompositeSubscription() {
+//--    return new CompositeSubscription();
+//--  }
+//--
+//--//  @Inject
+//--//  KeepScreenOn keepScreenOn;
+//--
+//--  @Provides
+//--  KeepScreenOn provideKeepScreenOn() {
+//--    return new KeepScreenOn();
+//--  }
+
 }

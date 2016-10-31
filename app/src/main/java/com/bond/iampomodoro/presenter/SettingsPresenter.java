@@ -26,18 +26,19 @@ public class SettingsPresenter {
     @Inject
     SettingsHelper settingsHelper;
 
-    @Inject
-    CompositeSubscription subscriptionList;
+    //@Inject
+    private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     private SettingsObject settings;
 
     public SettingsPresenter() {
-        App.getComponent().inject(this);
+        App.getAppComponent().inject(this);
     }
 
     private FragmentSettingsBinding binding;
 
     public void saveSettings() {
+        clearCompositeSubscription();
 
         if(settings != null) {
             settingsHelper.setSetings(settings);
@@ -60,7 +61,7 @@ public class SettingsPresenter {
 
         Subscription s = Observable.from(cbList)
                 .doOnNext(v -> v.setChecked(settings.bool[cbList.indexOf(v)])) //TODO Refactor index calculation
-                .map(RxCompoundButton::checkedChanges)
+                .map(RxCompoundButton::checkedChanges)                         // with .count or something else
                 .toList()
                 .flatMap(v -> combineLatest(v, args -> {
                     List<Boolean> combine = new ArrayList<>();
@@ -72,7 +73,7 @@ public class SettingsPresenter {
                 .map(v -> v.toArray(new Boolean[v.size()])) //TODO ?Refactor data casting?
                 .subscribe(v -> settings.bool = v);
 
-        subscriptionList.add(s);
+        compositeSubscription.add(s);
     }
 
     private void initSeekbars() {
@@ -114,6 +115,13 @@ public class SettingsPresenter {
                 .subscribe(v -> settings.intr = v);
 
         //TODO Fix subscriptions lifecycle management
-        subscriptionList.add(s);
+        compositeSubscription.add(s);
+    }
+
+    private void clearCompositeSubscription() {
+        if (compositeSubscription != null && !compositeSubscription.isUnsubscribed()) {
+            compositeSubscription.unsubscribe();
+            compositeSubscription = new CompositeSubscription();
+        }
     }
 }

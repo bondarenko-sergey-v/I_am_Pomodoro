@@ -21,12 +21,9 @@
             android:textColor="#909090"/>
 
         <Button
+            android:id="@+id/resetBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/resetBtn"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:background="@android:drawable/screen_background_dark"
             android:textSize="22sp"
             android:fontFamily="monospace"
@@ -34,20 +31,12 @@
             android:visibility="invisible"
             android:enabled="false"
             android:text="@string/reset"
-            android:paddingBottom="10dp" />
-
-        <Button
-            android:text="Start"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/startBtn"
-            android:layout_above="@+id/resetBtn"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@android:drawable/screen_background_dark"
-            android:textSize="22sp"
-            android:fontFamily="monospace"
-            android:textColor="#909090"/>
+            android:layout_below="@+id/seconds"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/seconds"
+            android:layout_toEndOf="@+id/seconds"
+            android:paddingBottom="26dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,11 +45,28 @@
             android:textSize="100dp"
             android:text="00"
             android:gravity="center"
-            android:layout_marginBottom="140dp"
-            android:layout_above="@+id/startBtn"
-            android:layout_centerHorizontal="true"
             android:fontFamily="monospace"
-            android:textColor="#909090"/>
+            android:textColor="#909090"
+
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="30dp" />
+
+        <Button
+            android:text="Start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/startBtn"
+            android:background="@android:drawable/screen_background_dark"
+            android:textSize="22sp"
+            android:fontFamily="monospace"
+            android:textColor="#909090"
+            android:layout_alignTop="@+id/seconds"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/seconds"
+            android:layout_toEndOf="@+id/seconds"
+            android:paddingTop="26dp" />
 
     </RelativeLayout>
 

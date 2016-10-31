@@ -4,29 +4,27 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.bond.iampomodoro.App;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import javax.inject.Inject;
-
 public class SettingsHelper {
 
-    private static final String APP_PREF_OBJECT = "prefObject";
+    private static final String APP_PREF_GENERAL = "general";
+    private static final String APP_PREF_TIMER = "timer";
+    private final Context context;
 
-    @Inject
-    Context appContext;
+    private SharedPreferences mSettings;
+    private SharedPreferences.Editor editor;
 
-    public SettingsHelper() {
-        App.getComponent().inject(this);
+    public SettingsHelper(Context context) {
+        this.context = context;
     }
 
     public SettingsObject getSetings() {
-        SharedPreferences mSettings;
 
-        mSettings = PreferenceManager.getDefaultSharedPreferences(appContext);
+        mSettings = PreferenceManager.getDefaultSharedPreferences(context);
 
-        String json = mSettings.getString(APP_PREF_OBJECT,
+        String json = mSettings.getString(APP_PREF_GENERAL,
                 "{\"bool\":[true,true,true,false,true,true,true],\"intr\":[25,5,15,4]}");
 
         return new Gson().fromJson(json,
@@ -35,10 +33,33 @@ public class SettingsHelper {
 
     public void setSetings(SettingsObject settings) {
 
-        SharedPreferences.Editor editor = PreferenceManager
-                .getDefaultSharedPreferences(appContext).edit();
+        editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
-        editor.putString(APP_PREF_OBJECT, new Gson().toJson(settings))
+        editor.putString(APP_PREF_GENERAL, new Gson().toJson(settings))
                 .apply();
+    }
+
+    public TimerSettingsObject getTimerSetings() {
+
+        mSettings = PreferenceManager.getDefaultSharedPreferences(context);
+
+        String json = mSettings.getString(APP_PREF_TIMER,
+        "{\"intervalInSeconds\":1,\"isTimerOnPause\":false,\"timerCycleCounter\":0}");
+
+        //TODO Fix bug with "null" settings and delete underlying code
+        if(json.equals("null")) { json = "{\"intervalInSeconds\":1," +
+                "\"isTimerOnPause\":false,\"timerCycleCounter\":0}";}
+
+        return new Gson().fromJson(json,
+                new TypeToken<TimerSettingsObject>(){}.getType());
+    }
+
+    public void setTimerSetings(TimerSettingsObject timerSetings) {
+
+        editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+
+        editor.putString(APP_PREF_TIMER, new Gson().toJson(timerSetings))
+                .apply();
+        //System.out.println("Save timer settings - " + new Gson().toJson(timerSetings));\\ long[] pattern = { 500, 300, 400, 200 };
     }
 }
