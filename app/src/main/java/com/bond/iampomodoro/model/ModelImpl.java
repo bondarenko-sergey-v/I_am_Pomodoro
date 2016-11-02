@@ -65,6 +65,7 @@ public class ModelImpl {
         if(ob.timerState.equals("onPause")) {
             initBehaviorSubject(behaviorSubject.getValue());
             ob.timerState = "onStart";
+
             return;
         }
 
