@@ -3,12 +3,12 @@ package com.bond.iampomodoro.model;
 public class TimerSettingsObject {
     public int timerCycleCounter;
     public int intervalInSeconds;
-    public boolean isTimerOnPause;
+    public String timerState;
 
     public TimerSettingsObject(int timerCycleCounter, int intervalInSeconds,
-                               boolean isTimerOnPause) {
+                               String timerState) {
         this.timerCycleCounter = timerCycleCounter;
         this.intervalInSeconds = intervalInSeconds;
-        this.isTimerOnPause = isTimerOnPause;
+        this.timerState = timerState;
     }
 }

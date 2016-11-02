@@ -1,94 +1,77 @@
 package com.bond.iampomodoro.presenter;
 
-import android.view.View;
+import com.bond.iampomodoro.App;
+import com.bond.iampomodoro.model.SettingsObject;
+import com.bond.iampomodoro.model.TimerSettingsObject;
+import com.bond.iampomodoro.view.fragments.HardcoreView;
 
-import com.bond.iampomodoro.R;
-import com.bond.iampomodoro.databinding.FragmentHardcoreBinding;
-import com.bond.iampomodoro.util.NotifyUser;
-import com.jakewharton.rxbinding.view.RxView;
+import rx.subscriptions.CompositeSubscription;
 
 public class HardcorePresenter extends BasePresenter {
 
-//    @Inject
-//    //@Named("ActivityContext")
-//    @ActivityContext
-//    Context activityContext;
+    private TimerSettingsObject ob;
+    private SettingsObject settings;
 
-    private FragmentHardcoreBinding binding;
+    private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
-    public void notifyHardcoreFragmentStarts(FragmentHardcoreBinding binding) {
-        this.binding = binding;
+    private HardcoreView view;
 
-        getSettingsAndRestoreTimer();
+    public void onCreate(HardcoreView view) {
+        App.getAppComponent().inject(this);
+        this.view = view;
 
-        initUI();
+        onTabSelected();
     }
 
-    public void refreshFragment() {
+    public void onTabSelected() {
+        ob = model.getTimerState();
+        settings = model.getSettings();
 
-        getSettingsAndRestoreTimer();
-
-        initUI(); //?
-    }
-
-    private void initUI() {
-
-        RxView.clicks(binding.startBtn)
-                .subscribe(v -> {
-                    if(ob.isTimerOnPause || ob.timerCycleCounter == 0) {
-                        startTimer();
-                    } else {
-                        pauseTimer();
+        localCompositeSubscription.add(
+                behaviorSubject.subscribe(v -> {
+                    view.showTime(v);
+                    if(v == 0) {
+                        notifyUser.playSoundAndVibrate(settings.bool[3], settings.bool[4]);
                     }
-                });
+                }));
 
-        RxView.clicks(binding.resetBtn)
-                .subscribe(v -> resetTimer());
+        switch (ob.timerState) {
+            case "onPause":
+                view.showButons("Pause");
+                break;
+            case "onReset":
+                view.showButons("Reset");
+                view.showTime(settings.intr[0] * 60);
+                break;
+            default:
+                view.showButons("Start");
+                break;
+        }
     }
 
-    @Override
-    public void startTimer() {
-        showTime(ob.intervalInSeconds);
-        timerStart();
-
-        binding.startBtn.setText(R.string.pause);
-        binding.resetBtn.setEnabled(true);
-        binding.resetBtn.setVisibility(View.VISIBLE);
+    public void onTabUnselected() {
+        localCompositeSubscription.clear();
     }
 
-    @Override
-    public void pauseTimer() {
-        clearCompositeSubscription();
-        showTime(ob.intervalInSeconds);
-        ob.isTimerOnPause = true;
+    public void onStartButtonClick() {
+        ob = model.getTimerState();
 
-        binding.startBtn.setText(R.string.start);
+        if(!ob.timerState.equals("onStart")) {
+            model.startTimer();
+            view.showButons("Start");
+        } else {
+            model.pauseTimer();
+            view.showButons("Pause");
+        }
     }
 
-    @Override
-    public void resetTimer() {
-        clearCompositeSubscription();
-
-        ob.timerCycleCounter = 0;
-        ob.isTimerOnPause = false;
-        ob.intervalInSeconds = workSessionMin * 60;
-        showTime(ob.intervalInSeconds);
-
-        binding.startBtn.setText(R.string.start);
-        binding.resetBtn.setEnabled(false);
-        binding.resetBtn.setVisibility(View.INVISIBLE);
+    public void onResetButtonClick() {
+        model.resetTimer();
+        view.showButons("Reset");
+        view.showTime(settings.intr[0] * 60);
     }
 
-    @Override
-    public void showTime(int timeInSeconds) {
-        binding.minutes.setText(String.valueOf(
-                (int) timeInSeconds / 60));
-        binding.seconds.setText(String.format("%02d",//TODO Check warning
-                (int) timeInSeconds % 60));
-    }
+    public void onSaveInstanceState() {
 
-    @Override
-    void notifyUser(NotifyUser notifyUser) { //TODO Fix double-link
-        notifyUser.vibrateAndPlaySound(generalSettings.bool[3],generalSettings.bool[4]);
     }
 }

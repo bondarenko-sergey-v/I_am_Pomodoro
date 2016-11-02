@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (tab.getPosition()) {
                     case 0:
                         setLightTabs();
-                        keepScreenOn(ob.bool[2]);
+                        keepScreenOn(ob.bool[2]); //TODO Refactor method
                         break;
                     default:
                         setDarkTabs();
@@ -85,16 +85,13 @@ public class MainActivity extends AppCompatActivity {
             public void onTabUnselected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        dayPresenter.saveTimerSettings();
-                        System.out.println("Day - Save timer settings!");
+                        dayPresenter.onTabUnselected();
                         break;
                     case 1:
-                        hardcorePresenter.saveTimerSettings();
-                        System.out.println("Hardcore - Save timer settings!");
+                        hardcorePresenter.onTabUnselected();
                         break;
                     case 2:
-                        settingsPresenter.saveSettings();
-                        System.out.println("Settings - Save timer settings!");
+                        settingsPresenter.onTabUnselected();
                         break;
                 }
             }

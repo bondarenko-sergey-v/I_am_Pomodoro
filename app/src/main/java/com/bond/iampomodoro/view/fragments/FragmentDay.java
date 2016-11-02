@@ -3,7 +3,6 @@ package com.bond.iampomodoro.view.fragments;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,15 @@ import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentDayBinding;
 import com.bond.iampomodoro.presenter.DayPresenter;
+import com.bond.iampomodoro.presenter.Presenter;
+import com.jakewharton.rxbinding.view.RxView;
 
 import javax.inject.Inject;
 
-public class FragmentDay extends Fragment{
+public class FragmentDay extends BaseFragment implements DayView {
 
     @Inject
-    DayPresenter dayPresenter;
+    DayPresenter presenter;
 
     private static FragmentDayBinding binding;
 
@@ -30,8 +31,8 @@ public class FragmentDay extends Fragment{
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if(isVisibleToUser && dayPresenter != null) {
-            dayPresenter.refreshFragment(); //TODO Make reinflation faster
+        if(isVisibleToUser && presenter != null) {
+            presenter.onTabSelected(); //TODO Make reinflation faster
             }
     }
 
@@ -55,17 +56,68 @@ public class FragmentDay extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        dayPresenter.notifyDayFragmentStarts(binding);
+        presenter.onCreate(this);
+
+        initUI();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        dayPresenter.saveTimerSettings();
+        presenter.onTabUnselected();
     }
 
-    public static FragmentDayBinding getFragmentDayBinding() {
-        return binding;
+    //@Override
+    protected Presenter getPresenter() {
+        App.getAppComponent().inject(this);
+        return presenter;
+    }
+
+    @Override
+    public void showTime(int timeInSeconds) {
+
+        if(timeInSeconds != 0) {
+            binding.minutes.setText(String.valueOf(
+                    (int) timeInSeconds / 60));
+            binding.seconds.setText(String.format("%02d",//TODO Check warning
+                    (int) timeInSeconds % 60));
+        } else {
+            binding.minutes.setText(String.valueOf(0));
+            binding.seconds.setText(String.format("%02d", 0));
+        }
+    }
+
+    @Override
+    public void showButons(String buttonsState) {
+        switch(buttonsState) {
+            case "Start":
+                binding.startBtn.setText(R.string.pause);
+                binding.resetBtn.setEnabled(true);
+                binding.resetBtn.setVisibility(View.VISIBLE);
+                break;
+            case "Pause":
+                binding.startBtn.setText(R.string.start);
+                break;
+            case "Reset":
+                binding.startBtn.setText(R.string.start);
+                binding.resetBtn.setEnabled(false);
+                binding.resetBtn.setVisibility(View.INVISIBLE);
+                break;
+        }
+    }
+
+    @Override
+    public void showState(String currentState) {
+
+    }
+
+    private void initUI() {
+
+        RxView.clicks(binding.startBtn)
+                .subscribe(v -> presenter.onStartButtonClick());
+
+        RxView.clicks(binding.resetBtn)
+                .subscribe(v -> presenter.onResetButtonClick());
     }
 }

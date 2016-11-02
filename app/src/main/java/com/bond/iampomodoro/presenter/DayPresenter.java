@@ -1,103 +1,77 @@
 package com.bond.iampomodoro.presenter;
 
-import android.view.View;
+import com.bond.iampomodoro.App;
+import com.bond.iampomodoro.model.SettingsObject;
+import com.bond.iampomodoro.model.TimerSettingsObject;
+import com.bond.iampomodoro.view.fragments.DayView;
 
-import com.bond.iampomodoro.R;
-import com.bond.iampomodoro.databinding.FragmentDayBinding;
-import com.bond.iampomodoro.util.NotifyUser;
-import com.jakewharton.rxbinding.view.RxView;
+import rx.subscriptions.CompositeSubscription;
 
 public class DayPresenter extends BasePresenter {
 
-    private FragmentDayBinding binding;
+    private TimerSettingsObject ob;
+    private SettingsObject settings;
 
-    public DayPresenter() {
+    private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
-//        App.getAppComponent().inject(this);
-          //MainActivity.getActivitySubcomponent().inject(this);
+    private DayView view;
+
+    public void onCreate(DayView view) {
+        App.getAppComponent().inject(this);
+        this.view = view;
+
+        onTabSelected();
     }
 
-    public void notifyDayFragmentStarts(FragmentDayBinding binding) {
-        this.binding = binding;
+    public void onTabSelected() {
+        ob = model.getTimerState();
+        settings = model.getSettings();
 
-        getSettingsAndRestoreTimer();
+        localCompositeSubscription.add(
+                behaviorSubject.subscribe(v -> {
+                    view.showTime(v);
+                    if(v == 0) {
+                        notifyUser.playSoundAndVibrate(settings.bool[0], settings.bool[1]);
+                    }
+                }));
 
-        initUI();
-    }
-
-    public void refreshFragment() {
-
-        getSettingsAndRestoreTimer();
-
-        initUI(); //?
-    }
-
-//    @Inject
-//    KeepScreenOn keepScreenOn;
-
-    private void initUI() {
-
-        RxView.clicks(binding.startBtn)
-            .subscribe(v -> {
-                if(ob.isTimerOnPause || ob.timerCycleCounter == 0) {
-                    startTimer();
-                } else {
-                    pauseTimer();
-                }
-            });
-
-        RxView.clicks(binding.resetBtn)
-            .subscribe(v -> resetTimer());
-    }
-
-    @Override
-    public void startTimer() {
-        showTime(ob.intervalInSeconds);
-        timerStart();
-
-        binding.startBtn.setText(R.string.pause);
-        binding.resetBtn.setEnabled(true);
-        binding.resetBtn.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void pauseTimer() {
-        clearCompositeSubscription();
-        showTime(ob.intervalInSeconds);
-        ob.isTimerOnPause = true;
-
-        binding.startBtn.setText(R.string.start);
-    }
-
-    @Override
-    public void resetTimer() {
-        clearCompositeSubscription();
-
-        ob.timerCycleCounter = 0;
-        ob.isTimerOnPause = false;
-        ob.intervalInSeconds = workSessionMin * 60;
-        showTime(ob.intervalInSeconds);
-
-        binding.startBtn.setText(R.string.start);
-        binding.resetBtn.setEnabled(false);
-        binding.resetBtn.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void showTime(int timelInSeconds) {
-        if(timelInSeconds != 0) {
-            binding.minutes.setText(String.valueOf(
-                    (int) timelInSeconds / 60));
-            binding.seconds.setText(String.format("%02d",//TODO Check warning
-                    (int) timelInSeconds % 60));
-        } else {
-            binding.minutes.setText(String.valueOf(0));
-            binding.seconds.setText(String.format("%02d", 0));
+        switch (ob.timerState) {
+            case "onPause":
+                view.showButons("Pause");
+                break;
+            case "onReset":
+                view.showButons("Reset");
+                view.showTime(settings.intr[0] * 60);
+                break;
+            default:
+                view.showButons("Start");
+                break;
         }
     }
 
-    @Override
-    void notifyUser(NotifyUser notifyUser) {
-        notifyUser.vibrateAndPlaySound(generalSettings.bool[0],generalSettings.bool[1]);
+    public void onTabUnselected() {
+        localCompositeSubscription.clear();
+    }
+
+    public void onStartButtonClick() {
+        ob = model.getTimerState();
+
+        if(!ob.timerState.equals("onStart")) {
+            model.startTimer();
+            view.showButons("Start");
+        } else {
+            model.pauseTimer();
+            view.showButons("Pause");
+        }
+    }
+
+    public void onResetButtonClick() {
+        model.resetTimer();
+        view.showButons("Reset");
+        view.showTime(settings.intr[0] * 60);
+    }
+
+    public void onSaveInstanceState() {
+        //TODO Make it
     }
 }

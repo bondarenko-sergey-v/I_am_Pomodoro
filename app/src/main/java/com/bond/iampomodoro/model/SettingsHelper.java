@@ -44,11 +44,11 @@ public class SettingsHelper {
         mSettings = PreferenceManager.getDefaultSharedPreferences(context);
 
         String json = mSettings.getString(APP_PREF_TIMER,
-        "{\"intervalInSeconds\":1,\"isTimerOnPause\":false,\"timerCycleCounter\":0}");
+        "{\"intervalInSeconds\":1,\"timerCycleCounter\":0,\"timerState\":onReset}");
 
         //TODO Fix bug with "null" settings and delete underlying code
         if(json.equals("null")) { json = "{\"intervalInSeconds\":1," +
-                "\"isTimerOnPause\":false,\"timerCycleCounter\":0}";}
+                "\"timerCycleCounter\":0,\"timerState\":onReset}";}
 
         return new Gson().fromJson(json,
                 new TypeToken<TimerSettingsObject>(){}.getType());

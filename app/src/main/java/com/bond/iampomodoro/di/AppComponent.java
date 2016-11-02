@@ -1,5 +1,6 @@
 package com.bond.iampomodoro.di;
 
+import com.bond.iampomodoro.model.ModelImpl;
 import com.bond.iampomodoro.model.SettingsHelper;
 import com.bond.iampomodoro.presenter.BasePresenter;
 import com.bond.iampomodoro.presenter.DayPresenter;
@@ -8,6 +9,7 @@ import com.bond.iampomodoro.presenter.SettingsPresenter;
 import com.bond.iampomodoro.view.fragments.FragmentDay;
 import com.bond.iampomodoro.view.fragments.FragmentHardcore;
 import com.bond.iampomodoro.view.fragments.FragmentSettings;
+import com.bond.iampomodoro.view.util.NotifyUser;
 
 import javax.inject.Singleton;
 
@@ -35,4 +37,8 @@ public interface AppComponent {
    void inject (BasePresenter basePresenter);
 
    void inject (SettingsHelper settingsHelper);
+
+   void inject (ModelImpl modelImpl);
+
+   void inject (NotifyUser notifyUser);
 }
