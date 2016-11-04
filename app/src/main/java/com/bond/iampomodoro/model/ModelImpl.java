@@ -1,6 +1,9 @@
 package com.bond.iampomodoro.model;
 
 import com.bond.iampomodoro.App;
+import com.bond.iampomodoro.model.dataObjects.PreferencesObject;
+import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
+import com.bond.iampomodoro.model.dataObjects.TimerObject;
 
 import java.util.concurrent.TimeUnit;
 
@@ -16,110 +19,111 @@ import rx.subscriptions.CompositeSubscription;
 public class ModelImpl {
 
     @Inject
-    SettingsHelper settingsHelper;
-
+    PreferencesHelper preferencesHelper;
     @Inject
-    BehaviorSubject<Integer> behaviorSubject;
-
+    BehaviorSubject<TimerObject> behaviorSubject;
     @Inject
     CompositeSubscription compositeSubscription;
 
-    private int workSessionMin;
-    private int breakMin;
-    private int longBreakMin;
-    private int sessionsBeforeLB;
-
-    private TimerSettingsObject ob;
-    private SettingsObject settings;
+    private PreferencesObject pref;
 
     public ModelImpl() {
         App.getAppComponent().inject(this);
-        this.ob = settingsHelper.getTimerSetings();
+        this.pref = preferencesHelper.getPreferences();
 
-        getSettingsForModel();
-    }
-
-    public SettingsObject getSettings() {
-        return settingsHelper.getSetings();
-    }
-
-    public void setSettings(SettingsObject settings) {
-        settingsHelper.setSetings(settings);
-    }
-
-    public TimerSettingsObject getTimerState() {
-        return settingsHelper.getTimerSetings();
-    }
-
-    private void setTimerState(TimerSettingsObject settings) {
-        settingsHelper.setTimerSetings(settings);
+        //TODO Change to preferences
+        behaviorSubject.onNext(new TimerObject(pref.workSession * 60, pref.timerState));
     }
 
     public void getPicture() {
         //TODO Make it
     }
 
+    public UserSettingsObject getUserSettings() {
+        Boolean[] b = {pref.daySound, pref.dayVibration, pref.dayKeepScreen,
+            pref.nightSound, pref.nightVibration, pref.nightKeepScreen, pref.nightPictures};
+
+        return new UserSettingsObject(b,pref.workSession, pref.breakMin,
+                pref.longBreak, pref.sessionsBeforeLB);
+    }
+
+    public void setUserSettings(UserSettingsObject usrSet) {
+        pref.daySound = usrSet.bool[0];
+        pref.dayVibration = usrSet.bool[1];
+        pref.dayKeepScreen = usrSet.bool[2];
+        pref.nightSound = usrSet.bool[3];
+        pref.nightVibration = usrSet.bool[4];
+        pref.nightKeepScreen = usrSet.bool[5];
+        pref.nightPictures = usrSet.bool[6];
+
+        pref.workSession = usrSet.workSession;
+        pref.breakMin = usrSet.breakMin;
+        pref.longBreak = usrSet.longBreak;
+        pref.sessionsBeforeLB = usrSet.sessionsBeforeLB;
+
+        preferencesHelper.setPreferences(pref);
+
+        if(pref.timerState.equals("onReset")) {
+            behaviorSubject.onNext(new TimerObject(pref.workSession * 60, pref.timerState));
+        }
+    }
+
     public void startTimer() {
         clearCompositeSubscription();
 
-        if(ob.timerState.equals("onPause")) {
-            initBehaviorSubject(behaviorSubject.getValue());
-            ob.timerState = "onStart";
-
+        if(pref.timerState.equals("onPause")) {
+            pref.timerState = "onStart";
+            initBehaviorSubject(behaviorSubject.getValue().intervalInSeconds);
             return;
         }
 
-        ob.timerCycleCounter++;
+        pref.timerCycleCounter++;
 
-        if (ob.timerCycleCounter % 2 != 0) {
-            //initBehaviorSubject(15);  // Mock
-            initBehaviorSubject(workSessionMin * 60);
-        } else if (ob.timerCycleCounter % ((sessionsBeforeLB + 1) * 2) != 0) {
-            //initBehaviorSubject(5);   // Mock
-            initBehaviorSubject(breakMin * 60);
+        if (pref.timerCycleCounter % 2 != 0) {
+            pref.timerState = "onWorkSession";
+            initBehaviorSubject(15);  // Mock
+            //initBehaviorSubject(pref.workSession * 60); // Start work session
+        } else if (pref.timerCycleCounter % ((pref.sessionsBeforeLB + 1) * 2) != 0) {
+            pref.timerState = "onBreak";
+            initBehaviorSubject(5);   // Mock
+            //initBehaviorSubject(pref.breakMin * 60);    // Start break
         } else {
-            //initBehaviorSubject(10);  // Mock
-            initBehaviorSubject(longBreakMin * 60);
+            pref.timerState = "onLongBreak";
+            initBehaviorSubject(10);  // Mock
+            //initBehaviorSubject(pref.longBreak * 60);   // Start long break
         }
 
-        ob.timerState = "onStart";
-        setTimerState(ob);
+        preferencesHelper.setPreferences(pref); //TODO Move to onStop
     }
 
    public void pauseTimer() {
         clearCompositeSubscription();
-        ob.timerState = "onPause";
-        setTimerState(ob);
+        pref.timerState = "onPause";
+        behaviorSubject.onNext(new TimerObject(
+                behaviorSubject.getValue().intervalInSeconds, pref.timerState));
+        preferencesHelper.setPreferences(pref); //TODO Move to onStop
     }
 
     public void resetTimer() {
         clearCompositeSubscription();
 
-        ob.timerCycleCounter = 0;
-        ob.intervalInSeconds = workSessionMin * 60;
-        ob.timerState = "onReset";
-        setTimerState(ob);
+        pref.timerState = "onReset";
+        pref.timerCycleCounter = 0;
+        pref.intervalInSeconds = pref.workSession * 60;
+
+        behaviorSubject.onNext(new TimerObject(pref.intervalInSeconds, pref.timerState));
+        preferencesHelper.setPreferences(pref); //TODO Move to onStop
     }
 
-    private void getSettingsForModel() {
-
-        settings = getSettings();
-        ob = getTimerState();
-
-        workSessionMin = settings.intr[0];
-        breakMin = settings.intr[1];
-        longBreakMin = settings.intr[2];
-        sessionsBeforeLB = settings.intr[3];
-    }
-
-    private void initBehaviorSubject(int timeInSeconds) {
+    private void initBehaviorSubject(int intervalInSeconds) {
 
         Subscription s =
                 Observable.interval(1, TimeUnit.SECONDS, Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .map(v -> v + 1)
-                        .take(timeInSeconds)
-                        .map(v -> (int) (timeInSeconds - v))
+                        .take(intervalInSeconds)
+                        .map(v -> (int) (intervalInSeconds - v))
+                        .map(v -> new TimerObject(v, pref.timerState))
                         .doOnCompleted(this::startTimer)
                         .subscribe(behaviorSubject::onNext);
 

@@ -12,11 +12,9 @@ import android.view.WindowManager;
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.di.ActivityModule;
-import com.bond.iampomodoro.model.SettingsHelper;
-import com.bond.iampomodoro.model.SettingsObject;
-import com.bond.iampomodoro.presenter.DayPresenter;
-import com.bond.iampomodoro.presenter.HardcorePresenter;
-import com.bond.iampomodoro.presenter.SettingsPresenter;
+import com.bond.iampomodoro.model.PreferencesHelper;
+import com.bond.iampomodoro.model.dataObjects.PreferencesObject;
+import com.squareup.leakcanary.LeakCanary;
 
 import javax.inject.Inject;
 
@@ -25,13 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     Context appContext;
     @Inject
-    SettingsHelper settingsHelper;
-    @Inject
-    DayPresenter dayPresenter;
-    @Inject
-    HardcorePresenter hardcorePresenter;
-    @Inject
-    SettingsPresenter settingsPresenter;
+    PreferencesHelper settingsHelper;
 
     private TabLayout tabLayout;
 
@@ -43,14 +35,15 @@ public class MainActivity extends AppCompatActivity {
                 .plus(new ActivityModule(this))
                 .inject(this);
 
-//        if (LeakCanary.isInAnalyzerProcess(this)) { //TODO Check memory leaks
-//            return;
-//        }
-//        LeakCanary.install(getApplication());
+        if (LeakCanary.isInAnalyzerProcess(this)) { //TODO Check memory leaks
+            return;
+        }
+        LeakCanary.install(getApplication());
 
         setContentView(R.layout.activity_main);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
 
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
@@ -68,33 +61,24 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                SettingsObject ob = settingsHelper.getSetings();
+                PreferencesObject ob = settingsHelper.getPreferences(); //TODO ? Refactor to not to request settings from Activity
                 switch (tab.getPosition()) {
                     case 0:
                         setLightTabs();
-                        keepScreenOn(ob.bool[2]); //TODO Refactor method
+                        keepScreenOn(ob.dayKeepScreen);
                         break;
-                    default:
+                    case 1:
                         setDarkTabs();
-                        keepScreenOn(ob.bool[5]);
+                        keepScreenOn(ob.nightKeepScreen);
+                        break;
+                    case 2:
+                        setDarkTabs();
                         break;
                 }
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 0:
-                        dayPresenter.onTabUnselected();
-                        break;
-                    case 1:
-                        hardcorePresenter.onTabUnselected();
-                        break;
-                    case 2:
-                        settingsPresenter.onTabUnselected();
-                        break;
-                }
-            }
+            public void onTabUnselected(TabLayout.Tab tab) { }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) { }
@@ -116,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.mipmap.ic_code_tags2);
         tabLayout.getTabAt(2).setIcon(R.mipmap.ic_settings);
     }
+
     private void keepScreenOn(boolean keepScreenOn) {
         if(keepScreenOn) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

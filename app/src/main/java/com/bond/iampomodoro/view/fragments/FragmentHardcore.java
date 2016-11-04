@@ -22,18 +22,10 @@ public class FragmentHardcore extends BaseFragment implements HardcoreView {
     HardcorePresenter presenter;
 
     private FragmentHardcoreBinding binding;
+    private boolean isFragmentVisible;
 
     public static FragmentHardcore newInstance() {
         return new FragmentHardcore();
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if(isVisibleToUser && presenter != null) {
-            presenter.onTabSelected();
-            }
     }
 
     @Override
@@ -58,6 +50,10 @@ public class FragmentHardcore extends BaseFragment implements HardcoreView {
 
         presenter.onCreate(this);
 
+        if(isFragmentVisible) {
+            presenter.onTabSelected();
+        }
+
         initUI();
     }
 
@@ -67,6 +63,22 @@ public class FragmentHardcore extends BaseFragment implements HardcoreView {
 
         presenter.onTabUnselected();
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        isFragmentVisible = isVisibleToUser;
+
+        if(isVisibleToUser && presenter != null) {
+            presenter.onTabSelected();
+        }
+
+        if(!isVisibleToUser && presenter != null) {
+            presenter.onTabUnselected();
+        }
+    }
+
     @Override
     protected Presenter getPresenter() {
         App.getAppComponent().inject(this);
@@ -104,11 +116,6 @@ public class FragmentHardcore extends BaseFragment implements HardcoreView {
                 binding.resetBtn.setVisibility(View.INVISIBLE);
                 break;
         }
-    }
-
-    @Override
-    public void showState(String currentState) {
-
     }
 
     @Override

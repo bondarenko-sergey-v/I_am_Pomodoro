@@ -4,20 +4,19 @@ import android.app.Application;
 import android.content.Context;
 
 import com.bond.iampomodoro.model.ModelImpl;
+import com.bond.iampomodoro.model.dataObjects.TimerObject;
 import com.bond.iampomodoro.view.util.NotifyUser;
-import com.bond.iampomodoro.model.SettingsHelper;
+import com.bond.iampomodoro.model.PreferencesHelper;
 import com.bond.iampomodoro.presenter.DayPresenter;
 import com.bond.iampomodoro.presenter.HardcorePresenter;
 import com.bond.iampomodoro.presenter.SettingsPresenter;
 import com.bond.iampomodoro.view.fragments.FragmentDay;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import rx.subjects.BehaviorSubject;
-import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
 
 @Module
@@ -37,8 +36,8 @@ public class AppModule {
 
   @Provides
   @Singleton
-  SettingsHelper provideSettingsHelper() {
-    return new SettingsHelper(application);
+  PreferencesHelper providePreferencesHelper() {
+    return new PreferencesHelper(application);
   }
 
   @Provides
@@ -89,7 +88,7 @@ public class AppModule {
 
   @Provides
   @Singleton
-  BehaviorSubject<Integer> provideBehaviorSubject() {
+  BehaviorSubject<TimerObject> provideBehaviorSubject() {
     return BehaviorSubject.create();
   }
 

@@ -6,13 +6,13 @@ import com.bond.iampomodoro.presenter.Presenter;
 
 public abstract class BaseFragment extends Fragment {
 
-    protected abstract Presenter getPresenter(); //TODO Откуда прилшо???
+    protected abstract Presenter getPresenter();
 
     @Override
     public void onStop() {
         super.onStop();
         if (getPresenter() != null) {
-            getPresenter().onStop();
+            getPresenter().onStop();   //TODO Make it or delete
         }
     }
 

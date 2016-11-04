@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 
 import com.bond.iampomodoro.App;
-import com.bond.iampomodoro.model.SettingsObject;
+import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
 import com.bond.iampomodoro.presenter.Presenter;
 import com.bond.iampomodoro.presenter.SettingsPresenter;
 import com.bond.iampomodoro.R;
@@ -20,12 +20,13 @@ import com.jakewharton.rxbinding.widget.RxSeekBar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 import static rx.Observable.combineLatest;
@@ -40,10 +41,19 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
 
     private FragmentSettingsBinding binding;
 
-    private SettingsObject settings;
+    private UserSettingsObject usrSet;
 
     public static FragmentSettings newInstance() {
         return new FragmentSettings();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if(!isVisibleToUser && presenter != null) {
+            presenter.onTabUnselected();
+        }
     }
 
     @Override
@@ -66,7 +76,6 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         presenter.onCreate(this);
     }
 
@@ -76,8 +85,8 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
 
         presenter.onTabUnselected();
         clearCompositeSubscription();
-        //presenter.saveSettings(); //TODO Call onDestroy
     }
+
     @Override
     protected Presenter getPresenter() {
         App.getAppComponent().inject(this);
@@ -85,80 +94,73 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
     }
 
     @Override
-    public void showSettings(SettingsObject settings) {
-        this.settings = settings;
-        initCheckBoxes();
-        initSeekbars();
+    public Observable showSettings(UserSettingsObject usrSet) {
+        this.usrSet = usrSet;
+
+        Observable<Boolean[]> obs1 = initCheckBoxes();
+        Observable<int[]> obs2 = initSeekbars();
+
+        return Observable.combineLatest(obs1, obs2, (b, i) ->
+                new UserSettingsObject(b, i[0], i[1], i[2], i[3]));
     }
 
-    private void initCheckBoxes() {
+    private Observable<Boolean[]> initCheckBoxes() {
         List<CheckBox> cbList = Arrays.asList( binding.cbxDaySound, binding.cbxDayVibration,
                 binding.cbxDayKeepScreen, binding.cbxNightSound, binding.cbxNightVibration,
                 binding.cbxNightKeepScreen, binding.cbxNightPictures);
 
-        Subscription s = Observable.from(cbList)
-                .doOnNext(v -> v.setChecked(settings.bool[cbList.indexOf(v)])) //TODO Refactor index calculation
+        return Observable.from(cbList)
+                .doOnNext(v -> v.setChecked(usrSet.bool[cbList.indexOf(v)])) //TODO Refactor index calculation
                 .map(RxCompoundButton::checkedChanges)                         // with .count or something else
                 .toList()
                 .flatMap(v -> combineLatest(v, args -> {
-                    List<Boolean> combine = new ArrayList<>();
-                    for(Object c : args) {
-                        combine.add((Boolean) c);
-                    }
-                    return combine;
-                }))
-                .map(v -> v.toArray(new Boolean[v.size()])) //TODO ?Refactor data casting?
-                .subscribe(v -> presenter.onCheckBoxesChanges(v));
-
-        compositeSubscription.add(s);
+                    List<Object> combine = new ArrayList<>();
+                    Collections.addAll(combine, args);
+                    return combine.toArray(new Boolean[combine.size()]);
+                    }));
     }
 
-    private void initSeekbars() {
+    private Observable<int[]> initSeekbars() {
         Observable<Integer> sb1 = RxSeekBar.changes(binding.seekbarWorkSession)
                 .map(v -> v + 25)
                 .doOnSubscribe(() -> {
-                    binding.textViewWorkSession.setText(String.valueOf(settings.intr[0]));
-                    binding.seekbarWorkSession.setProgress(settings.intr[0] - 25);
+                    binding.textViewWorkSession.setText(String.valueOf(usrSet.workSession));
+                    binding.seekbarWorkSession.setProgress(usrSet.workSession - 25);
                 })
                 .doOnNext(v -> binding.textViewWorkSession.setText(String.valueOf(v)));
 
         Observable<Integer> sb2 = RxSeekBar.changes(binding.seekbarBreak)
                 .map(v -> v + 5)
                 .doOnSubscribe(() -> {
-                    binding.textViewBreak.setText(String.valueOf(settings.intr[1]));
-                    binding.seekbarBreak.setProgress(settings.intr[1] - 5);
+                    binding.textViewBreak.setText(String.valueOf(usrSet.breakMin));
+                    binding.seekbarBreak.setProgress(usrSet.breakMin - 5);
                 })
                 .doOnNext(v -> binding.textViewBreak.setText(String.valueOf(v)));
 
         Observable<Integer> sb3 = RxSeekBar.changes(binding.seekbarLongBreak)
                 .map(v -> v + 15)
                 .doOnSubscribe(() -> {
-                    binding.textViewLongBreak.setText(String.valueOf(settings.intr[2]));
-                    binding.seekbarLongBreak.setProgress(settings.intr[2] - 15);
+                    binding.textViewLongBreak.setText(String.valueOf(usrSet.longBreak));
+                    binding.seekbarLongBreak.setProgress(usrSet.longBreak - 15);
                 })
                 .doOnNext(v -> binding.textViewLongBreak.setText(String.valueOf(v)));
 
         Observable<Integer> sb4 = RxSeekBar.changes(binding.seekbarSessionsBeforeLB)
                 .map(v -> v + 3)
                 .doOnSubscribe(() -> {
-                    binding.textViewSessionsBeforeLB.setText(String.valueOf(settings.intr[3]));
-                    binding.seekbarSessionsBeforeLB.setProgress(settings.intr[3] - 3);
+                    binding.textViewSessionsBeforeLB.setText(String.valueOf(usrSet.sessionsBeforeLB));
+                    binding.seekbarSessionsBeforeLB.setProgress(usrSet.sessionsBeforeLB - 3);
                 })
                 .doOnNext(v -> binding.textViewSessionsBeforeLB.setText(String.valueOf(v)));
 
-        Subscription s = Observable.combineLatest(sb1,sb2,sb3,sb4, (a1, a2, a3, a4) ->
-                Arrays.asList(a1, a2, a3, a4))
-                .map(v -> v.toArray(new Integer[v.size()]))
-                .subscribe(v -> presenter.onSeekbarsChanges(v));
-
-        //TODO Fix subscriptions lifecycle management
-        compositeSubscription.add(s);
+        return Observable.combineLatest(sb1, sb2, sb3, sb4, (a1, a2, a3, a4) ->
+                new int[]{ a1, a2, a3, a4 })
+                .debounce(250, TimeUnit.MILLISECONDS);
     }
 
     public void clearCompositeSubscription() {
         if (compositeSubscription != null && !compositeSubscription.isUnsubscribed()) {
-            compositeSubscription.unsubscribe();
-            compositeSubscription = new CompositeSubscription();
+            compositeSubscription.clear();
         }
     }
 }

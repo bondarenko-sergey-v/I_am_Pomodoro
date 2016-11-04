@@ -1,8 +1,10 @@
 package com.bond.iampomodoro.view.fragments;
 
-import com.bond.iampomodoro.model.SettingsObject;
+import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
+
+import rx.Observable;
 
 public interface SettingsView extends View {
 
-    void showSettings(SettingsObject settings);
+    Observable showSettings(UserSettingsObject settings);
 }

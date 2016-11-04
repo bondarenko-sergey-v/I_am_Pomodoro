@@ -2,6 +2,7 @@ package com.bond.iampomodoro.presenter;
 
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.model.ModelImpl;
+import com.bond.iampomodoro.model.dataObjects.TimerObject;
 import com.bond.iampomodoro.view.util.NotifyUser;
 
 import javax.inject.Inject;
@@ -13,13 +14,10 @@ public abstract class BasePresenter implements Presenter {
 
     @Inject
     ModelImpl model;
-
     @Inject
     NotifyUser notifyUser;
-
     @Inject
-    BehaviorSubject<Integer> behaviorSubject;
-
+    BehaviorSubject<TimerObject> behaviorSubject;
     @Inject
     CompositeSubscription compositeSubscription;
 

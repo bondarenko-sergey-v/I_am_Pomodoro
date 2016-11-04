@@ -21,19 +21,11 @@ public class FragmentDay extends BaseFragment implements DayView {
     @Inject
     DayPresenter presenter;
 
-    private static FragmentDayBinding binding;
+    private FragmentDayBinding binding;
+    private boolean isFragmentVisible;
 
     public static FragmentDay newInstance() {
         return new FragmentDay();
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if(isVisibleToUser && presenter != null) {
-            presenter.onTabSelected(); //TODO Make reinflation faster
-            }
     }
 
     @Override
@@ -58,6 +50,10 @@ public class FragmentDay extends BaseFragment implements DayView {
 
         presenter.onCreate(this);
 
+        if(isFragmentVisible) {
+            presenter.onTabSelected();
+        }
+
         initUI();
     }
 
@@ -68,7 +64,22 @@ public class FragmentDay extends BaseFragment implements DayView {
         presenter.onTabUnselected();
     }
 
-    //@Override
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        isFragmentVisible = isVisibleToUser;
+
+        if(isVisibleToUser && presenter != null) {
+            presenter.onTabSelected();
+        }
+
+        if(!isVisibleToUser && presenter != null) {
+            presenter.onTabUnselected();
+        }
+    }
+
+    @Override
     protected Presenter getPresenter() {
         App.getAppComponent().inject(this);
         return presenter;
@@ -107,13 +118,7 @@ public class FragmentDay extends BaseFragment implements DayView {
         }
     }
 
-    @Override
-    public void showState(String currentState) {
-
-    }
-
     private void initUI() {
-
         RxView.clicks(binding.startBtn)
                 .subscribe(v -> presenter.onStartButtonClick());
 

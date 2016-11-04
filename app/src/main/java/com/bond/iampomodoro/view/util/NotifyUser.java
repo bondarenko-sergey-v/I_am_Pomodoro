@@ -6,13 +6,17 @@ import android.os.Vibrator;
 
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
+import com.bond.iampomodoro.model.ModelImpl;
+import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
+
+import javax.inject.Inject;
 
 public class NotifyUser {
 
     private final Context context;
 
     public NotifyUser(Context context) {
-        App.getAppComponent().inject(this); //TODO ???
+        App.getAppComponent().inject(this);
         this.context = context;
     }
 

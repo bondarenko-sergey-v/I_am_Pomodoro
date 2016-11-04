@@ -1,7 +1,7 @@
 package com.bond.iampomodoro.di;
 
 import com.bond.iampomodoro.model.ModelImpl;
-import com.bond.iampomodoro.model.SettingsHelper;
+import com.bond.iampomodoro.model.PreferencesHelper;
 import com.bond.iampomodoro.presenter.BasePresenter;
 import com.bond.iampomodoro.presenter.DayPresenter;
 import com.bond.iampomodoro.presenter.HardcorePresenter;
@@ -36,7 +36,7 @@ public interface AppComponent {
 
    void inject (BasePresenter basePresenter);
 
-   void inject (SettingsHelper settingsHelper);
+   void inject (PreferencesHelper settingsHelper);
 
    void inject (ModelImpl modelImpl);
 

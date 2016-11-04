@@ -1,15 +1,11 @@
 package com.bond.iampomodoro;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
-import com.bond.iampomodoro.di.ActivityModule;
-import com.bond.iampomodoro.di.ActivityComponent;
 import com.bond.iampomodoro.di.AppComponent;
 import com.bond.iampomodoro.di.AppModule;
 import com.bond.iampomodoro.di.DaggerAppComponent;
-import com.bond.iampomodoro.view.MainActivity;
 
 public class App extends Application {
 
@@ -51,5 +47,4 @@ public class App extends Application {
 //    // end lifecycle of chatComponent
 //    activityComponent = null;
 //  }
-
 }

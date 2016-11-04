@@ -6,9 +6,5 @@ public interface HardcoreView extends View {
 
     void showButons(String buttonsState);
 
-    void showState(String currentState);
-
     void showImage(int imageNumber); //TODO Change to appropriate data type
-
-    //String getUserName();
 }
