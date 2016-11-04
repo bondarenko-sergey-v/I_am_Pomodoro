@@ -11,7 +11,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/seconds"
             android:textSize="50dp"
-            android:text="00"
             android:gravity="center"
             android:layout_alignTop="@+id/minutes"
             android:layout_toRightOf="@+id/minutes"
@@ -25,7 +24,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/minutes"
             android:textSize="100dp"
-            android:text="00"
             android:gravity="center"
             android:fontFamily="monospace"
             android:layout_centerVertical="true"
@@ -34,7 +32,7 @@
             android:textColor="@color/colorTabIndicator" />
 
         <Button
-            android:text="Start"
+            android:text="@string/start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/startBtn"
@@ -58,7 +56,6 @@
             android:background="@android:color/white"
             android:textSize="22sp"
             android:fontFamily="monospace"
-            android:text="@string/reset"
             android:layout_below="@+id/seconds"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -67,7 +64,10 @@
             android:paddingBottom="26dp"
             style="?android:attr/borderlessButtonStyle"
             android:textColor="@color/colorTabIndicator"
-            android:textColorHighlight="@color/colorButtonText" />
+            android:textColorHighlight="@color/colorButtonText"
+            android:text="@string/reset"
+            android:visibility="invisible"
+            android:enabled="false"/>
 
     </RelativeLayout>
 

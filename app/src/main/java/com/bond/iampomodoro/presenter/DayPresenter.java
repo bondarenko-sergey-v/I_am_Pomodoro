@@ -17,8 +17,7 @@ public class DayPresenter extends BasePresenter {
         App.getAppComponent().inject(this);
         this.view = view;
 
-     //   PreferencesObject n = new PreferencesObject(true,true,true,false,true,true,true,25,5,15,4,0,1,"onReset");
-     //   System.out.println(new Gson().toJson(n));
+        showActualButtons(behaviorSubject.getValue().timerState);
     }
 
     public void onTabSelected() {
@@ -34,21 +33,25 @@ public class DayPresenter extends BasePresenter {
                         notifyUser.playSoundAndVibrate(usrSet.bool[0], usrSet.bool[1]);
                     }
 
-                    timerState = v.timerState;
-
-                    switch (v.timerState) { //TODO - do switch only if v.timerState changes
-                        case "onPause":
-                            view.showButons("Pause");
-                            break;
-                        case "onReset":
-                            view.showButons("Reset");
-                            //view.showTime(v. * 60);
-                            break;
-                        default:
-                            view.showButons("Start");
-                            break;
+                    if(!v.timerState.equals(timerState)) {
+                        showActualButtons(v.timerState);
+                        timerState = v.timerState;
                     }
             }));
+        }
+    }
+
+    private void showActualButtons(String timerState) {
+        switch (timerState) {
+            case "onPause":
+                view.showButons("Pause");
+                break;
+            case "onReset":
+                view.showButons("Reset");
+                break;
+            default:
+                view.showButons("Start");
+                break;
         }
     }
 
@@ -59,17 +62,17 @@ public class DayPresenter extends BasePresenter {
     public void onStartButtonClick() {
 
         if(timerState.equals("onReset") || timerState.equals("onPause")) {
+            view.showButons("Start");
             model.startTimer();
-            //view.showButons("Start");
         } else {
+            view.showButons("Pause");
             model.pauseTimer();
-            //view.showButons("Pause");
         }
     }
 
     public void onResetButtonClick() {
+        view.showButons("Reset");
         model.resetTimer();
-        //view.showButons("Reset");
     }
 
     public void onSaveInstanceState() {

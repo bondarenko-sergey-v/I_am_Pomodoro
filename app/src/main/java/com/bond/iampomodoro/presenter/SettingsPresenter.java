@@ -10,21 +10,26 @@ import rx.subscriptions.CompositeSubscription;
 
 public class SettingsPresenter extends BasePresenter {
 
+    private SettingsView view;
     private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
     public void onCreate(SettingsView view) {
         App.getAppComponent().inject(this);
+        this.view = view;
 
+        onTabSelected();
+    }
+
+    public void onTabSelected() {
         Observable obs = view.showSettings(model.getUserSettings());
 
-       localCompositeSubscription.add(
+        localCompositeSubscription.add(
                 obs.observeOn(AndroidSchedulers.mainThread())
                     .skip(1)
                     .subscribe(v -> model.setUserSettings((UserSettingsObject) v)));
     }
 
     public void onTabUnselected() {
-        //model.setUserSettings(settings);
-        //localCompositeSubscription.clear();
+        localCompositeSubscription.clear(); //TODO Shift to onStop
     }
 }

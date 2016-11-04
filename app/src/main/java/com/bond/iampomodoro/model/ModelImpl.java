@@ -81,16 +81,16 @@ public class ModelImpl {
 
         if (pref.timerCycleCounter % 2 != 0) {
             pref.timerState = "onWorkSession";
-            initBehaviorSubject(15);  // Mock
-            //initBehaviorSubject(pref.workSession * 60); // Start work session
+            //initBehaviorSubject(15);  // Mock
+            initBehaviorSubject(pref.workSession * 60); // Start work session
         } else if (pref.timerCycleCounter % ((pref.sessionsBeforeLB + 1) * 2) != 0) {
             pref.timerState = "onBreak";
-            initBehaviorSubject(5);   // Mock
-            //initBehaviorSubject(pref.breakMin * 60);    // Start break
+            //initBehaviorSubject(5);   // Mock
+            initBehaviorSubject(pref.breakMin * 60);    // Start break
         } else {
             pref.timerState = "onLongBreak";
-            initBehaviorSubject(10);  // Mock
-            //initBehaviorSubject(pref.longBreak * 60);   // Start long break
+            //initBehaviorSubject(10);  // Mock
+            initBehaviorSubject(pref.longBreak * 60);   // Start long break
         }
 
         preferencesHelper.setPreferences(pref); //TODO Move to onStop

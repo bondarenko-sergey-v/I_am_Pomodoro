@@ -11,7 +11,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="50dp"
-            android:text="00"
             android:gravity="center"
             android:layout_alignTop="@+id/minutes"
             android:layout_toRightOf="@+id/minutes"
@@ -30,14 +29,16 @@
             android:background="@android:color/white"
             android:textSize="22sp"
             android:fontFamily="monospace"
-            android:text="@string/reset"
             android:paddingBottom="10dp"
             style="?android:attr/borderlessButtonStyle"
             android:textColor="@color/colorTabIndicator"
-            android:textColorHighlight="@color/colorButtonText" />
+            android:textColorHighlight="@color/colorButtonText"
+            android:text="@string/reset"
+            android:visibility="invisible"
+            android:enabled="false"/>
 
         <Button
-            android:text="Start"
+            android:text="@string/start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/startBtn"
@@ -56,7 +57,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="100dp"
-            android:text="00"
             android:gravity="center"
             android:layout_marginBottom="140dp"
             android:layout_above="@+id/startBtn"

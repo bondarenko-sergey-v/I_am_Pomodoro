@@ -37,7 +37,7 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
     SettingsPresenter presenter;
 
     //@Inject
-    CompositeSubscription compositeSubscription = new CompositeSubscription();
+    CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
     private FragmentSettingsBinding binding;
 
@@ -45,15 +45,6 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
 
     public static FragmentSettings newInstance() {
         return new FragmentSettings();
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if(!isVisibleToUser && presenter != null) {
-            presenter.onTabUnselected();
-        }
     }
 
     @Override
@@ -85,6 +76,19 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
 
         presenter.onTabUnselected();
         clearCompositeSubscription();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if(isVisibleToUser && presenter != null) {
+            presenter.onTabSelected();
+        }
+
+        if(!isVisibleToUser && presenter != null) {
+            presenter.onTabUnselected();
+        }
     }
 
     @Override
@@ -128,6 +132,8 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
                     binding.seekbarWorkSession.setProgress(usrSet.workSession - 25);
                 })
                 .doOnNext(v -> binding.textViewWorkSession.setText(String.valueOf(v)));
+                //.takeUntil(waitOnDestroy)
+                //.doOnUnsubscribe(binding.seekbarWorkSession.setOnSeekBarChangeListener(null));
 
         Observable<Integer> sb2 = RxSeekBar.changes(binding.seekbarBreak)
                 .map(v -> v + 5)
@@ -155,12 +161,14 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
 
         return Observable.combineLatest(sb1, sb2, sb3, sb4, (a1, a2, a3, a4) ->
                 new int[]{ a1, a2, a3, a4 })
-                .debounce(250, TimeUnit.MILLISECONDS);
+                .debounce(200, TimeUnit.MILLISECONDS);
+
+        //localCompositeSubscription.add(sb1);
     }
 
     public void clearCompositeSubscription() {
-        if (compositeSubscription != null && !compositeSubscription.isUnsubscribed()) {
-            compositeSubscription.clear();
+        if (localCompositeSubscription != null && !localCompositeSubscription.isUnsubscribed()) {
+            localCompositeSubscription.clear();
         }
     }
 }

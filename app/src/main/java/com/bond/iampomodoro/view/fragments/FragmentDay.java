@@ -33,6 +33,7 @@ public class FragmentDay extends BaseFragment implements DayView {
         super.onCreate(savedInstanceState);
 
         App.getAppComponent().inject(this);
+        //setRetainInstance(true);
     }
 
     @Override

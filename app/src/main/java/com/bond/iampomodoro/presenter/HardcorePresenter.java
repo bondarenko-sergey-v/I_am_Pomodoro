@@ -16,6 +16,8 @@ public class HardcorePresenter extends BasePresenter {
     public void onCreate(HardcoreView view) {
         App.getAppComponent().inject(this);
         this.view = view;
+
+        showActualButtons(behaviorSubject.getValue().timerState);
     }
 
     public void onTabSelected() {
@@ -31,21 +33,25 @@ public class HardcorePresenter extends BasePresenter {
                         notifyUser.playSoundAndVibrate(usrSet.bool[3], usrSet.bool[4]);
                     }
 
-                    timerState = v.timerState;
-
-                    switch (v.timerState) { //TODO - do switch only if v.timerState changes
-                        case "onPause":
-                            view.showButons("Pause");
-                            break;
-                        case "onReset":
-                            view.showButons("Reset");
-                            //view.showTime(v. * 60);
-                            break;
-                        default:
-                            view.showButons("Start");
-                            break;
+                    if(!v.timerState.equals(timerState)) {
+                        showActualButtons(v.timerState);
+                        timerState = v.timerState;
                     }
             }));
+        }
+    }
+
+    private void showActualButtons(String timerState) {
+        switch (timerState) {
+            case "onPause":
+                view.showButons("Pause");
+                break;
+            case "onReset":
+                view.showButons("Reset");
+                break;
+            default:
+                view.showButons("Start");
+                break;
         }
     }
 
@@ -56,17 +62,17 @@ public class HardcorePresenter extends BasePresenter {
     public void onStartButtonClick() {
 
         if(timerState.equals("onReset") || timerState.equals("onPause")) {
+            view.showButons("Start");
             model.startTimer();
-            //view.showButons("Start");
         } else {
+            view.showButons("Pause");
             model.pauseTimer();
-            //view.showButons("Pause");
         }
     }
 
     public void onResetButtonClick() {
+        view.showButons("Reset");
         model.resetTimer();
-        //view.showButons("Reset");
     }
 
     public void onSaveInstanceState() {
