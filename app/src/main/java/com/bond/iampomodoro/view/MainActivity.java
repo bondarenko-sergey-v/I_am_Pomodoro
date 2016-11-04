@@ -11,9 +11,12 @@ import android.view.WindowManager;
 
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
+import com.bond.iampomodoro.di.ActivityComponent;
 import com.bond.iampomodoro.di.ActivityModule;
+import com.bond.iampomodoro.di.annotations.ApplicationContext;
 import com.bond.iampomodoro.model.PreferencesHelper;
 import com.bond.iampomodoro.model.dataObjects.PreferencesObject;
+import com.bond.iampomodoro.view.util.KeepScreenOn;
 import com.squareup.leakcanary.LeakCanary;
 
 import javax.inject.Inject;
@@ -21,11 +24,15 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity {
 
     @Inject
+    @ApplicationContext
     Context appContext;
-    @Inject
-    PreferencesHelper settingsHelper;
 
     private TabLayout tabLayout;
+    private static ActivityComponent activityComponent;
+
+    public static ActivityComponent getActivityComponent() {
+        return activityComponent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
         App.getAppComponent()
                 .plus(new ActivityModule(this))
                 .inject(this);
+
+        activityComponent = App.getAppComponent().plus(new ActivityModule(this));
+                                                //     new ActivityModule(activity));
+
+   //     App.getActivityComponent()
+  //              //.plus(new ActivityModule(this))
+  //              .inject(this);
 
         if (LeakCanary.isInAnalyzerProcess(this)) { //TODO Check memory leaks
             return;
@@ -61,15 +75,15 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                PreferencesObject ob = settingsHelper.getPreferences(); //TODO ? Refactor to not to request settings from Activity
+                //PreferencesObject ob = settingsHelper.getPreferences(); //TODO ? Refactor to not to request settings from Activity
                 switch (tab.getPosition()) {
                     case 0:
                         setLightTabs();
-                        keepScreenOn(ob.dayKeepScreen);
+                        //keepScreenOn(ob.dayKeepScreen);
                         break;
                     case 1:
                         setDarkTabs();
-                        keepScreenOn(ob.nightKeepScreen);
+                        //keepScreenOn(ob.nightKeepScreen);
                         break;
                     case 2:
                         setDarkTabs();
@@ -85,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         tabLayout.setupWithViewPager(viewPager);
+       // keepScreenOn.keep(true);
     }
 
     private void setLightTabs() {
@@ -101,11 +116,11 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(2).setIcon(R.mipmap.ic_settings);
     }
 
-    private void keepScreenOn(boolean keepScreenOn) {
-        if(keepScreenOn) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-    }
+ //   private void keepScreenOn(boolean keepScreenOn) {
+ //       if(keepScreenOn) {
+ //           getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+ //       } else {
+ //           getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+ //       }
+ //   }
 }

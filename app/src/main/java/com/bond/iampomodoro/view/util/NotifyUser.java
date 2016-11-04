@@ -16,7 +16,8 @@ public class NotifyUser {
     private final Context context;
 
     public NotifyUser(Context context) {
-        App.getAppComponent().inject(this);
+        //App.getAppComponent().inject(this);
+        //App.getActivityComponent().inject(this);
         this.context = context;
     }
 

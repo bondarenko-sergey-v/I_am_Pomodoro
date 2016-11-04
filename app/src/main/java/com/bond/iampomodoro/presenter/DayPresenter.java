@@ -2,6 +2,7 @@ package com.bond.iampomodoro.presenter;
 
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
+import com.bond.iampomodoro.view.MainActivity;
 import com.bond.iampomodoro.view.fragments.DayView;
 
 import rx.subscriptions.CompositeSubscription;
@@ -11,10 +12,11 @@ public class DayPresenter extends BasePresenter {
     private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
     private DayView view;
+    private UserSettingsObject usrSet;
     private String timerState;
 
     public void onCreate(DayView view) {
-        App.getAppComponent().inject(this);
+        //MainActivity.getActivityComponent().inject(this);
         this.view = view;
 
         showActualButtons(behaviorSubject.getValue().timerState);
@@ -22,6 +24,8 @@ public class DayPresenter extends BasePresenter {
 
     public void onTabSelected() {
         localCompositeSubscription.clear();
+        this.usrSet = model.getUserSettings();
+        keepScreenOn.keep(usrSet.bool[2]); // DayKeepScreenOn
 
         if (view != null) {
             localCompositeSubscription.add( //TODO Fix bug - on start call twice
@@ -29,7 +33,6 @@ public class DayPresenter extends BasePresenter {
                     view.showTime(v.intervalInSeconds);
 
                     if(v.intervalInSeconds == 0) {
-                        UserSettingsObject usrSet = model.getUserSettings(); // TODO ? Refactor to this.usrSet
                         notifyUser.playSoundAndVibrate(usrSet.bool[0], usrSet.bool[1]);
                     }
 

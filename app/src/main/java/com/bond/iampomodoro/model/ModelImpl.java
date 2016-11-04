@@ -4,6 +4,7 @@ import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.model.dataObjects.PreferencesObject;
 import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
 import com.bond.iampomodoro.model.dataObjects.TimerObject;
+import com.bond.iampomodoro.view.MainActivity;
 
 import java.util.concurrent.TimeUnit;
 

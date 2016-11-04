@@ -15,6 +15,7 @@ import com.bond.iampomodoro.presenter.Presenter;
 import com.bond.iampomodoro.presenter.SettingsPresenter;
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentSettingsBinding;
+import com.bond.iampomodoro.view.MainActivity;
 import com.jakewharton.rxbinding.widget.RxCompoundButton;
 import com.jakewharton.rxbinding.widget.RxSeekBar;
 
@@ -51,7 +52,7 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        App.getAppComponent().inject(this);
+        MainActivity.getActivityComponent().inject(this);
     }
 
     @Override
@@ -93,7 +94,7 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
 
     @Override
     protected Presenter getPresenter() {
-        App.getAppComponent().inject(this);
+        MainActivity.getActivityComponent().inject(this);
         return presenter;
     }
 

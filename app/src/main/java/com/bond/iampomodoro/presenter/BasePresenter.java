@@ -3,6 +3,8 @@ package com.bond.iampomodoro.presenter;
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.model.ModelImpl;
 import com.bond.iampomodoro.model.dataObjects.TimerObject;
+import com.bond.iampomodoro.view.MainActivity;
+import com.bond.iampomodoro.view.util.KeepScreenOn;
 import com.bond.iampomodoro.view.util.NotifyUser;
 
 import javax.inject.Inject;
@@ -17,12 +19,14 @@ public abstract class BasePresenter implements Presenter {
     @Inject
     NotifyUser notifyUser;
     @Inject
+    KeepScreenOn keepScreenOn;
+    @Inject
     BehaviorSubject<TimerObject> behaviorSubject;
     @Inject
     CompositeSubscription compositeSubscription;
 
     public BasePresenter() {
-        App.getAppComponent().inject(this);
+        MainActivity.getActivityComponent().inject(this);
     }
 
     @Override

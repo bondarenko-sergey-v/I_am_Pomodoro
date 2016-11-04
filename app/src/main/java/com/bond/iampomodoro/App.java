@@ -1,11 +1,17 @@
 package com.bond.iampomodoro;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
+import com.bond.iampomodoro.di.ActivityComponent;
+import com.bond.iampomodoro.di.ActivityModule;
 import com.bond.iampomodoro.di.AppComponent;
 import com.bond.iampomodoro.di.AppModule;
 import com.bond.iampomodoro.di.DaggerAppComponent;
+import com.bond.iampomodoro.view.MainActivity;
+
+import javax.inject.Inject;
 
 public class App extends Application {
 
@@ -16,12 +22,15 @@ public class App extends Application {
     return (App) context.getApplicationContext();
   }
 
+  @Inject
+  MainActivity activity;
 
   @Override
   public void onCreate() {
     super.onCreate();
 
     appComponent = createComponent();
+    //activityComponent = createActivityComponent();
   }
 
   public AppComponent createComponent() {
@@ -34,17 +43,19 @@ public class App extends Application {
     return appComponent;
   }
 
-//  public static ActivityComponent plusActivityComponent(Activity activity) {
-//    // always get only one instance
-//    if (activityComponent == null) {
-//      // start lifecycle of chatComponent
-//      activityComponent = appComponent.plusActivityComponent(new ActivityModule(activity));
+//  public ActivityComponent createActivityComponent() {
+//
+//    if(activityComponent == null) {
+//      activityComponent = appComponent.plus(new ActivityModule(activity));
 //    }
 //    return activityComponent;
 //  }
-//
-//  public void clearActivityComponent() {
-//    // end lifecycle of chatComponent
-//    activityComponent = null;
+
+//  public static ActivityComponent getActivityComponent() {
+//    return activityComponent;
 //  }
+// public void clearActivityComponent() {
+//   // end lifecycle of chatComponent
+//   activityComponent = null;
+// }
 }

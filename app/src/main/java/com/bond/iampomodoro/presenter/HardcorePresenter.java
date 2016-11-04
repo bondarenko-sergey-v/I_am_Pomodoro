@@ -2,6 +2,7 @@ package com.bond.iampomodoro.presenter;
 
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
+import com.bond.iampomodoro.view.MainActivity;
 import com.bond.iampomodoro.view.fragments.HardcoreView;
 
 import rx.subscriptions.CompositeSubscription;
@@ -11,10 +12,11 @@ public class HardcorePresenter extends BasePresenter {
     private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
     private HardcoreView view;
+    private UserSettingsObject usrSet;
     private String timerState;
 
     public void onCreate(HardcoreView view) {
-        App.getAppComponent().inject(this);
+        //MainActivity.getActivityComponent().inject(this);
         this.view = view;
 
         showActualButtons(behaviorSubject.getValue().timerState);
@@ -22,6 +24,8 @@ public class HardcorePresenter extends BasePresenter {
 
     public void onTabSelected() {
         localCompositeSubscription.clear();
+        this.usrSet = model.getUserSettings();
+        //keepScreenOn.keep(usrSet.bool[5]); // NightKeepScreenOn
 
         if (view != null) {
             localCompositeSubscription.add(
@@ -29,7 +33,6 @@ public class HardcorePresenter extends BasePresenter {
                     view.showTime(v.intervalInSeconds);
 
                     if(v.intervalInSeconds == 0) {
-                        UserSettingsObject usrSet = model.getUserSettings(); // TODO ? Refactor to this.usrSet
                         notifyUser.playSoundAndVibrate(usrSet.bool[3], usrSet.bool[4]);
                     }
 

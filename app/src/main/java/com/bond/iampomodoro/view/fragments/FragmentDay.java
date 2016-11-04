@@ -12,6 +12,7 @@ import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.databinding.FragmentDayBinding;
 import com.bond.iampomodoro.presenter.DayPresenter;
 import com.bond.iampomodoro.presenter.Presenter;
+import com.bond.iampomodoro.view.MainActivity;
 import com.jakewharton.rxbinding.view.RxView;
 
 import javax.inject.Inject;
@@ -32,8 +33,7 @@ public class FragmentDay extends BaseFragment implements DayView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        App.getAppComponent().inject(this);
-        //setRetainInstance(true);
+        MainActivity.getActivityComponent().inject(this);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class FragmentDay extends BaseFragment implements DayView {
 
     @Override
     protected Presenter getPresenter() {
-        App.getAppComponent().inject(this);
+        MainActivity.getActivityComponent().inject(this);
         return presenter;
     }
 

@@ -2,6 +2,7 @@ package com.bond.iampomodoro.presenter;
 
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
+import com.bond.iampomodoro.view.MainActivity;
 import com.bond.iampomodoro.view.fragments.SettingsView;
 
 import rx.Observable;
@@ -14,10 +15,10 @@ public class SettingsPresenter extends BasePresenter {
     private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
     public void onCreate(SettingsView view) {
-        App.getAppComponent().inject(this);
+        //MainActivity.getActivityComponent().inject(this);
         this.view = view;
 
-        onTabSelected();
+        onTabSelected(); //TODO Make only UI changes, without subscriptions
     }
 
     public void onTabSelected() {
