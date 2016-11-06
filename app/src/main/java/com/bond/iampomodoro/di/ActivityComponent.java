@@ -16,18 +16,11 @@ public interface ActivityComponent {
 
     void inject (MainActivity mainActivity);
 
-
     void inject (FragmentDay fragmentDay);
 
     void inject (FragmentNight fragmentNight);
 
     void inject (FragmentSettings fragmentSettings);
-
-    //void inject (SettingsPresenter settingsPresenter);
-
-    //void inject (DayPresenter dayPresenter);
-
-    //void inject (NightPresenter nightPresenter);
 
     void inject (BasePresenter basePresenter);
 }

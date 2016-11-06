@@ -4,12 +4,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 
-import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
-import com.bond.iampomodoro.model.ModelImpl;
-import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
-
-import javax.inject.Inject;
 
 public class NotifyUser {
 

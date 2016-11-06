@@ -9,8 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
-import com.bond.iampomodoro.App;
-import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
+import com.bond.iampomodoro.model.dto.UserSettingsObject;
 import com.bond.iampomodoro.presenter.Presenter;
 import com.bond.iampomodoro.presenter.SettingsPresenter;
 import com.bond.iampomodoro.R;
@@ -28,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.subscriptions.CompositeSubscription;
 
 import static rx.Observable.combineLatest;
 
@@ -36,8 +34,6 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
 
     @Inject
     SettingsPresenter presenter;
-
-    CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
     private FragmentSettingsBinding binding;
 
@@ -74,8 +70,7 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
     public void onDestroy() {
         super.onDestroy();
 
-        //presenter.onTabUnselected();
-        clearCompositeSubscription();
+        presenter = null;
     }
 
     @Override
@@ -84,10 +79,6 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
 
         if(isVisibleToUser && presenter != null) {
             presenter.onTabSelected();
-        }
-
-        if(!isVisibleToUser && presenter != null) {
-            //presenter.onTabUnselected();
         }
     }
 
@@ -132,8 +123,6 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
                     binding.seekbarWorkSession.setProgress(usrSet.workSession - 25);
                 })
                 .doOnNext(v -> binding.textViewWorkSession.setText(String.valueOf(v)));
-                //.takeUntil(waitOnDestroy)
-                //.doOnUnsubscribe(binding.seekbarWorkSession.setOnSeekBarChangeListener(null));
 
         Observable<Integer> sb2 = RxSeekBar.changes(binding.seekbarBreak)
                 .map(v -> v + 5)
@@ -162,13 +151,5 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
         return Observable.combineLatest(sb1, sb2, sb3, sb4, (a1, a2, a3, a4) ->
                 new int[]{ a1, a2, a3, a4 })
                 .debounce(200, TimeUnit.MILLISECONDS);
-
-        //localCompositeSubscription.add(sb1);
-    }
-
-    public void clearCompositeSubscription() {
-        if (localCompositeSubscription != null && !localCompositeSubscription.isUnsubscribed()) {
-            localCompositeSubscription.clear();
-        }
     }
 }

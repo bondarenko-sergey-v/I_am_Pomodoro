@@ -2,26 +2,22 @@ package com.bond.iampomodoro.presenter;
 
 import android.view.WindowManager;
 
-import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
+import com.bond.iampomodoro.model.dto.UserSettingsObject;
 import com.bond.iampomodoro.view.fragments.NightView;
 
 public class NightPresenter extends BasePresenter {
-
-    //private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
     private NightView view;
     private UserSettingsObject usrSet;
     private String timerState;
 
     public void onCreate(NightView view) {
-        //MainActivity.getActivityComponent().inject(this);
         this.view = view;
 
         showActualButtons(behaviorSubject.getValue().timerState);
     }
 
     public void onTabSelected() {
-        //localCompositeSubscription.clear();
         compositeSubscription.clear();
         this.usrSet = model.getUserSettings();
         keepScreenOn(usrSet.bool[5]); // NightKeepScreenOn
@@ -57,10 +53,6 @@ public class NightPresenter extends BasePresenter {
         }
     }
 
-    public void onTabUnselected() {
-        //localCompositeSubscription.clear();
-    }
-
     public void onStartButtonClick() {
 
         if(timerState.equals("onReset") || timerState.equals("onPause")) {
@@ -81,10 +73,10 @@ public class NightPresenter extends BasePresenter {
 
     private void keepScreenOn(boolean keepScreenOn) {
 
-        if(keepScreenOn) {
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        } else {
-            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
+       if(keepScreenOn) {
+           activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+       } else {
+           activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+       }
     }
 }

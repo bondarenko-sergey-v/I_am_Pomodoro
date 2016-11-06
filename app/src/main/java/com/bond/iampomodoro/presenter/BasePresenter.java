@@ -3,7 +3,7 @@ package com.bond.iampomodoro.presenter;
 import android.app.Activity;
 
 import com.bond.iampomodoro.model.Model;
-import com.bond.iampomodoro.model.dataObjects.TimerObject;
+import com.bond.iampomodoro.model.dto.TimerObject;
 import com.bond.iampomodoro.view.MainActivity;
 import com.bond.iampomodoro.view.util.NotifyUser;
 
@@ -32,6 +32,5 @@ public abstract class BasePresenter implements Presenter {
     @Override
     public void onStop() {
         compositeSubscription.clear();
-        //activity = null; //TODO Fix Activity leaks
     }
 }

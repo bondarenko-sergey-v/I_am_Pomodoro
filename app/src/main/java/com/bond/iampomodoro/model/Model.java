@@ -1,6 +1,6 @@
 package com.bond.iampomodoro.model;
 
-import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
+import com.bond.iampomodoro.model.dto.UserSettingsObject;
 
 public interface Model {
 

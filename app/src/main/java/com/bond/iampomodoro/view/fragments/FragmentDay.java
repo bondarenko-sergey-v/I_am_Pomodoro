@@ -62,7 +62,7 @@ public class FragmentDay extends BaseFragment implements DayView {
     public void onDestroy() {
         super.onDestroy();
 
-        //presenter.onTabUnselected();
+        presenter = null;
     }
 
     @Override
@@ -73,10 +73,6 @@ public class FragmentDay extends BaseFragment implements DayView {
 
         if(isVisibleToUser && presenter != null) {
             presenter.onTabSelected();
-        }
-
-        if(!isVisibleToUser && presenter != null) {
-            //presenter.onTabUnselected();
         }
     }
 

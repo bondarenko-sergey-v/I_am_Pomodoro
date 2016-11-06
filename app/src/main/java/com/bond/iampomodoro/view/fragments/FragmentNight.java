@@ -65,7 +65,7 @@ public class FragmentNight extends BaseFragment implements NightView {
     public void onDestroy() {
         super.onDestroy();
 
-        //presenter.onTabUnselected();
+        presenter = null;
     }
 
     @Override
@@ -76,10 +76,6 @@ public class FragmentNight extends BaseFragment implements NightView {
 
         if(isVisibleToUser && presenter != null) {
             presenter.onTabSelected();
-        }
-
-        if(!isVisibleToUser && presenter != null) {
-            //presenter.onTabUnselected();
         }
     }
 
@@ -127,13 +123,13 @@ public class FragmentNight extends BaseFragment implements NightView {
     @Override
     public void showImage(boolean showImage, int imageNumber) {
         //TODO Realize imageNumber functionality
-        //TODO Had been shown at break time
+        //TODO Had been shown at break time. Shift logic to the Presenter
         if(showImage) {
             //Calendar c = Calendar.getInstance();
-            int hour = Calendar.getInstance() //TODO Check is Calendar instance leaks?
+            int hour = Calendar.getInstance()
                                .get(Calendar.HOUR_OF_DAY);
 
-            if(hour >= 12 || hour <= 6) {
+            if(hour >= 22 || hour <= 6) {
                 binding.imageView.getDrawable().setColorFilter(Color.rgb(144,144,144)
                         , PorterDuff.Mode.MULTIPLY );
                 binding.imageView.setVisibility(View.VISIBLE);

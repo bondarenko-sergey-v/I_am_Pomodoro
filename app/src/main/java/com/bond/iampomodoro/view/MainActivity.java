@@ -12,7 +12,9 @@ import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.di.ActivityComponent;
 import com.bond.iampomodoro.di.ActivityModule;
+import com.bond.iampomodoro.di.AppComponent;
 import com.bond.iampomodoro.di.annotations.ApplicationContext;
+import com.squareup.leakcanary.LeakCanary;
 
 import javax.inject.Inject;
 
@@ -29,17 +31,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        App.getAppComponent()
-                .plus(new ActivityModule(this))
-                .inject(this);                   //TODO Join
-
         activityComponent = App.getAppComponent()
-                .plus(new ActivityModule(this)); //TODO Join if possible
+                .plus(new ActivityModule(this));
+        activityComponent.inject(this);
 
-   //     if (LeakCanary.isInAnalyzerProcess(this)) {
-   //         return;
-   //     }
-   //     LeakCanary.install(getApplication());
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(getApplication());
 
         setContentView(R.layout.activity_main);
 

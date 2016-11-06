@@ -1,7 +1,6 @@
 package com.bond.iampomodoro.di;
 
 import com.bond.iampomodoro.model.ModelImpl;
-import com.bond.iampomodoro.view.MainActivity;
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -11,8 +10,6 @@ import dagger.Component;
 public interface AppComponent {
 
     ActivityComponent plus(ActivityModule module);
-
-    void inject (MainActivity mainActivity);
 
     void inject (ModelImpl modelImpl);
 }

@@ -1,6 +1,6 @@
 package com.bond.iampomodoro.view.fragments;
 
-import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
+import com.bond.iampomodoro.model.dto.UserSettingsObject;
 
 import rx.Observable;
 

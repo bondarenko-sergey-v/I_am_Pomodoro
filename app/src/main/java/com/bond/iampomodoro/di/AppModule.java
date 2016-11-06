@@ -6,7 +6,7 @@ import android.content.Context;
 import com.bond.iampomodoro.di.annotations.ApplicationContext;
 import com.bond.iampomodoro.model.Model;
 import com.bond.iampomodoro.model.ModelImpl;
-import com.bond.iampomodoro.model.dataObjects.TimerObject;
+import com.bond.iampomodoro.model.dto.TimerObject;
 import com.bond.iampomodoro.view.util.NotifyUser;
 import com.bond.iampomodoro.model.PreferencesHelper;
 

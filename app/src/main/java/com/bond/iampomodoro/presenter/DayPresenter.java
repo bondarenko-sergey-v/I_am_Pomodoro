@@ -2,28 +2,22 @@ package com.bond.iampomodoro.presenter;
 
 import android.view.WindowManager;
 
-import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
+import com.bond.iampomodoro.model.dto.UserSettingsObject;
 import com.bond.iampomodoro.view.fragments.DayView;
 
-import rx.subscriptions.CompositeSubscription;
-
 public class DayPresenter extends BasePresenter {
-
-    //private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
     private DayView view;
     private UserSettingsObject usrSet;
     private String timerState;
 
     public void onCreate(DayView view) {
-        //MainActivity.getActivityComponent().inject(this);
         this.view = view;
 
         showActualButtons(behaviorSubject.getValue().timerState);
     }
 
     public void onTabSelected() {
-        //localCompositeSubscription.clear();
         compositeSubscription.clear();
         this.usrSet = model.getUserSettings();
         keepScreenOn(usrSet.bool[2]); // DayKeepScreenOn
@@ -57,10 +51,6 @@ public class DayPresenter extends BasePresenter {
                 view.showButtons("Start");
                 break;
         }
-    }
-
-    public void onTabUnselected() {
-        //localCompositeSubscription.clear();
     }
 
     public void onStartButtonClick() {

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.bond.iampomodoro.model.dataObjects.PreferencesObject;
+import com.bond.iampomodoro.model.dto.PreferencesObject;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

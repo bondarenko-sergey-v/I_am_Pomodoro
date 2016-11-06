@@ -1,4 +1,4 @@
-package com.bond.iampomodoro.model.dataObjects;
+package com.bond.iampomodoro.model.dto;
 
 public class TimerObject {
     public int intervalInSeconds;

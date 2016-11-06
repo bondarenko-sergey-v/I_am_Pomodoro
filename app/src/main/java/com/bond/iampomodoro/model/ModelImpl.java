@@ -1,9 +1,9 @@
 package com.bond.iampomodoro.model;
 
 import com.bond.iampomodoro.App;
-import com.bond.iampomodoro.model.dataObjects.PreferencesObject;
-import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
-import com.bond.iampomodoro.model.dataObjects.TimerObject;
+import com.bond.iampomodoro.model.dto.PreferencesObject;
+import com.bond.iampomodoro.model.dto.UserSettingsObject;
+import com.bond.iampomodoro.model.dto.TimerObject;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,8 +21,8 @@ public class ModelImpl implements Model {
     PreferencesHelper preferencesHelper;
     @Inject
     BehaviorSubject<TimerObject> behaviorSubject;
-    //@Inject
-    CompositeSubscription compositeSubscription
+
+    private CompositeSubscription compositeSubscription
             = new CompositeSubscription(); /** LOCAL Composite Subscription **/
 
     private PreferencesObject pref;
@@ -31,7 +31,6 @@ public class ModelImpl implements Model {
         App.getAppComponent().inject(this);
         this.pref = preferencesHelper.getPreferences();
 
-        //TODO Change to preferences
         behaviorSubject.onNext(new TimerObject(pref.workSession * 60, pref.timerState));
     }
 
@@ -87,6 +86,7 @@ public class ModelImpl implements Model {
 
     private void initBehaviorSubject(int intervalInSeconds) {
 
+        //TODO Move to separate eventBus class
         compositeSubscription.add(
                 Observable.interval(1, TimeUnit.SECONDS, Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
