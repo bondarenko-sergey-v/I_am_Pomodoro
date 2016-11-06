@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -59,6 +60,15 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="monospace"
             android:textColor="#909090"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:srcCompat="@drawable/coffee_300"
+            android:id="@+id/imageView"
+            android:layout_above="@+id/startBtn"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"/>
 
     </RelativeLayout>
 

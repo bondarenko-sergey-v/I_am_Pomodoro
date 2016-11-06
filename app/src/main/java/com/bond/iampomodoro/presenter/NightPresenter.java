@@ -1,21 +1,19 @@
 package com.bond.iampomodoro.presenter;
 
-import com.bond.iampomodoro.App;
+import android.view.WindowManager;
+
 import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
-import com.bond.iampomodoro.view.MainActivity;
-import com.bond.iampomodoro.view.fragments.HardcoreView;
+import com.bond.iampomodoro.view.fragments.NightView;
 
-import rx.subscriptions.CompositeSubscription;
+public class NightPresenter extends BasePresenter {
 
-public class HardcorePresenter extends BasePresenter {
+    //private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
-    private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
-
-    private HardcoreView view;
+    private NightView view;
     private UserSettingsObject usrSet;
     private String timerState;
 
-    public void onCreate(HardcoreView view) {
+    public void onCreate(NightView view) {
         //MainActivity.getActivityComponent().inject(this);
         this.view = view;
 
@@ -23,12 +21,13 @@ public class HardcorePresenter extends BasePresenter {
     }
 
     public void onTabSelected() {
-        localCompositeSubscription.clear();
+        //localCompositeSubscription.clear();
+        compositeSubscription.clear();
         this.usrSet = model.getUserSettings();
-        //keepScreenOn.keep(usrSet.bool[5]); // NightKeepScreenOn
+        keepScreenOn(usrSet.bool[5]); // NightKeepScreenOn
 
         if (view != null) {
-            localCompositeSubscription.add(
+            compositeSubscription.add(
                 behaviorSubject.subscribe(v -> {
                     view.showTime(v.intervalInSeconds);
 
@@ -47,38 +46,45 @@ public class HardcorePresenter extends BasePresenter {
     private void showActualButtons(String timerState) {
         switch (timerState) {
             case "onPause":
-                view.showButons("Pause");
+                view.showButtons("Pause");
                 break;
             case "onReset":
-                view.showButons("Reset");
+                view.showButtons("Reset");
                 break;
             default:
-                view.showButons("Start");
+                view.showButtons("Start");
                 break;
         }
     }
 
     public void onTabUnselected() {
-        //localCompositeSubscription.clear(); //TODO Move to onPause
+        //localCompositeSubscription.clear();
     }
 
     public void onStartButtonClick() {
 
         if(timerState.equals("onReset") || timerState.equals("onPause")) {
-            view.showButons("Start");
+            view.showButtons("Start");
+            view.showImage(false,0);
             model.startTimer();
         } else {
-            view.showButons("Pause");
+            view.showButtons("Pause");
+            view.showImage(usrSet.bool[6],0); //TODO rewrite showImage
             model.pauseTimer();
         }
     }
 
     public void onResetButtonClick() {
-        view.showButons("Reset");
+        view.showButtons("Reset");
         model.resetTimer();
     }
 
-    public void onSaveInstanceState() {
-        //TODO Make it
+    private void keepScreenOn(boolean keepScreenOn) {
+
+        if(keepScreenOn) {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 }

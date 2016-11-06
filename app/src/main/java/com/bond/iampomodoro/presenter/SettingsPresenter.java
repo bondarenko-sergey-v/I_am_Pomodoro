@@ -1,8 +1,6 @@
 package com.bond.iampomodoro.presenter;
 
-import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
-import com.bond.iampomodoro.view.MainActivity;
 import com.bond.iampomodoro.view.fragments.SettingsView;
 
 import rx.Observable;
@@ -12,7 +10,7 @@ import rx.subscriptions.CompositeSubscription;
 public class SettingsPresenter extends BasePresenter {
 
     private SettingsView view;
-    private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
+    //private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
     public void onCreate(SettingsView view) {
         //MainActivity.getActivityComponent().inject(this);
@@ -24,13 +22,14 @@ public class SettingsPresenter extends BasePresenter {
     public void onTabSelected() {
         Observable obs = view.showSettings(model.getUserSettings());
 
-        localCompositeSubscription.add(
+        //localCompositeSubscription.add(
+        compositeSubscription.add(
                 obs.observeOn(AndroidSchedulers.mainThread())
                     .skip(1)
                     .subscribe(v -> model.setUserSettings((UserSettingsObject) v)));
     }
 
     public void onTabUnselected() {
-        localCompositeSubscription.clear(); //TODO Shift to onStop
+        //localCompositeSubscription.clear();
     }
 }

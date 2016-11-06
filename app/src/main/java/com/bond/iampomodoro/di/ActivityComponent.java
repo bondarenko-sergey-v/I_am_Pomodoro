@@ -1,18 +1,11 @@
 package com.bond.iampomodoro.di;
 
 import com.bond.iampomodoro.di.annotations.PerActivity;
-import com.bond.iampomodoro.model.ModelImpl;
-import com.bond.iampomodoro.model.PreferencesHelper;
 import com.bond.iampomodoro.presenter.BasePresenter;
-import com.bond.iampomodoro.presenter.DayPresenter;
-import com.bond.iampomodoro.presenter.HardcorePresenter;
-import com.bond.iampomodoro.presenter.SettingsPresenter;
 import com.bond.iampomodoro.view.MainActivity;
 import com.bond.iampomodoro.view.fragments.FragmentDay;
-import com.bond.iampomodoro.view.fragments.FragmentHardcore;
+import com.bond.iampomodoro.view.fragments.FragmentNight;
 import com.bond.iampomodoro.view.fragments.FragmentSettings;
-import com.bond.iampomodoro.view.util.KeepScreenOn;
-import com.bond.iampomodoro.view.util.NotifyUser;
 
 import dagger.Subcomponent;
 
@@ -26,7 +19,7 @@ public interface ActivityComponent {
 
     void inject (FragmentDay fragmentDay);
 
-    void inject (FragmentHardcore fragmentHardcore);
+    void inject (FragmentNight fragmentNight);
 
     void inject (FragmentSettings fragmentSettings);
 
@@ -34,7 +27,7 @@ public interface ActivityComponent {
 
     //void inject (DayPresenter dayPresenter);
 
-    //void inject (HardcorePresenter hardcorePresenter);
+    //void inject (NightPresenter nightPresenter);
 
     void inject (BasePresenter basePresenter);
 }

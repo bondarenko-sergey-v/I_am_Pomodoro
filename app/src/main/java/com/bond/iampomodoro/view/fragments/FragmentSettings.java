@@ -37,7 +37,6 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
     @Inject
     SettingsPresenter presenter;
 
-    //@Inject
     CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
     private FragmentSettingsBinding binding;
@@ -75,7 +74,7 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
     public void onDestroy() {
         super.onDestroy();
 
-        presenter.onTabUnselected();
+        //presenter.onTabUnselected();
         clearCompositeSubscription();
     }
 
@@ -88,7 +87,7 @@ public class FragmentSettings extends BaseFragment implements SettingsView {
         }
 
         if(!isVisibleToUser && presenter != null) {
-            presenter.onTabUnselected();
+            //presenter.onTabUnselected();
         }
     }
 

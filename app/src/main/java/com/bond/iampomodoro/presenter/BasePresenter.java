@@ -1,10 +1,10 @@
 package com.bond.iampomodoro.presenter;
 
-import com.bond.iampomodoro.App;
-import com.bond.iampomodoro.model.ModelImpl;
+import android.app.Activity;
+
+import com.bond.iampomodoro.model.Model;
 import com.bond.iampomodoro.model.dataObjects.TimerObject;
 import com.bond.iampomodoro.view.MainActivity;
-import com.bond.iampomodoro.view.util.KeepScreenOn;
 import com.bond.iampomodoro.view.util.NotifyUser;
 
 import javax.inject.Inject;
@@ -15,11 +15,11 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class BasePresenter implements Presenter {
 
     @Inject
-    ModelImpl model;
+    Model model;
     @Inject
     NotifyUser notifyUser;
     @Inject
-    KeepScreenOn keepScreenOn;
+    Activity activity;
     @Inject
     BehaviorSubject<TimerObject> behaviorSubject;
     @Inject
@@ -31,6 +31,7 @@ public abstract class BasePresenter implements Presenter {
 
     @Override
     public void onStop() {
-        //compositeSubscription.clear();
+        compositeSubscription.clear();
+        //activity = null; //TODO Fix Activity leaks
     }
 }

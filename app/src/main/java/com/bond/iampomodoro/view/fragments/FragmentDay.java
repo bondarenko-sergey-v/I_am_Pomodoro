@@ -62,7 +62,7 @@ public class FragmentDay extends BaseFragment implements DayView {
     public void onDestroy() {
         super.onDestroy();
 
-        presenter.onTabUnselected();
+        //presenter.onTabUnselected();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class FragmentDay extends BaseFragment implements DayView {
         }
 
         if(!isVisibleToUser && presenter != null) {
-            presenter.onTabUnselected();
+            //presenter.onTabUnselected();
         }
     }
 
@@ -101,7 +101,7 @@ public class FragmentDay extends BaseFragment implements DayView {
     }
 
     @Override
-    public void showButons(String buttonsState) {
+    public void showButtons(String buttonsState) {
         switch(buttonsState) {
             case "Start":
                 binding.startBtn.setText(R.string.pause);
@@ -110,6 +110,8 @@ public class FragmentDay extends BaseFragment implements DayView {
                 break;
             case "Pause":
                 binding.startBtn.setText(R.string.start);
+                binding.resetBtn.setEnabled(true);
+                binding.resetBtn.setVisibility(View.VISIBLE);
                 break;
             case "Reset":
                 binding.startBtn.setText(R.string.start);

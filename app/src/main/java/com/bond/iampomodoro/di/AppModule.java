@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.bond.iampomodoro.di.annotations.ApplicationContext;
-import com.bond.iampomodoro.di.annotations.PerActivity;
+import com.bond.iampomodoro.model.Model;
 import com.bond.iampomodoro.model.ModelImpl;
 import com.bond.iampomodoro.model.dataObjects.TimerObject;
 import com.bond.iampomodoro.view.util.NotifyUser;
@@ -33,6 +33,7 @@ public class AppModule {
   }
 
   @Provides
+  @Singleton
   @ApplicationContext
   Context provideContext() {
     return this.application;
@@ -52,7 +53,7 @@ public class AppModule {
 
   @Provides
   @Singleton
-  ModelImpl provideModelImpl() {
+  Model provideModelImpl() {
     return new ModelImpl();
   }
 

@@ -7,17 +7,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.WindowManager;
 
 import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.R;
 import com.bond.iampomodoro.di.ActivityComponent;
 import com.bond.iampomodoro.di.ActivityModule;
 import com.bond.iampomodoro.di.annotations.ApplicationContext;
-import com.bond.iampomodoro.model.PreferencesHelper;
-import com.bond.iampomodoro.model.dataObjects.PreferencesObject;
-import com.bond.iampomodoro.view.util.KeepScreenOn;
-import com.squareup.leakcanary.LeakCanary;
 
 import javax.inject.Inject;
 
@@ -30,32 +25,28 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private static ActivityComponent activityComponent;
 
-    public static ActivityComponent getActivityComponent() {
-        return activityComponent;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         App.getAppComponent()
                 .plus(new ActivityModule(this))
-                .inject(this);
+                .inject(this);                   //TODO Join
 
-        activityComponent = App.getAppComponent().plus(new ActivityModule(this));
-                                                //     new ActivityModule(activity));
+        activityComponent = App.getAppComponent()
+                .plus(new ActivityModule(this)); //TODO Join if possible
 
-   //     App.getActivityComponent()
-  //              //.plus(new ActivityModule(this))
-  //              .inject(this);
-
-        if (LeakCanary.isInAnalyzerProcess(this)) { //TODO Check memory leaks
-            return;
-        }
-        LeakCanary.install(getApplication());
+   //     if (LeakCanary.isInAnalyzerProcess(this)) {
+   //         return;
+   //     }
+   //     LeakCanary.install(getApplication());
 
         setContentView(R.layout.activity_main);
 
+        setTabLayout();
+    }
+
+    private void setTabLayout() {
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
@@ -75,31 +66,20 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                //PreferencesObject ob = settingsHelper.getPreferences(); //TODO ? Refactor to not to request settings from Activity
                 switch (tab.getPosition()) {
                     case 0:
                         setLightTabs();
-                        //keepScreenOn(ob.dayKeepScreen);
                         break;
-                    case 1:
-                        setDarkTabs();
-                        //keepScreenOn(ob.nightKeepScreen);
-                        break;
-                    case 2:
+                    default:
                         setDarkTabs();
                         break;
                 }
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) { }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) { }
+            @Override public void onTabUnselected(TabLayout.Tab tab) { }
+            @Override public void onTabReselected(TabLayout.Tab tab) { }
         });
 
         tabLayout.setupWithViewPager(viewPager);
-       // keepScreenOn.keep(true);
     }
 
     private void setLightTabs() {
@@ -116,11 +96,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(2).setIcon(R.mipmap.ic_settings);
     }
 
- //   private void keepScreenOn(boolean keepScreenOn) {
- //       if(keepScreenOn) {
- //           getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
- //       } else {
- //           getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
- //       }
- //   }
+    public static ActivityComponent getActivityComponent() {
+        return activityComponent;
+    }
 }

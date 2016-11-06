@@ -4,5 +4,5 @@ public interface DayView extends View {
 
     void showTime(int timeInSeconds);
 
-    void showButons(String buttonsState);
+    void showButtons(String buttonsState);
 }

@@ -1,15 +1,15 @@
 package com.bond.iampomodoro.presenter;
 
-import com.bond.iampomodoro.App;
+import android.view.WindowManager;
+
 import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
-import com.bond.iampomodoro.view.MainActivity;
 import com.bond.iampomodoro.view.fragments.DayView;
 
 import rx.subscriptions.CompositeSubscription;
 
 public class DayPresenter extends BasePresenter {
 
-    private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
+    //private CompositeSubscription localCompositeSubscription = new CompositeSubscription();
 
     private DayView view;
     private UserSettingsObject usrSet;
@@ -23,12 +23,13 @@ public class DayPresenter extends BasePresenter {
     }
 
     public void onTabSelected() {
-        localCompositeSubscription.clear();
+        //localCompositeSubscription.clear();
+        compositeSubscription.clear();
         this.usrSet = model.getUserSettings();
-        keepScreenOn.keep(usrSet.bool[2]); // DayKeepScreenOn
+        keepScreenOn(usrSet.bool[2]); // DayKeepScreenOn
 
         if (view != null) {
-            localCompositeSubscription.add( //TODO Fix bug - on start call twice
+            compositeSubscription.add( //TODO Fix bug - on start call twice
                 behaviorSubject.subscribe(v -> {
                     view.showTime(v.intervalInSeconds);
 
@@ -47,38 +48,43 @@ public class DayPresenter extends BasePresenter {
     private void showActualButtons(String timerState) {
         switch (timerState) {
             case "onPause":
-                view.showButons("Pause");
+                view.showButtons("Pause");
                 break;
             case "onReset":
-                view.showButons("Reset");
+                view.showButtons("Reset");
                 break;
             default:
-                view.showButons("Start");
+                view.showButtons("Start");
                 break;
         }
     }
 
     public void onTabUnselected() {
-        //localCompositeSubscription.clear(); //TODO Move to onPause
+        //localCompositeSubscription.clear();
     }
 
     public void onStartButtonClick() {
 
         if(timerState.equals("onReset") || timerState.equals("onPause")) {
-            view.showButons("Start");
+            view.showButtons("Start");
             model.startTimer();
         } else {
-            view.showButons("Pause");
+            view.showButtons("Pause");
             model.pauseTimer();
         }
     }
 
     public void onResetButtonClick() {
-        view.showButons("Reset");
+        view.showButtons("Reset");
         model.resetTimer();
     }
 
-    public void onSaveInstanceState() {
-        //TODO Make it
+    private void keepScreenOn(boolean keepScreenOn) {
+
+        if(keepScreenOn) {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 }

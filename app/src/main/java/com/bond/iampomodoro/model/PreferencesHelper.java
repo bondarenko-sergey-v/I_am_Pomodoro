@@ -17,7 +17,7 @@ public class PreferencesHelper {
         this.context = context;
     }
 
-    public PreferencesObject getPreferences() {
+    PreferencesObject getPreferences() {
 
         String json = PreferenceManager
                 .getDefaultSharedPreferences(context)
@@ -32,7 +32,7 @@ public class PreferencesHelper {
                 new TypeToken<PreferencesObject>(){}.getType());
     }
 
-    public void setPreferences(PreferencesObject pref) {
+    void setPreferences(PreferencesObject pref) {
 
         SharedPreferences.Editor editor =
                 PreferenceManager.getDefaultSharedPreferences(context).edit();

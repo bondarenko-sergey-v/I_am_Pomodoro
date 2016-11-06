@@ -12,7 +12,7 @@ public abstract class BaseFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if (getPresenter() != null) {
-            getPresenter().onStop();   //TODO Make it or delete
+            getPresenter().onStop();
         }
     }
 

@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.bond.iampomodoro.view.fragments.FragmentDay;
-import com.bond.iampomodoro.view.fragments.FragmentHardcore;
+import com.bond.iampomodoro.view.fragments.FragmentNight;
 import com.bond.iampomodoro.view.fragments.FragmentSettings;
 
 class MyPagerAdapter extends FragmentPagerAdapter {
@@ -23,7 +23,7 @@ class MyPagerAdapter extends FragmentPagerAdapter {
                 fragment = FragmentDay.newInstance();
                 break;
             case 1:
-                fragment = FragmentHardcore.newInstance();
+                fragment = FragmentNight.newInstance();
                 break;
             default:
                 fragment = FragmentSettings.newInstance();

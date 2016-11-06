@@ -4,27 +4,26 @@ import com.bond.iampomodoro.App;
 import com.bond.iampomodoro.model.dataObjects.PreferencesObject;
 import com.bond.iampomodoro.model.dataObjects.UserSettingsObject;
 import com.bond.iampomodoro.model.dataObjects.TimerObject;
-import com.bond.iampomodoro.view.MainActivity;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 import rx.subscriptions.CompositeSubscription;
 
-public class ModelImpl {
+public class ModelImpl implements Model {
 
     @Inject
     PreferencesHelper preferencesHelper;
     @Inject
     BehaviorSubject<TimerObject> behaviorSubject;
-    @Inject
-    CompositeSubscription compositeSubscription;
+    //@Inject
+    CompositeSubscription compositeSubscription
+            = new CompositeSubscription(); /** LOCAL Composite Subscription **/
 
     private PreferencesObject pref;
 
@@ -36,39 +35,7 @@ public class ModelImpl {
         behaviorSubject.onNext(new TimerObject(pref.workSession * 60, pref.timerState));
     }
 
-    public void getPicture() {
-        //TODO Make it
-    }
-
-    public UserSettingsObject getUserSettings() {
-        Boolean[] b = {pref.daySound, pref.dayVibration, pref.dayKeepScreen,
-            pref.nightSound, pref.nightVibration, pref.nightKeepScreen, pref.nightPictures};
-
-        return new UserSettingsObject(b,pref.workSession, pref.breakMin,
-                pref.longBreak, pref.sessionsBeforeLB);
-    }
-
-    public void setUserSettings(UserSettingsObject usrSet) {
-        pref.daySound = usrSet.bool[0];
-        pref.dayVibration = usrSet.bool[1];
-        pref.dayKeepScreen = usrSet.bool[2];
-        pref.nightSound = usrSet.bool[3];
-        pref.nightVibration = usrSet.bool[4];
-        pref.nightKeepScreen = usrSet.bool[5];
-        pref.nightPictures = usrSet.bool[6];
-
-        pref.workSession = usrSet.workSession;
-        pref.breakMin = usrSet.breakMin;
-        pref.longBreak = usrSet.longBreak;
-        pref.sessionsBeforeLB = usrSet.sessionsBeforeLB;
-
-        preferencesHelper.setPreferences(pref);
-
-        if(pref.timerState.equals("onReset")) {
-            behaviorSubject.onNext(new TimerObject(pref.workSession * 60, pref.timerState));
-        }
-    }
-
+    @Override
     public void startTimer() {
         clearCompositeSubscription();
 
@@ -97,7 +64,8 @@ public class ModelImpl {
         preferencesHelper.setPreferences(pref); //TODO Move to onStop
     }
 
-   public void pauseTimer() {
+    @Override
+    public void pauseTimer() {
         clearCompositeSubscription();
         pref.timerState = "onPause";
         behaviorSubject.onNext(new TimerObject(
@@ -105,6 +73,7 @@ public class ModelImpl {
         preferencesHelper.setPreferences(pref); //TODO Move to onStop
     }
 
+    @Override
     public void resetTimer() {
         clearCompositeSubscription();
 
@@ -118,7 +87,7 @@ public class ModelImpl {
 
     private void initBehaviorSubject(int intervalInSeconds) {
 
-        Subscription s =
+        compositeSubscription.add(
                 Observable.interval(1, TimeUnit.SECONDS, Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .map(v -> v + 1)
@@ -126,9 +95,38 @@ public class ModelImpl {
                         .map(v -> (int) (intervalInSeconds - v))
                         .map(v -> new TimerObject(v, pref.timerState))
                         .doOnCompleted(this::startTimer)
-                        .subscribe(behaviorSubject::onNext);
+                        .subscribe(behaviorSubject::onNext));
+    }
 
-        compositeSubscription.add(s);
+    @Override
+    public UserSettingsObject getUserSettings() {
+        Boolean[] b = {pref.daySound, pref.dayVibration, pref.dayKeepScreen,
+                pref.nightSound, pref.nightVibration, pref.nightKeepScreen, pref.nightPictures};
+
+        return new UserSettingsObject(b,pref.workSession, pref.breakMin,
+                pref.longBreak, pref.sessionsBeforeLB);
+    }
+
+    @Override
+    public void setUserSettings(UserSettingsObject usrSet) {
+        pref.daySound = usrSet.bool[0];
+        pref.dayVibration = usrSet.bool[1];
+        pref.dayKeepScreen = usrSet.bool[2];
+        pref.nightSound = usrSet.bool[3];
+        pref.nightVibration = usrSet.bool[4];
+        pref.nightKeepScreen = usrSet.bool[5];
+        pref.nightPictures = usrSet.bool[6];
+
+        pref.workSession = usrSet.workSession;
+        pref.breakMin = usrSet.breakMin;
+        pref.longBreak = usrSet.longBreak;
+        pref.sessionsBeforeLB = usrSet.sessionsBeforeLB;
+
+        preferencesHelper.setPreferences(pref);
+
+        if(pref.timerState.equals("onReset")) {
+            behaviorSubject.onNext(new TimerObject(pref.workSession * 60, pref.timerState));
+        }
     }
 
     private void clearCompositeSubscription() {
